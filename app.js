@@ -2,6 +2,34 @@ const tg = window.Telegram.WebApp;
 
 tg.expand();
 
+const photoInput = document.getElementById("photo");
+const preview = document.getElementById("preview");
+const photoBox = document.querySelector(".photo-box");
+const photoText = document.getElementById("photo-text");
+
+
+photoInput.addEventListener("change", function(){
+
+    const file = this.files[0];
+
+
+    if(file){
+
+        preview.src = URL.createObjectURL(file);
+
+        preview.style.display = "block";
+
+
+        photoText.innerHTML =
+        "✅ Фото загружено";
+
+
+        photoBox.classList.add("loaded");
+
+    }
+
+});
+
 async function analyze() {
 
     const file =

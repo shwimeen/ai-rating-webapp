@@ -1,24 +1,274 @@
-body {
-    background: #111;
-    color: white;
-    font-family: Arial;
+* {
+    box-sizing: border-box;
 }
+
+
+body {
+
+    margin: 0;
+
+    min-height: 100vh;
+
+    background:
+    radial-gradient(
+        circle at top,
+        #5b21ff,
+        #111827 45%,
+        #050505
+    );
+
+    color:white;
+
+    font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Arial;
+
+}
+
+
+
+.container {
+
+    max-width:450px;
+
+    margin:auto;
+
+    padding:20px;
+
+}
+
+
+
+.header {
+
+    text-align:center;
+
+    margin-bottom:25px;
+
+}
+
+
+
+.header h1 {
+
+    font-size:38px;
+
+    margin-bottom:10px;
+
+}
+
+
+
+.header p {
+
+    opacity:.7;
+
+    font-size:16px;
+
+}
+
+
 
 .card {
-    max-width: 450px;
-    margin: auto;
-    padding: 20px;
+
+    background:
+    rgba(255,255,255,.08);
+
+    backdrop-filter:blur(20px);
+
+    border-radius:28px;
+
+    padding:25px;
+
+    box-shadow:
+    0 20px 50px rgba(0,0,0,.4);
+
 }
 
-input,
+
+
+label {
+
+    display:block;
+
+    margin-bottom:8px;
+
+    font-size:14px;
+
+    opacity:.8;
+
+}
+
+
+
 select,
-button {
-    width: 100%;
-    margin-top: 12px;
-    padding: 12px;
-    border-radius: 12px;
+input {
+
+
+    width:100%;
+
+    margin-bottom:14px;
+
+    padding:15px;
+
+    border-radius:16px;
+
+    border:none;
+
+    outline:none;
+
+    background:
+    rgba(255,255,255,.12);
+
+    color:white;
+
+    font-size:16px;
+
 }
 
+
+
+select option {
+
+    color:black;
+
+}
+
+
+
+.photo-box {
+
+    display:block;
+
+    text-align:center;
+
+    padding:18px;
+
+    border-radius:20px;
+
+    border:
+    2px dashed rgba(255,255,255,.3);
+
+    margin-top:10px;
+
+    cursor:pointer;
+
+}
+
+
+
+.photo-box input {
+
+    display:none;
+
+}
+
+
+
 button {
-    cursor: pointer;
+
+    width:100%;
+
+    margin-top:20px;
+
+    padding:17px;
+
+    border-radius:20px;
+
+    border:none;
+
+    cursor:pointer;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+    color:white;
+
+    background:
+    linear-gradient(
+        135deg,
+        #8b5cf6,
+        #ec4899
+    );
+
+
+    transition:.3s;
+
+}
+
+
+
+button:active {
+
+    transform:scale(.96);
+
+}
+
+
+
+#result {
+
+
+    margin-top:25px;
+
+    padding:20px;
+
+    border-radius:20px;
+
+    background:
+    rgba(0,0,0,.25);
+
+}
+
+
+
+#result h2 {
+
+    text-align:center;
+
+    font-size:48px;
+
+    margin:10px;
+
+}
+
+
+
+li {
+
+    margin-bottom:8px;
+
+}
+.score {
+    text-align:center;
+}
+
+
+.score span {
+    font-size:20px;
+    opacity:.6;
+}
+
+
+.section {
+
+    margin-top:20px;
+
+    padding:15px;
+
+    border-radius:18px;
+
+    background:
+    rgba(255,255,255,.08);
+
+}
+
+
+.section h3 {
+
+    margin-top:0;
+
 }

@@ -3,35 +3,80 @@
 <head>
 <meta charset="UTF-8">
 <title>AI Rating</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
 <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
 
-<div class="card">
+<div class="container">
 
-<h1>AI Rating</h1>
+    <div class="header">
+        <h1>✨ AI Rating</h1>
+        <p>Оцени свою внешность<br>с помощью искусственного интеллекта</p>
+    </div>
 
-<select id="mode">
-    <option value="male">Мужской образ</option>
-    <option value="female">Женский образ</option>
-    <option value="general">Общая оценка</option>
-</select>
 
-<input id="age" type="number" placeholder="Возраст">
-<input id="height" type="number" placeholder="Рост">
-<input id="weight" type="number" placeholder="Вес">
+    <div class="card">
 
-<input id="photo" type="file" accept="image/*">
+        <label>🎯 Тип анализа</label>
 
-<button onclick="analyze()">
-    Оценить
-</button>
+        <select id="mode">
+            <option value="male">👨 Мужской образ</option>
+            <option value="female">👩 Женский образ</option>
+            <option value="general">✨ Общая оценка</option>
+        </select>
 
-<div id="result"></div>
+
+        <div class="inputs">
+
+            <input id="age" 
+            type="number" 
+            placeholder="🎂 Возраст">
+
+
+            <input id="height" 
+            type="number" 
+            placeholder="📏 Рост (см)">
+
+
+            <input id="weight" 
+            type="number" 
+            placeholder="⚖️ Вес (кг)">
+
+        </div>
+
+
+        <label class="photo-box">
+
+            📸 Выберите фото
+
+            <input 
+            id="photo" 
+            type="file" 
+            accept="image/*">
+
+        </label>
+
+
+        <button onclick="analyze()">
+            🔥 Анализировать
+        </button>
+
+
+        <div id="result"></div>
+
+
+    </div>
+
 
 </div>
+
 
 <script src="app.js"></script>
 

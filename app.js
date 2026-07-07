@@ -60,20 +60,35 @@ async function analyze() {
     const data = await response.json();
 
 
-    document.getElementById("result").innerHTML =
-        `
-        <h2>${data.rating}/10</h2>
+   document.getElementById("result").innerHTML =
+`
+<div class="score">
+    <h2>${data.rating}<span>/10</span></h2>
+    <p>${data.summary}</p>
+</div>
 
-        <p>${data.summary}</p>
 
-        <h3>✅ Сильные стороны:</h3>
-        <ul>
-            ${data.strengths.map(item => `<li>${item}</li>`).join("")}
-        </ul>
+<div class="section">
 
-        <h3>💡 Советы:</h3>
-        <ul>
-            ${data.advice.map(item => `<li>${item}</li>`).join("")}
-        </ul>
-        `;
+<h3>✨ Сильные стороны</h3>
+
+<ul>
+    ${data.strengths.map(item => 
+    `<li>${item}</li>`).join("")}
+</ul>
+
+</div>
+
+
+<div class="section">
+
+<h3>💡 Советы</h3>
+
+<ul>
+    ${data.advice.map(item => 
+    `<li>${item}</li>`).join("")}
+</ul>
+
+</div>
+`;
 }

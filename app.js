@@ -65,7 +65,19 @@ async function analyze() {
     );
 
     document.getElementById("result").innerHTML =
-        "⏳ Анализирую...";
+`
+<div class="loading">
+
+<div class="loader"></div>
+
+<h3>✨ AI анализирует</h3>
+
+<p id="ai-text">
+🔍 Изучаем изображение...
+</p>
+
+</div>
+`;
 
 
     const response = await fetch(

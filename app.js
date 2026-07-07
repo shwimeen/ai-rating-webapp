@@ -79,9 +79,8 @@ async function analyze() {
 </div>
 `;
 
-
-    const response = await fetch(
-        "https://brief-crew-waters-hybrid.trycloudflare.com/analyze",
+       const response = await fetch(
+    "https://ai-rating-backend.onrender.com/analyze",
         {
             method: "POST",
             body: formData

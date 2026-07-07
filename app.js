@@ -81,7 +81,7 @@ async function analyze() {
 
 
     const response = await fetch(
-        "https://warrant-gravity-pro-cage.trycloudflare.com/analyze",
+        "https://brief-crew-waters-hybrid.trycloudflare.com",
         {
             method: "POST",
             body: formData

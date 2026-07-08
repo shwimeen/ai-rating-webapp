@@ -223,7 +223,7 @@ async function analyze() {
 
     let response;
     try {
-        response = await fetch("https://ai-rating-backend.onrender.com/analyze", {
+       response = await fetch("https://ai-rating-backend-2.onrender.com/analyze",  {
             method: "POST",
             body: formData
         });

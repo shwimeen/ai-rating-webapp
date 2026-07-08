@@ -3,16 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <title>AI Rating</title>
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
 <link rel="stylesheet" href="style.css">
-
 </head>
-
 <body>
+
+<canvas id="confetti"></canvas>
 
 <div class="container">
 
@@ -21,68 +18,54 @@
         <p>Оцени свою внешность<br>с помощью искусственного интеллекта</p>
     </div>
 
-
     <div class="card">
 
         <label>🎯 Тип анализа</label>
 
-        <select id="mode">
-            <option value="male">👨 Мужской образ</option>
-            <option value="female">👩 Женский образ</option>
-            <option value="general">✨ Общая оценка</option>
-        </select>
-
+        <div class="segmented" id="mode-group">
+            <button type="button" class="seg active" data-value="male">👨 Муж.</button>
+            <button type="button" class="seg" data-value="female">👩 Жен.</button>
+            <button type="button" class="seg" data-value="general">✨ Общая</button>
+        </div>
+        <input type="hidden" id="mode" value="male">
 
         <div class="inputs">
-
-            <input id="age" 
-            type="number" 
-            placeholder="🎂 Возраст">
-
-
-            <input id="height" 
-            type="number" 
-            placeholder="📏 Рост (см)">
-
-
-            <input id="weight" 
-            type="number" 
-            placeholder="⚖️ Вес (кг)">
-
+            <div class="field">
+                <input id="age" type="number" placeholder=" ">
+                <label for="age">🎂 Возраст</label>
+            </div>
+            <div class="field">
+                <input id="height" type="number" placeholder=" ">
+                <label for="height">📏 Рост (см)</label>
+            </div>
+            <div class="field">
+                <input id="weight" type="number" placeholder=" ">
+                <label for="weight">⚖️ Вес (кг)</label>
+            </div>
         </div>
 
+        <label class="photo-box" id="photo-box">
+            <div class="photo-glow"></div>
+            <img id="preview" src="" alt="">
+            <div id="photo-text">
+                <span class="photo-icon">📸</span>
+                <span>Выберите фото</span>
+            </div>
+            <input id="photo" type="file" accept="image/*">
+        </label>
 
-        <label class="photo-box">
-
-    <img id="preview" src="" alt="">
-
-    <div id="photo-text">
-        📸 Выберите фото
-    </div>
-
-    <input 
-    id="photo" 
-    type="file" 
-    accept="image/*">
-
-</label>
-
-
-        <button onclick="analyze()">
-            🔥 Анализировать
+        <button id="analyze-btn" onclick="analyze()">
+            <span class="btn-label">🔥 Анализировать</span>
         </button>
-
 
         <div id="result"></div>
 
-
     </div>
 
+    <div class="footer-hint">Работает на нейросети · результат может отличаться каждый раз</div>
 
 </div>
 
-
 <script src="app.js"></script>
-
 </body>
 </html>

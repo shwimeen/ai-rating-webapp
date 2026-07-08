@@ -189,6 +189,55 @@ function launchConfetti() {
     tick();
 }
 
+/* ---------------- Face scan overlay animation ---------------- */
+const scanOverlay = document.getElementById("scan-overlay");
+const scanDotsWrap = document.getElementById("scan-dots");
+const scanStatusEl = document.getElementById("scan-status");
+
+const scanStatusPhases = [
+    "Поиск лица...",
+    "Лицо обнаружено ✅",
+    "Разметка точек...",
+    "Анализ пропорций..."
+];
+
+function playScanAnimation(duration = 2200) {
+    return new Promise((resolve) => {
+        scanDotsWrap.innerHTML = "";
+        scanOverlay.classList.add("active");
+
+        // Scatter random "landmark" dots inside the frame, staggered
+        const dotCount = 14;
+        for (let i = 0; i < dotCount; i++) {
+            const dot = document.createElement("div");
+            dot.className = "scan-dot";
+            const x = 20 + Math.random() * 60; // % within frame, avoiding edges
+            const y = 20 + Math.random() * 60;
+            dot.style.left = x + "%";
+            dot.style.top = y + "%";
+            dot.style.animationDelay = (i * 0.07) + "s";
+            scanDotsWrap.appendChild(dot);
+        }
+
+        // Cycle status text
+        let phase = 0;
+        scanStatusEl.textContent = scanStatusPhases[0];
+        haptic("light");
+        const statusInterval = setInterval(() => {
+            phase = (phase + 1) % scanStatusPhases.length;
+            scanStatusEl.textContent = scanStatusPhases[phase];
+            haptic("light");
+        }, duration / scanStatusPhases.length);
+
+        setTimeout(() => {
+            clearInterval(statusInterval);
+            scanOverlay.classList.remove("active");
+            haptic("success");
+            resolve();
+        }, duration);
+    });
+}
+
 /* ---------------- Main analyze flow ---------------- */
 async function analyze() {
     const file = document.getElementById("photo").files[0];
@@ -201,6 +250,9 @@ async function analyze() {
 
     haptic("medium");
     analyzeBtn.classList.add("loading");
+
+    // Play the face-scan animation over the photo first
+    await playScanAnimation();
 
     const formData = new FormData();
     formData.append("photo", file);
@@ -223,7 +275,7 @@ async function analyze() {
 
     let response;
     try {
-       response = await fetch("https://ai-rating-backend-2.onrender.com/analyze",  {
+        response = await fetch("https://ai-rating-backend-2.onrender.com/analyze", {
             method: "POST",
             body: formData
         });

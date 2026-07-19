@@ -291,10 +291,23 @@ async function analyze() {
     analyzeBtn.classList.remove("loading");
 
     if (!response.ok) {
-        haptic("error");
-        resultEl.innerHTML = `<div class="result-wrap">❌ Ошибка сервера</div>`;
-        return;
-    }
+
+    haptic("error");
+
+    let errorText = "Неизвестная ошибка";
+
+    try {
+        const errorData = await response.json();
+        errorText = errorData.error || errorText;
+    } catch(e) {}
+
+    resultEl.innerHTML = `
+    <div class="result-wrap">
+        ❌ ${errorText}
+    </div>`;
+
+    return;
+}
 
     const data = await response.json();
     const rating = Number(data.rating) || 0;

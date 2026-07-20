@@ -2,6 +2,12 @@ const tg = window.Telegram.WebApp;
 tg.expand();
 tg.ready();
 
+// ⚠️ Замени на username своего бота (без @) — используется в реферальных
+// ссылках и на карточке результата.
+const BOT_USERNAME = "pslmaxai_bot";
+
+const API_BASE = "https://ai-rating-backend-2.onrender.com";
+
 // Apply Telegram theme background subtly if available (falls back to CSS gradient)
 try { tg.setHeaderColor && tg.setHeaderColor("secondary_bg_color"); } catch(e) {}
 
@@ -13,6 +19,33 @@ function haptic(type) {
             tg.HapticFeedback.impactOccurred(type || "light");
         }
     } catch (e) {}
+}
+
+function hasAuth() {
+    return !!(tg.initData && tg.initData.length > 0);
+}
+
+function escapeHtml(str) {
+    const div = document.createElement("div");
+    div.textContent = str == null ? "" : String(str);
+    return div.innerHTML;
+}
+
+/* ---------------- Small API helpers ---------------- */
+async function apiGet(path, params) {
+    const url = new URL(API_BASE + path);
+    Object.entries(params || {}).forEach(([k, v]) => {
+        if (v !== undefined && v !== null && v !== "") url.searchParams.set(k, v);
+    });
+    const res = await fetch(url.toString());
+    return res.json();
+}
+
+async function apiPostForm(path, fields) {
+    const formData = new FormData();
+    Object.entries(fields || {}).forEach(([k, v]) => formData.append(k, v));
+    const res = await fetch(API_BASE + path, { method: "POST", body: formData });
+    return res.json();
 }
 
 /* ---------------- Segmented mode control ---------------- */
@@ -34,9 +67,12 @@ const preview = document.getElementById("preview");
 const photoBox = document.getElementById("photo-box");
 const photoText = document.getElementById("photo-text");
 
+let currentPhotoFile = null;
+
 photoInput.addEventListener("change", function () {
     const file = this.files[0];
     if (file) {
+        currentPhotoFile = file;
         preview.src = URL.createObjectURL(file);
         preview.style.display = "block";
         photoText.innerHTML = `<span class="photo-icon">✅</span><span>Фото загружено</span>`;
@@ -238,6 +274,386 @@ function playScanAnimation(duration = 2200) {
     });
 }
 
+/* ============================================================
+   TABS
+   ============================================================ */
+
+document.querySelectorAll(".tab").forEach(btn => {
+    btn.addEventListener("click", () => switchTab(btn.dataset.tab));
+});
+
+function switchTab(name) {
+    document.querySelectorAll(".tab").forEach(b => b.classList.toggle("active", b.dataset.tab === name));
+    document.querySelectorAll(".tab-panel").forEach(p => p.classList.toggle("active", p.id === "panel-" + name));
+    haptic("light");
+    if (name === "history") loadHistory();
+    if (name === "leaderboard") loadLeaderboard();
+}
+
+/* ============================================================
+   MODALS
+   ============================================================ */
+
+document.querySelectorAll("[data-close]").forEach(el => {
+    el.addEventListener("click", () => closeModal(el.dataset.close));
+});
+
+function openModal(id) { document.getElementById(id).classList.add("open"); }
+function closeModal(id) { document.getElementById(id).classList.remove("open"); }
+
+document.getElementById("badges-btn").addEventListener("click", () => {
+    renderBadgesGrid();
+    openModal("badges-modal");
+    haptic("light");
+});
+
+/* ============================================================
+   PROFILE / STATS / BADGES
+   ============================================================ */
+
+let cachedBadges = [];
+
+async function loadProfile() {
+    if (!hasAuth()) return;
+    try {
+        const data = await apiGet("/profile", { init_data: tg.initData });
+        if (data.error) return;
+
+        document.getElementById("stat-streak").textContent = data.stats.streak;
+        document.getElementById("stat-total").textContent = data.stats.total;
+        document.getElementById("visibility-checkbox").checked = !!data.leaderboard_opt_in;
+
+        cachedBadges = data.badges || [];
+    } catch (e) {
+        console.error("loadProfile failed", e);
+    }
+}
+
+function renderBadgesGrid() {
+    const grid = document.getElementById("badges-grid");
+    if (!cachedBadges.length) {
+        grid.innerHTML = `<div class="empty-state">Бейджи появятся после первого анализа ✨</div>`;
+        return;
+    }
+    grid.innerHTML = cachedBadges.map(b => `
+        <div class="badge-chip ${b.earned ? "earned" : ""}">
+            <span class="badge-emoji">${b.emoji}</span>
+            <span class="badge-name">${escapeHtml(b.name)}</span>
+        </div>
+    `).join("");
+}
+
+function showBadgePopups(badges) {
+    if (!badges || !badges.length) return;
+    const wrap = document.getElementById("badge-popup");
+    badges.forEach((b, i) => {
+        setTimeout(() => {
+            const el = document.createElement("div");
+            el.className = "badge-popup-item";
+            el.innerHTML = `<span class="badge-emoji">${b.emoji}</span><span>Новый бейдж: ${escapeHtml(b.name)}</span>`;
+            wrap.appendChild(el);
+            requestAnimationFrame(() => el.classList.add("show"));
+            haptic("success");
+            setTimeout(() => {
+                el.classList.remove("show");
+                setTimeout(() => el.remove(), 400);
+            }, 2600);
+        }, i * 900);
+    });
+}
+
+document.getElementById("visibility-checkbox").addEventListener("change", async function () {
+    if (!hasAuth()) {
+        this.checked = !this.checked;
+        showToast("Доступно только в Telegram");
+        return;
+    }
+    await apiPostForm("/profile/visibility", { init_data: tg.initData, visible: this.checked });
+    haptic("light");
+});
+
+/* ============================================================
+   HISTORY
+   ============================================================ */
+
+const MODE_ICONS = { male: "👨", female: "👩", general: "✨" };
+
+async function loadHistory() {
+    const wrap = document.getElementById("history-list");
+
+    if (!hasAuth()) {
+        wrap.innerHTML = `<div class="empty-state">Откройте приложение через Telegram, чтобы видеть историю 🔒</div>`;
+        return;
+    }
+
+    wrap.innerHTML = `<div class="empty-state">🕓 Загрузка истории...</div>`;
+
+    let data;
+    try {
+        data = await apiGet("/history", { init_data: tg.initData, limit: 30 });
+    } catch (e) {
+        wrap.innerHTML = `<div class="empty-state">❌ Не удалось загрузить историю</div>`;
+        return;
+    }
+
+    if (data.error || !data.items || data.items.length === 0) {
+        wrap.innerHTML = `<div class="empty-state">Пока нет ни одного анализа 👀<br>Начни на вкладке «Анализ»</div>`;
+        return;
+    }
+
+    wrap.innerHTML = data.items.map(item => {
+        const dt = new Date(item.created_at);
+        const dateStr = isNaN(dt.getTime())
+            ? ""
+            : dt.toLocaleDateString("ru-RU", { day: "numeric", month: "short" });
+
+        return `
+        <div class="history-item" data-id="${item.id}">
+            <div class="history-item-top">
+                <span class="history-mode-icon">${MODE_ICONS[item.mode] || "✨"}</span>
+                <div class="history-meta">
+                    <div class="history-date">${dateStr}${item.vibe ? " · " + escapeHtml(item.vibe) : ""}</div>
+                    <div class="history-vibe">${escapeHtml(item.summary || "")}</div>
+                </div>
+                <div class="history-rating">${Number(item.rating || 0).toFixed(1)}</div>
+            </div>
+            <div class="history-body">
+                <p>${escapeHtml(item.potential || "")}</p>
+                <ul>${(item.advice || []).map(a => `<li>${escapeHtml(a)}</li>`).join("")}</ul>
+            </div>
+        </div>`;
+    }).join("");
+
+    wrap.querySelectorAll(".history-item").forEach(el => {
+        el.addEventListener("click", () => {
+            el.classList.toggle("open");
+            haptic("light");
+        });
+    });
+}
+
+/* ============================================================
+   LEADERBOARD
+   ============================================================ */
+
+async function loadLeaderboard() {
+    const wrap = document.getElementById("leaderboard-list");
+    wrap.innerHTML = `<div class="empty-state">🏆 Загрузка топа...</div>`;
+
+    let data;
+    try {
+        data = await apiGet("/leaderboard", { init_data: tg.initData || "", limit: 30 });
+    } catch (e) {
+        wrap.innerHTML = `<div class="empty-state">❌ Не удалось загрузить топ</div>`;
+        return;
+    }
+
+    if (data.error || !data.items || data.items.length === 0) {
+        wrap.innerHTML = `<div class="empty-state">Топ пока пуст — стань первым! 🚀</div>`;
+        return;
+    }
+
+    const medals = ["🥇", "🥈", "🥉"];
+
+    wrap.innerHTML = data.items.map(row => {
+        const medal = row.rank <= 3 ? medals[row.rank - 1] : row.rank;
+        const initials = (row.first_name || "?").slice(0, 1).toUpperCase();
+        const avatar = row.photo_url
+            ? `<img class="leaderboard-avatar" src="${row.photo_url}" alt="">`
+            : `<div class="leaderboard-avatar">${initials}</div>`;
+
+        return `
+        <div class="leaderboard-row ${row.is_you ? "is-you" : ""}">
+            <div class="leaderboard-rank">${medal}</div>
+            ${avatar}
+            <div class="leaderboard-name">${escapeHtml(row.first_name || "Игрок")}${row.is_you ? " (вы)" : ""}</div>
+            <div class="leaderboard-score">${Number(row.best_rating || 0).toFixed(1)}</div>
+        </div>`;
+    }).join("");
+}
+
+/* ============================================================
+   REFERRALS
+   ============================================================ */
+
+async function handleReferral() {
+    if (!hasAuth()) return;
+
+    const startParam = tg.initDataUnsafe && tg.initDataUnsafe.start_param;
+    if (!startParam || !startParam.startsWith("ref_")) return;
+    if (localStorage.getItem("ai_rating_referral_done")) return;
+
+    const referrerId = startParam.replace("ref_", "");
+    if (!referrerId || isNaN(Number(referrerId))) return;
+
+    try {
+        await apiPostForm("/referral", { init_data: tg.initData, referred_by: referrerId });
+        localStorage.setItem("ai_rating_referral_done", "1");
+    } catch (e) {
+        console.error("referral failed", e);
+    }
+}
+
+document.getElementById("invite-btn").addEventListener("click", () => {
+    const myId = tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id;
+    if (!myId) {
+        showToast("Доступно только в Telegram");
+        return;
+    }
+    const link = `https://t.me/${BOT_USERNAME}?startapp=ref_${myId}`;
+    const text = `Узнай свою AI-оценку внешности ✨\n${link}`;
+
+    haptic("medium");
+
+    if (navigator.share) {
+        navigator.share({ text }).catch(() => {});
+    } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(text);
+        showToast("✅ Ссылка скопирована");
+    }
+});
+
+/* ============================================================
+   SHARE CARD (canvas)
+   ============================================================ */
+
+function roundRectPath(c, x, y, w, h, r) {
+    c.beginPath();
+    c.moveTo(x + r, y);
+    c.arcTo(x + w, y, x + w, y + h, r);
+    c.arcTo(x + w, y + h, x, y + h, r);
+    c.arcTo(x, y + h, x, y, r);
+    c.arcTo(x, y, x + w, y, r);
+    c.closePath();
+}
+
+function loadImageFromFile(file) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = URL.createObjectURL(file);
+    });
+}
+
+async function buildShareCard(data, rating) {
+    const canvas = document.getElementById("share-canvas");
+    const sc = canvas.getContext("2d");
+    const W = canvas.width, H = canvas.height;
+
+    const bg = sc.createRadialGradient(W / 2, 120, 40, W / 2, H / 2, W);
+    bg.addColorStop(0, "#5b21ff");
+    bg.addColorStop(0.5, "#1a1030");
+    bg.addColorStop(1, "#05050a");
+    sc.fillStyle = bg;
+    sc.fillRect(0, 0, W, H);
+
+    if (currentPhotoFile) {
+        try {
+            const img = await loadImageFromFile(currentPhotoFile);
+            const size = 260;
+            const px = W / 2 - size / 2, py = 70;
+
+            sc.save();
+            roundRectPath(sc, px, py, size, size, 28);
+            sc.clip();
+            const scale = Math.max(size / img.width, size / img.height);
+            const iw = img.width * scale, ih = img.height * scale;
+            sc.drawImage(img, px + size / 2 - iw / 2, py + size / 2 - ih / 2, iw, ih);
+            sc.restore();
+
+            sc.strokeStyle = "rgba(255,255,255,.25)";
+            sc.lineWidth = 2;
+            roundRectPath(sc, px, py, size, size, 28);
+            sc.stroke();
+        } catch (e) {
+            console.error("photo draw failed", e);
+        }
+    }
+
+    sc.textAlign = "center";
+    sc.fillStyle = "#ffffff";
+    sc.font = "bold 90px -apple-system, Arial";
+    sc.fillText(rating.toFixed(1), W / 2, 445);
+
+    sc.font = "20px -apple-system, Arial";
+    sc.fillStyle = "rgba(255,255,255,.6)";
+    sc.fillText("из 10", W / 2, 478);
+
+    if (data.vibe) {
+        sc.font = "bold 22px -apple-system, Arial";
+        const text = data.vibe;
+        const textW = sc.measureText(text).width;
+        const pillW = textW + 50, pillH = 44;
+        const pillX = W / 2 - pillW / 2, pillY = 505;
+
+        sc.fillStyle = "rgba(255,255,255,.12)";
+        roundRectPath(sc, pillX, pillY, pillW, pillH, 22);
+        sc.fill();
+        sc.strokeStyle = "rgba(255,255,255,.25)";
+        sc.stroke();
+
+        sc.fillStyle = "#fff";
+        sc.fillText(text, W / 2, pillY + 29);
+    }
+
+    sc.font = "bold 26px -apple-system, Arial";
+    sc.fillStyle = "#fff";
+    sc.fillText("✨ AI Rating", W / 2, 610);
+
+    sc.font = "16px -apple-system, Arial";
+    sc.fillStyle = "rgba(255,255,255,.55)";
+    sc.fillText(`Узнай свою оценку: @${BOT_USERNAME}`, W / 2, 645);
+
+    sc.font = "12px -apple-system, Arial";
+    sc.fillStyle = "rgba(255,255,255,.3)";
+    sc.fillText("результат сгенерирован нейросетью", W / 2, 710);
+}
+
+async function openShareCard(data, rating) {
+    await buildShareCard(data, rating);
+    openModal("share-modal");
+    haptic("light");
+}
+
+document.getElementById("share-download").addEventListener("click", () => {
+    const canvas = document.getElementById("share-canvas");
+    canvas.toBlob(blob => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "ai-rating.png";
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 2000);
+    }, "image/png");
+    haptic("medium");
+});
+
+document.getElementById("share-native").addEventListener("click", () => {
+    const canvas = document.getElementById("share-canvas");
+    canvas.toBlob(async blob => {
+        const file = new File([blob], "ai-rating.png", { type: "image/png" });
+        const myId = tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id;
+        const link = myId ? `https://t.me/${BOT_USERNAME}?startapp=ref_${myId}` : `https://t.me/${BOT_USERNAME}`;
+        const text = `Мой AI Rating ✨ Проверь свою оценку: ${link}`;
+
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            try {
+                await navigator.share({ files: [file], text });
+                haptic("success");
+                return;
+            } catch (e) {
+                /* user cancelled or unsupported — fall through to clipboard */
+            }
+        }
+
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(text);
+            showToast("✅ Ссылка скопирована, картинку скачайте вручную");
+        }
+    }, "image/png");
+});
+
 /* ---------------- Main analyze flow ---------------- */
 async function analyze() {
     const file = document.getElementById("photo").files[0];
@@ -260,6 +676,7 @@ async function analyze() {
     formData.append("age", document.getElementById("age").value);
     formData.append("height", document.getElementById("height").value);
     formData.append("weight", document.getElementById("weight").value);
+    formData.append("init_data", tg.initData || "");
 
     const resultEl = document.getElementById("result");
     resultEl.innerHTML = `
@@ -275,7 +692,7 @@ async function analyze() {
 
     let response;
     try {
-        response = await fetch("https://ai-rating-backend-2.onrender.com/analyze", {
+        response = await fetch(`${API_BASE}/analyze`, {
             method: "POST",
             body: formData
         });
@@ -291,26 +708,26 @@ async function analyze() {
     analyzeBtn.classList.remove("loading");
 
     if (!response.ok) {
-
-    haptic("error");
-
-    let errorText = "Неизвестная ошибка";
-
-    try {
-        const errorData = await response.json();
-        errorText = errorData.error || errorText;
-    } catch(e) {}
-
-    resultEl.innerHTML = `
-    <div class="result-wrap">
-        ❌ ${errorText}
-    </div>`;
-
-    return;
-}
+        haptic("error");
+        let errorText = "Неизвестная ошибка";
+        try {
+            const errorData = await response.json();
+            errorText = errorData.error || errorText;
+        } catch (e) {}
+        resultEl.innerHTML = `<div class="result-wrap">❌ ${escapeHtml(errorText)}</div>`;
+        return;
+    }
 
     const data = await response.json();
+
+    if (data.error) {
+        haptic("error");
+        resultEl.innerHTML = `<div class="result-wrap">${escapeHtml(data.message || "Произошла ошибка")}</div>`;
+        return;
+    }
+
     const rating = Number(data.rating) || 0;
+    const styleScore = Number(data.style_score) || 0;
     const circumference = 314; // 2 * PI * r(50)
     const offset = circumference - (rating / 10) * circumference;
 
@@ -331,27 +748,38 @@ async function analyze() {
             </svg>
             <div class="score-number"><span id="score-count">0.0</span><span>/10</span></div>
         </div>
-        <p>${data.summary || ""}</p>
+        <p>${escapeHtml(data.summary || "")}</p>
+
+        <div class="sub-score">
+            <div class="sub-score-label"><span>💅 Стиль</span><span>${styleScore.toFixed(1)}/10</span></div>
+            <div class="sub-score-track"><div class="sub-score-fill" id="style-fill"></div></div>
+        </div>
+
+        ${data.vibe ? `<div class="vibe-pill">🌀 ${escapeHtml(data.vibe)}</div>` : ""}
+
+        ${data.potential ? `<div class="potential-box"><b>Потенциал роста</b>${escapeHtml(data.potential)}</div>` : ""}
     </div>
 
     <div class="section">
         <h3>✨ Сильные стороны</h3>
-        <ul>${(data.strengths || []).map(item => `<li>${item}</li>`).join("")}</ul>
+        <ul>${(data.strengths || []).map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
     </div>
 
     <div class="section">
         <h3>💡 Советы</h3>
-        <ul>${(data.advice || []).map(item => `<li>${item}</li>`).join("")}</ul>
+        <ul>${(data.advice || []).map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
     </div>
 
     <button class="share-btn" id="share-btn">📤 Поделиться результатом</button>
 
 </div>`;
 
-    // Animate ring + counter
+    // Animate ring + counters
     const ringFg = document.getElementById("ring-fg");
     requestAnimationFrame(() => {
         ringFg.style.strokeDashoffset = offset;
+        const fill = document.getElementById("style-fill");
+        if (fill) fill.style.width = Math.min(100, (styleScore / 10) * 100) + "%";
     });
     animateCount(document.getElementById("score-count"), rating);
 
@@ -364,14 +792,18 @@ async function analyze() {
         haptic("warning");
     }
 
+    // Update stats bar + badges from this response, refresh full profile in background
+    if (typeof data.streak === "number") document.getElementById("stat-streak").textContent = data.streak;
+    if (typeof data.total_analyses === "number") document.getElementById("stat-total").textContent = data.total_analyses;
+    if (data.new_badges && data.new_badges.length) showBadgePopups(data.new_badges);
+    loadProfile();
+
     document.getElementById("share-btn").addEventListener("click", () => {
-        const text = `Мой AI Rating: ${rating.toFixed(1)}/10 ✨`;
-        if (navigator.share) {
-            navigator.share({ text }).catch(() => {});
-        } else if (navigator.clipboard) {
-            navigator.clipboard.writeText(text);
-            showToast("✅ Результат скопирован");
-        }
         haptic("light");
+        openShareCard(data, rating);
     });
 }
+
+/* ---------------- Init ---------------- */
+loadProfile();
+handleReferral();

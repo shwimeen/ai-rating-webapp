@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
 <meta charset="UTF-8">
 <title>AI Rating</title>
@@ -18,6 +18,28 @@
         <p>Оцени свою внешность<br>с помощью искусственного интеллекта</p>
     </div>
 
+    <div class="stats-bar" id="stats-bar">
+        <div class="stat">
+            <span class="stat-emoji">🔥</span>
+            <span id="stat-streak">0</span>
+            <span class="stat-label">дней</span>
+        </div>
+        <div class="stat">
+            <span class="stat-emoji">📸</span>
+            <span id="stat-total">0</span>
+            <span class="stat-label">анализов</span>
+        </div>
+        <button class="badges-btn" id="badges-btn">🏅 Бейджи</button>
+    </div>
+
+    <div class="tabbar" id="tabbar">
+        <button class="tab active" data-tab="analyze">🔥 Анализ</button>
+        <button class="tab" data-tab="history">🕓 История</button>
+        <button class="tab" data-tab="leaderboard">🏆 Топ</button>
+    </div>
+
+    <!-- ================= TAB: ANALYZE ================= -->
+    <div class="tab-panel active" id="panel-analyze">
     <div class="card">
 
         <label>🎯 Тип анализа</label>
@@ -75,10 +97,66 @@
         <div id="result"></div>
 
     </div>
+    </div>
+
+    <!-- ================= TAB: HISTORY ================= -->
+    <div class="tab-panel" id="panel-history">
+    <div class="card">
+        <div id="history-list">
+            <div class="empty-state">🕓 Загрузка истории...</div>
+        </div>
+    </div>
+    </div>
+
+    <!-- ================= TAB: LEADERBOARD ================= -->
+    <div class="tab-panel" id="panel-leaderboard">
+    <div class="card">
+        <button class="share-btn" id="invite-btn">🤝 Пригласить друга</button>
+
+        <label class="visibility-toggle">
+            <input type="checkbox" id="visibility-checkbox" checked>
+            <span>Показывать меня в топе</span>
+        </label>
+
+        <div id="leaderboard-list">
+            <div class="empty-state">🏆 Загрузка топа...</div>
+        </div>
+    </div>
+    </div>
 
     <div class="footer-hint">Работает на нейросети · результат может отличаться каждый раз</div>
 
 </div>
+
+<!-- ================= MODAL: BADGES ================= -->
+<div class="modal" id="badges-modal">
+    <div class="modal-backdrop" data-close="badges-modal"></div>
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3>🏅 Бейджи</h3>
+            <button class="modal-close" data-close="badges-modal">✕</button>
+        </div>
+        <div id="badges-grid" class="badges-grid"></div>
+    </div>
+</div>
+
+<!-- ================= MODAL: SHARE CARD ================= -->
+<div class="modal" id="share-modal">
+    <div class="modal-backdrop" data-close="share-modal"></div>
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3>📤 Поделиться</h3>
+            <button class="modal-close" data-close="share-modal">✕</button>
+        </div>
+        <canvas id="share-canvas" width="600" height="750"></canvas>
+        <div class="share-actions">
+            <button class="share-action-btn" id="share-download">⬇️ Скачать</button>
+            <button class="share-action-btn primary" id="share-native">📤 Поделиться</button>
+        </div>
+    </div>
+</div>
+
+<div class="badge-popup" id="badge-popup"></div>
 
 <script src="app.js"></script>
 </body>

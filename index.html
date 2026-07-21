@@ -29,7 +29,12 @@
             <span id="stat-total">0</span>
             <span class="stat-label">анализов</span>
         </div>
-        <button class="badges-btn" id="badges-btn">🏅 Бейджи</button>
+        <div class="stat">
+            <span class="stat-emoji">💰</span>
+            <span id="stat-credits">0</span>
+            <span class="stat-label">баланс</span>
+        </div>
+        <button class="badges-btn" id="badges-btn">🏅</button>
     </div>
 
     <div class="tabbar" id="tabbar">
@@ -152,6 +157,21 @@
         <div class="share-actions">
             <button class="share-action-btn" id="share-download">⬇️ Скачать</button>
             <button class="share-action-btn primary" id="share-native">📤 Поделиться</button>
+        </div>
+    </div>
+</div>
+
+<!-- ================= MODAL: BUY CREDITS ================= -->
+<div class="modal" id="payment-modal">
+    <div class="modal-backdrop" data-close="payment-modal"></div>
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3>⭐ Пополнить баланс</h3>
+            <button class="modal-close" data-close="payment-modal">✕</button>
+        </div>
+        <p class="payment-hint">Бесплатная попытка использована. Выбери пакет — оплата звёздами Telegram, прямо здесь.</p>
+        <div id="packages-list">
+            <div class="empty-state">Загрузка пакетов...</div>
         </div>
     </div>
 </div>

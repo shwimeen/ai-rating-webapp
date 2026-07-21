@@ -4,7 +4,7 @@ tg.ready();
 
 // ⚠️ Замени на username своего бота (без @) — используется в реферальных
 // ссылках и на карточке результата.
-const BOT_USERNAME = "pslmaxai_bot";
+const BOT_USERNAME = "your_bot_username";
 
 const API_BASE = "https://ai-rating-backend-2.onrender.com";
 
@@ -307,6 +307,11 @@ document.getElementById("badges-btn").addEventListener("click", () => {
     haptic("light");
 });
 
+document.getElementById("stat-credits").closest(".stat").addEventListener("click", () => {
+    openPaymentModal();
+});
+document.getElementById("stat-credits").closest(".stat").style.cursor = "pointer";
+
 /* ============================================================
    PROFILE / STATS / BADGES
    ============================================================ */
@@ -321,6 +326,7 @@ async function loadProfile() {
 
         document.getElementById("stat-streak").textContent = data.stats.streak;
         document.getElementById("stat-total").textContent = data.stats.total;
+        document.getElementById("stat-credits").textContent = data.credits || 0;
         document.getElementById("visibility-checkbox").checked = !!data.leaderboard_opt_in;
 
         cachedBadges = data.badges || [];
@@ -512,6 +518,92 @@ document.getElementById("invite-btn").addEventListener("click", () => {
         showToast("✅ Ссылка скопирована");
     }
 });
+
+/* ============================================================
+   PAYMENTS (Telegram Stars)
+   ============================================================ */
+
+let cachedPackages = null;
+
+async function loadPackages() {
+    if (cachedPackages) return cachedPackages;
+    try {
+        const data = await apiGet("/packages", {});
+        cachedPackages = data.items || [];
+    } catch (e) {
+        cachedPackages = [];
+    }
+    return cachedPackages;
+}
+
+async function openPaymentModal() {
+    const wrap = document.getElementById("packages-list");
+    wrap.innerHTML = `<div class="empty-state">Загрузка пакетов...</div>`;
+    openModal("payment-modal");
+    haptic("light");
+
+    const packages = await loadPackages();
+
+    if (!packages.length) {
+        wrap.innerHTML = `<div class="empty-state">❌ Оплата временно недоступна</div>`;
+        return;
+    }
+
+    // Пакет с лучшей ценой за анализ помечаем как "выгодно"
+    const bestValueId = packages.reduce((best, p) => {
+        const ratio = p.stars / p.credits;
+        const bestRatio = best ? best.stars / best.credits : Infinity;
+        return ratio < bestRatio ? p : best;
+    }, null)?.id;
+
+    wrap.innerHTML = packages.map(p => `
+        <div class="package-card ${p.id === bestValueId ? "popular" : ""}" data-id="${p.id}">
+            <div class="package-info">
+                <span class="package-title">${escapeHtml(p.title)}</span>
+                ${p.id === bestValueId ? `<span class="package-badge">Выгодно</span>` : ""}
+            </div>
+            <div class="package-price">⭐ ${p.stars}</div>
+        </div>
+    `).join("");
+
+    wrap.querySelectorAll(".package-card").forEach(card => {
+        card.addEventListener("click", () => buyPackage(card.dataset.id));
+    });
+}
+
+async function buyPackage(packageId) {
+    if (!hasAuth()) {
+        showToast("Доступно только в Telegram");
+        return;
+    }
+
+    haptic("medium");
+
+    const data = await apiPostForm("/create_invoice", {
+        init_data: tg.initData,
+        package: packageId,
+    });
+
+    if (data.error || !data.invoice_link) {
+        showToast(data.message || "❌ Не удалось создать счёт");
+        return;
+    }
+
+    tg.openInvoice(data.invoice_link, (status) => {
+        if (status === "paid") {
+            haptic("success");
+            launchConfetti();
+            showToast("✅ Оплата прошла! Баланс пополнен");
+            closeModal("payment-modal");
+            loadProfile();
+        } else if (status === "failed") {
+            haptic("error");
+            showToast("❌ Оплата не прошла");
+        } else if (status === "cancelled") {
+            haptic("light");
+        }
+    });
+}
 
 /* ============================================================
    SHARE CARD (canvas)
@@ -720,6 +812,20 @@ async function analyze() {
 
     const data = await response.json();
 
+    if (data.need_payment) {
+        haptic("warning");
+        resultEl.innerHTML = `
+        <div class="result-wrap">
+            <div class="paywall-card">
+                <div class="paywall-emoji">🔒</div>
+                <p>${escapeHtml(data.message || "Бесплатная попытка использована.")}</p>
+                <button class="share-btn" id="buy-credits-btn">⭐ Пополнить баланс</button>
+            </div>
+        </div>`;
+        document.getElementById("buy-credits-btn").addEventListener("click", openPaymentModal);
+        return;
+    }
+
     if (data.error) {
         haptic("error");
         resultEl.innerHTML = `<div class="result-wrap">${escapeHtml(data.message || "Произошла ошибка")}</div>`;
@@ -795,6 +901,7 @@ async function analyze() {
     // Update stats bar + badges from this response, refresh full profile in background
     if (typeof data.streak === "number") document.getElementById("stat-streak").textContent = data.streak;
     if (typeof data.total_analyses === "number") document.getElementById("stat-total").textContent = data.total_analyses;
+    if (typeof data.credits_left === "number") document.getElementById("stat-credits").textContent = data.credits_left;
     if (data.new_badges && data.new_badges.length) showBadgePopups(data.new_badges);
     loadProfile();
 

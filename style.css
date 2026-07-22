@@ -1089,8 +1089,14 @@ li {
    RESULT: extra score elements (style bar / vibe / potential)
    ============================================================ */
 
-.sub-score {
+.sub-scores {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
     margin-top: 18px;
+}
+
+.sub-score {
 }
 
 .sub-score-label {
@@ -1269,4 +1275,19 @@ li {
     font-size: 14px;
     margin-bottom: 18px;
     line-height: 1.5;
+}
+
+.history-mini-scores {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    opacity: .8;
+    margin-bottom: 8px;
+}
+
+.history-mini-scores span {
+    background: rgba(255,255,255,.08);
+    padding: 4px 9px;
+    border-radius: 999px;
 }

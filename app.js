@@ -31,6 +31,32 @@ function escapeHtml(str) {
     return div.innerHTML;
 }
 
+function dimorphismLabel(mode) {
+    if (mode === "male") return { emoji: "💪", label: "Маскулинность" };
+    if (mode === "female") return { emoji: "🌸", label: "Женственность" };
+    return { emoji: "⚖️", label: "Диморфизм" };
+}
+
+function buildSubScoresHtml(data, mode) {
+    const dm = dimorphismLabel(mode);
+
+    const items = [
+        { emoji: "💅", label: "Стиль", value: Number(data.style_score) || 0 },
+        { emoji: "🔮", label: "Симметрия", value: Number(data.symmetry_score) || 0 },
+        { emoji: "📐", label: "Гармония", value: Number(data.harmony_score) || 0 },
+        { emoji: dm.emoji, label: dm.label, value: Number(data.dimorphism_score) || 0 },
+    ];
+
+    return items.map(it => {
+        const width = Math.max(0, Math.min(100, (it.value / 10) * 100));
+        return `
+        <div class="sub-score">
+            <div class="sub-score-label"><span>${it.emoji} ${it.label}</span><span>${it.value.toFixed(1)}/10</span></div>
+            <div class="sub-score-track"><div class="sub-score-fill" data-width="${width}"></div></div>
+        </div>`;
+    }).join("");
+}
+
 /* ---------------- Small API helpers ---------------- */
 async function apiGet(path, params) {
     const url = new URL(API_BASE + path);
@@ -424,6 +450,12 @@ async function loadHistory() {
                 <div class="history-rating">${Number(item.rating || 0).toFixed(1)}</div>
             </div>
             <div class="history-body">
+                <div class="history-mini-scores">
+                    <span>💅 ${Number(item.style_score || 0).toFixed(1)}</span>
+                    <span>🔮 ${Number(item.symmetry_score || 0).toFixed(1)}</span>
+                    <span>📐 ${Number(item.harmony_score || 0).toFixed(1)}</span>
+                    <span>${dimorphismLabel(item.mode).emoji} ${Number(item.dimorphism_score || 0).toFixed(1)}</span>
+                </div>
                 <p>${escapeHtml(item.potential || "")}</p>
                 <ul>${(item.advice || []).map(a => `<li>${escapeHtml(a)}</li>`).join("")}</ul>
             </div>
@@ -689,17 +721,43 @@ async function buildShareCard(data, rating) {
         sc.fillText(text, W / 2, pillY + 29);
     }
 
+    // Мини-метрики: симметрия / гармония / диморфизм
+    const dm = dimorphismLabel(data.mode);
+    const miniStats = [
+        { emoji: "🔮", value: Number(data.symmetry_score) || 0 },
+        { emoji: "📐", value: Number(data.harmony_score) || 0 },
+        { emoji: dm.emoji, value: Number(data.dimorphism_score) || 0 },
+    ];
+
+    sc.font = "15px -apple-system, Arial";
+    const chipTexts = miniStats.map(m => `${m.emoji} ${m.value.toFixed(1)}`);
+    const chipWidths = chipTexts.map(t => sc.measureText(t).width + 30);
+    const gap = 10;
+    const totalW = chipWidths.reduce((a, b) => a + b, 0) + gap * (chipWidths.length - 1);
+    let chipX = W / 2 - totalW / 2;
+    const chipY = 565;
+
+    chipTexts.forEach((t, i) => {
+        const cw = chipWidths[i];
+        sc.fillStyle = "rgba(255,255,255,.08)";
+        roundRectPath(sc, chipX, chipY, cw, 34, 17);
+        sc.fill();
+        sc.fillStyle = "rgba(255,255,255,.85)";
+        sc.fillText(t, chipX + cw / 2, chipY + 23);
+        chipX += cw + gap;
+    });
+
     sc.font = "bold 26px -apple-system, Arial";
     sc.fillStyle = "#fff";
-    sc.fillText("✨ AI Rating", W / 2, 610);
+    sc.fillText("✨ AI Rating", W / 2, 622);
 
     sc.font = "16px -apple-system, Arial";
     sc.fillStyle = "rgba(255,255,255,.55)";
-    sc.fillText(`Узнай свою оценку: @${BOT_USERNAME}`, W / 2, 645);
+    sc.fillText(`Узнай свою оценку: @${BOT_USERNAME}`, W / 2, 657);
 
     sc.font = "12px -apple-system, Arial";
     sc.fillStyle = "rgba(255,255,255,.3)";
-    sc.fillText("результат сгенерирован нейросетью", W / 2, 710);
+    sc.fillText("результат сгенерирован нейросетью", W / 2, 722);
 }
 
 async function openShareCard(data, rating) {
@@ -811,6 +869,7 @@ async function analyze() {
     }
 
     const data = await response.json();
+    if (!data.error) data.mode = modeInput.value;
 
     if (data.need_payment) {
         haptic("warning");
@@ -833,9 +892,9 @@ async function analyze() {
     }
 
     const rating = Number(data.rating) || 0;
-    const styleScore = Number(data.style_score) || 0;
     const circumference = 314; // 2 * PI * r(50)
     const offset = circumference - (rating / 10) * circumference;
+    const subScoresHtml = buildSubScoresHtml(data, modeInput.value);
 
     resultEl.innerHTML = `
 <div class="result-wrap">
@@ -856,10 +915,7 @@ async function analyze() {
         </div>
         <p>${escapeHtml(data.summary || "")}</p>
 
-        <div class="sub-score">
-            <div class="sub-score-label"><span>💅 Стиль</span><span>${styleScore.toFixed(1)}/10</span></div>
-            <div class="sub-score-track"><div class="sub-score-fill" id="style-fill"></div></div>
-        </div>
+        <div class="sub-scores">${subScoresHtml}</div>
 
         ${data.vibe ? `<div class="vibe-pill">🌀 ${escapeHtml(data.vibe)}</div>` : ""}
 
@@ -884,8 +940,9 @@ async function analyze() {
     const ringFg = document.getElementById("ring-fg");
     requestAnimationFrame(() => {
         ringFg.style.strokeDashoffset = offset;
-        const fill = document.getElementById("style-fill");
-        if (fill) fill.style.width = Math.min(100, (styleScore / 10) * 100) + "%";
+        document.querySelectorAll(".sub-score-fill").forEach(el => {
+            el.style.width = el.dataset.width + "%";
+        });
     });
     animateCount(document.getElementById("score-count"), rating);
 

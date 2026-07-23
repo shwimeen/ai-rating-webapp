@@ -37,23 +37,69 @@ function dimorphismLabel(mode) {
     return { emoji: "⚖️", label: "Диморфизм" };
 }
 
-function buildSubScoresHtml(data, mode) {
-    const dm = dimorphismLabel(mode);
+// Единый список критериев — подписи/эмодзи совпадают с CRITERIA_GROUPS на backend.
+const CRITERIA_GROUPS = [
+    {
+        title: "📊 Основные критерии",
+        items: [
+            { key: "rating", emoji: "⭐", label: "Общая привлекательность" },
+            { key: "symmetry_score", emoji: "😊", label: "Симметрия лица" },
+            { key: "proportions_score", emoji: "📐", label: "Пропорции лица" },
+            { key: "jawline_score", emoji: "🦴", label: "Линия челюсти" },
+            { key: "chin_score", emoji: "👤", label: "Подбородок" },
+            { key: "eyes_score", emoji: "👀", label: "Глаза" },
+            { key: "nose_score", emoji: "👃", label: "Нос" },
+            { key: "lips_score", emoji: "👄", label: "Губы" },
+            { key: "skin_score", emoji: "🧴", label: "Кожа" },
+            { key: "hair_score", emoji: "💇", label: "Волосы и причёска" },
+            { key: "expression_score", emoji: "😐", label: "Выражение лица" },
+            { key: "photo_quality_score", emoji: "📸", label: "Качество фотографии" },
+        ],
+    },
+    {
+        title: "💪 Lookmaxing",
+        items: [
+            { key: "body_fat_percent", emoji: "🏋️", label: "Процент жира (оценочно)", unit: "%" },
+        ],
+    },
+    {
+        title: "✨ Дополнительно",
+        items: [
+            { key: "style_score", emoji: "💅", label: "Стиль" },
+            { key: "dimorphism_score", emoji: "⚖️", label: "Диморфизм" },
+        ],
+    },
+];
 
-    const items = [
-        { emoji: "💅", label: "Стиль", value: Number(data.style_score) || 0 },
-        { emoji: "🔮", label: "Симметрия", value: Number(data.symmetry_score) || 0 },
-        { emoji: "📐", label: "Гармония", value: Number(data.harmony_score) || 0 },
-        { emoji: dm.emoji, label: dm.label, value: Number(data.dimorphism_score) || 0 },
-    ];
+function buildCriteriaTableHtml(data, mode) {
+    return CRITERIA_GROUPS.map(group => {
+        const rows = group.items.map(item => {
+            let emoji = item.emoji;
+            let label = item.label;
 
-    return items.map(it => {
-        const width = Math.max(0, Math.min(100, (it.value / 10) * 100));
+            if (item.key === "dimorphism_score") {
+                const dm = dimorphismLabel(mode);
+                emoji = dm.emoji;
+                label = dm.label;
+            }
+
+            const raw = Number(data[item.key]) || 0;
+            const display = item.unit === "%"
+                ? `${raw.toFixed(1)}%`
+                : `${raw.toFixed(1)}<span class="crit-max">/10</span>`;
+
+            return `
+                <tr>
+                    <td class="crit-name">${emoji} ${escapeHtml(label)}</td>
+                    <td class="crit-value">${display}</td>
+                </tr>`;
+        }).join("");
+
         return `
-        <div class="sub-score">
-            <div class="sub-score-label"><span>${it.emoji} ${it.label}</span><span>${it.value.toFixed(1)}/10</span></div>
-            <div class="sub-score-track"><div class="sub-score-fill" data-width="${width}"></div></div>
-        </div>`;
+            <div class="criteria-group">
+                <h4 class="criteria-group-title">${group.title}</h4>
+                <table class="criteria-table"><tbody>${rows}</tbody></table>
+            </div>`;
     }).join("");
 }
 
@@ -87,38 +133,63 @@ modeGroup.addEventListener("click", (e) => {
     haptic("light");
 });
 
-/* ---------------- Photo upload + tilt effect ---------------- */
-const photoInput = document.getElementById("photo");
-const preview = document.getElementById("preview");
-const photoBox = document.getElementById("photo-box");
-const photoText = document.getElementById("photo-text");
+/* ---------------- Photo upload (2 шага: анфас → профиль) + tilt effect ---------------- */
+function setupPhotoBox(inputId, previewId, boxId, textId, loadedLabel) {
+    const input = document.getElementById(inputId);
+    const preview = document.getElementById(previewId);
+    const box = document.getElementById(boxId);
+    const text = document.getElementById(textId);
 
-let currentPhotoFile = null;
+    input.addEventListener("change", function () {
+        const file = this.files[0];
+        if (!file) return;
 
-photoInput.addEventListener("change", function () {
-    const file = this.files[0];
-    if (file) {
-        currentPhotoFile = file;
         preview.src = URL.createObjectURL(file);
         preview.style.display = "block";
-        photoText.innerHTML = `<span class="photo-icon">✅</span><span>Фото загружено</span>`;
-        photoBox.classList.add("loaded");
+        text.innerHTML = `<span class="photo-icon">✅</span><span>${loadedLabel}</span>`;
+        box.classList.add("loaded");
         haptic("medium");
+
+        onPhotoBoxChanged(boxId, file);
+    });
+
+    box.addEventListener("pointermove", (e) => {
+        if (!box.classList.contains("loaded")) return;
+        const rect = box.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        preview.style.transform = `scale(1.04) translate(${x * 10}px, ${y * 10}px)`;
+    });
+
+    box.addEventListener("pointerleave", () => {
+        preview.style.transform = "scale(1) translate(0,0)";
+    });
+
+    return { input, preview, box, text };
+}
+
+let currentPhotoFrontFile = null;
+let currentPhotoProfileFile = null;
+
+const frontPhotoEls = setupPhotoBox(
+    "photo-front", "preview-front", "photo-box-front", "photo-text-front", "Анфас загружен"
+);
+const profilePhotoEls = setupPhotoBox(
+    "photo-profile", "preview-profile", "photo-box-profile", "photo-text-profile", "Профиль загружен"
+);
+
+function onPhotoBoxChanged(boxId, file) {
+    if (boxId === "photo-box-front") {
+        currentPhotoFrontFile = file;
+        // Разблокируем шаг 2 сразу после выбора первого фото
+        profilePhotoEls.box.classList.remove("locked");
+        profilePhotoEls.input.disabled = false;
+    } else if (boxId === "photo-box-profile") {
+        currentPhotoProfileFile = file;
     }
-});
+}
 
-// Subtle tilt/parallax on the preview image following pointer
-photoBox.addEventListener("pointermove", (e) => {
-    if (!photoBox.classList.contains("loaded")) return;
-    const rect = photoBox.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
-    preview.style.transform = `scale(1.04) translate(${x * 10}px, ${y * 10}px)`;
-});
-
-photoBox.addEventListener("pointerleave", () => {
-    preview.style.transform = "scale(1) translate(0,0)";
-});
+const photoBox = frontPhotoEls.box; // используется ripple/scan-overlay кодом ниже, который завязан на "первый" бокс
 
 /* ---------------- Button ripple effect ---------------- */
 const analyzeBtn = document.getElementById("analyze-btn");
@@ -450,12 +521,7 @@ async function loadHistory() {
                 <div class="history-rating">${Number(item.rating || 0).toFixed(1)}</div>
             </div>
             <div class="history-body">
-                <div class="history-mini-scores">
-                    <span>💅 ${Number(item.style_score || 0).toFixed(1)}</span>
-                    <span>🔮 ${Number(item.symmetry_score || 0).toFixed(1)}</span>
-                    <span>📐 ${Number(item.harmony_score || 0).toFixed(1)}</span>
-                    <span>${dimorphismLabel(item.mode).emoji} ${Number(item.dimorphism_score || 0).toFixed(1)}</span>
-                </div>
+                ${buildCriteriaTableHtml(item, item.mode)}
                 <p>${escapeHtml(item.potential || "")}</p>
                 <ul>${(item.advice || []).map(a => `<li>${escapeHtml(a)}</li>`).join("")}</ul>
             </div>
@@ -672,9 +738,9 @@ async function buildShareCard(data, rating) {
     sc.fillStyle = bg;
     sc.fillRect(0, 0, W, H);
 
-    if (currentPhotoFile) {
+    if (currentPhotoFrontFile) {
         try {
-            const img = await loadImageFromFile(currentPhotoFile);
+            const img = await loadImageFromFile(currentPhotoFrontFile);
             const size = 260;
             const px = W / 2 - size / 2, py = 70;
 
@@ -721,12 +787,11 @@ async function buildShareCard(data, rating) {
         sc.fillText(text, W / 2, pillY + 29);
     }
 
-    // Мини-метрики: симметрия / гармония / диморфизм
-    const dm = dimorphismLabel(data.mode);
+    // Мини-метрики на карточке: симметрия / пропорции / чёткость челюсти
     const miniStats = [
-        { emoji: "🔮", value: Number(data.symmetry_score) || 0 },
-        { emoji: "📐", value: Number(data.harmony_score) || 0 },
-        { emoji: dm.emoji, value: Number(data.dimorphism_score) || 0 },
+        { emoji: "😊", value: Number(data.symmetry_score) || 0 },
+        { emoji: "📐", value: Number(data.proportions_score) || 0 },
+        { emoji: "🦴", value: Number(data.jawline_score) || 0 },
     ];
 
     sc.font = "15px -apple-system, Arial";
@@ -806,11 +871,18 @@ document.getElementById("share-native").addEventListener("click", () => {
 
 /* ---------------- Main analyze flow ---------------- */
 async function analyze() {
-    const file = document.getElementById("photo").files[0];
+    const frontFile = document.getElementById("photo-front").files[0];
+    const profileFile = document.getElementById("photo-profile").files[0];
 
-    if (!file) {
+    if (!frontFile) {
         haptic("error");
-        showToast("📸 Сначала выберите фото");
+        showToast("📸 Сначала загрузите фото анфас");
+        return;
+    }
+
+    if (!profileFile) {
+        haptic("error");
+        showToast("📸 Теперь загрузите фото профиля (сбоку)");
         return;
     }
 
@@ -821,7 +893,8 @@ async function analyze() {
     await playScanAnimation();
 
     const formData = new FormData();
-    formData.append("photo", file);
+    formData.append("photo_front", frontFile);
+    formData.append("photo_profile", profileFile);
     formData.append("mode", modeInput.value);
     formData.append("age", document.getElementById("age").value);
     formData.append("height", document.getElementById("height").value);
@@ -894,7 +967,7 @@ async function analyze() {
     const rating = Number(data.rating) || 0;
     const circumference = 314; // 2 * PI * r(50)
     const offset = circumference - (rating / 10) * circumference;
-    const subScoresHtml = buildSubScoresHtml(data, modeInput.value);
+    const criteriaHtml = buildCriteriaTableHtml(data, modeInput.value);
 
     resultEl.innerHTML = `
 <div class="result-wrap">
@@ -915,12 +988,12 @@ async function analyze() {
         </div>
         <p>${escapeHtml(data.summary || "")}</p>
 
-        <div class="sub-scores">${subScoresHtml}</div>
-
         ${data.vibe ? `<div class="vibe-pill">🌀 ${escapeHtml(data.vibe)}</div>` : ""}
 
         ${data.potential ? `<div class="potential-box"><b>Потенциал роста</b>${escapeHtml(data.potential)}</div>` : ""}
     </div>
+
+    <div class="criteria-wrap">${criteriaHtml}</div>
 
     <div class="section">
         <h3>✨ Сильные стороны</h3>
@@ -940,9 +1013,6 @@ async function analyze() {
     const ringFg = document.getElementById("ring-fg");
     requestAnimationFrame(() => {
         ringFg.style.strokeDashoffset = offset;
-        document.querySelectorAll(".sub-score-fill").forEach(el => {
-            el.style.width = el.dataset.width + "%";
-        });
     });
     animateCount(document.getElementById("score-count"), rating);
 

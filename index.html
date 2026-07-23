@@ -71,9 +71,9 @@
             </div>
         </div>
 
-        <label class="photo-box" id="photo-box">
+        <label class="photo-box" id="photo-box-front">
             <div class="photo-glow"></div>
-            <img id="preview" src="" alt="">
+            <img id="preview-front" src="" alt="">
 
             <div class="scan-overlay" id="scan-overlay">
                 <div class="scan-corners">
@@ -88,11 +88,23 @@
                 <div class="scan-status" id="scan-status">Поиск лица...</div>
             </div>
 
-            <div id="photo-text">
+            <div id="photo-text-front">
                 <span class="photo-icon">📸</span>
-                <span>Выберите фото</span>
+                <span>Шаг 1 — фото анфас (лицом к камере)</span>
             </div>
-            <input id="photo" type="file" accept="image/*">
+            <input id="photo-front" type="file" accept="image/*">
+        </label>
+
+        <label class="photo-box locked" id="photo-box-profile">
+            <div class="photo-glow"></div>
+            <img id="preview-profile" src="" alt="">
+
+            <div id="photo-text-profile">
+                <span class="photo-icon">🔄</span>
+                <span>Шаг 2 — фото профиля (вид сбоку)</span>
+            </div>
+            <div class="photo-lock-hint">Сначала загрузи фото анфас ⬆️</div>
+            <input id="photo-profile" type="file" accept="image/*" disabled>
         </label>
 
         <button id="analyze-btn" onclick="analyze()">

@@ -5,7 +5,7 @@
 <title>AI Rating</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<link rel="stylesheet" href="style.css?v=10">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -71,41 +71,42 @@
             </div>
         </div>
 
-        <label class="photo-box" id="photo-box-front">
-            <div class="photo-glow"></div>
-            <img id="preview-front" src="" alt="">
+        <div class="photo-box-split">
+            <label class="photo-half" id="photo-box-front">
+                <div class="photo-glow"></div>
+                <img id="preview-front" src="" alt="">
 
-            <div class="scan-overlay" id="scan-overlay">
-                <div class="scan-corners">
-                    <span class="corner tl"></span>
-                    <span class="corner tr"></span>
-                    <span class="corner bl"></span>
-                    <span class="corner br"></span>
+                <div class="scan-overlay" id="scan-overlay">
+                    <div class="scan-corners">
+                        <span class="corner tl"></span>
+                        <span class="corner tr"></span>
+                        <span class="corner bl"></span>
+                        <span class="corner br"></span>
+                    </div>
+                    <div class="scan-grid"></div>
+                    <div class="scan-line"></div>
+                    <div class="scan-dots" id="scan-dots"></div>
+                    <div class="scan-status" id="scan-status">Поиск...</div>
                 </div>
-                <div class="scan-grid"></div>
-                <div class="scan-line"></div>
-                <div class="scan-dots" id="scan-dots"></div>
-                <div class="scan-status" id="scan-status">Поиск лица...</div>
-            </div>
 
-            <div id="photo-text-front">
-                <span class="photo-icon">📸</span>
-                <span>Шаг 1 — фото анфас (лицом к камере)</span>
-            </div>
-            <input id="photo-front" type="file" accept="image/*">
-        </label>
+                <div id="photo-text-front">
+                    <span class="photo-icon">📸</span>
+                    <span>Анфас</span>
+                </div>
+                <input id="photo-front" type="file" accept="image/*">
+            </label>
 
-        <label class="photo-box locked" id="photo-box-profile">
-            <div class="photo-glow"></div>
-            <img id="preview-profile" src="" alt="">
+            <label class="photo-half" id="photo-box-profile">
+                <div class="photo-glow"></div>
+                <img id="preview-profile" src="" alt="">
 
-            <div id="photo-text-profile">
-                <span class="photo-icon">🔄</span>
-                <span>Шаг 2 — фото профиля (вид сбоку)</span>
-            </div>
-            <div class="photo-lock-hint">Сначала загрузи фото анфас ⬆️</div>
-            <input id="photo-profile" type="file" accept="image/*" disabled>
-        </label>
+                <div id="photo-text-profile">
+                    <span class="photo-icon">🔄</span>
+                    <span>Профиль</span>
+                </div>
+                <input id="photo-profile" type="file" accept="image/*">
+            </label>
+        </div>
 
         <button id="analyze-btn" onclick="analyze()">
             <span class="btn-label">🔥 Анализировать</span>
@@ -141,7 +142,10 @@
     </div>
     </div>
 
-    <div class="footer-hint">Работает на нейросети · результат может отличаться каждый раз</div>
+    <div class="footer-hint">
+        Работает на нейросети · результат может отличаться каждый раз<br>
+        <a href="#" id="privacy-link">🔒 Конфиденциальность</a>
+    </div>
 
 </div>
 
@@ -173,6 +177,23 @@
     </div>
 </div>
 
+<!-- ================= MODAL: PRIVACY ================= -->
+<div class="modal" id="privacy-modal">
+    <div class="modal-backdrop" data-close="privacy-modal"></div>
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3>🔒 Конфиденциальность</h3>
+            <button class="modal-close" data-close="privacy-modal">✕</button>
+        </div>
+        <div class="privacy-text">
+            <p>Фото используются <b>только</b> для анализа внешности и не передаются третьим лицам, кроме сервиса Google Gemini, который непосредственно выполняет сам анализ по нашему запросу.</p>
+            <p>Файлы фотографий удаляются с сервера сразу после обработки — они нигде не сохраняются.</p>
+            <p>Сохраняются только результаты анализа (оценки, текст советов) и привязка к твоему Telegram-аккаунту — чтобы работали история, стрики и бейджи.</p>
+            <p>Данные для лидерборда (имя, оценка) видны другим пользователям, только если ты сам не отключил показ в настройках топа.</p>
+        </div>
+    </div>
+</div>
+
 <!-- ================= MODAL: BUY CREDITS ================= -->
 <div class="modal" id="payment-modal">
     <div class="modal-backdrop" data-close="payment-modal"></div>
@@ -190,6 +211,6 @@
 
 <div class="badge-popup" id="badge-popup"></div>
 
-    <script src="app.js?v=10"></script>
+<script src="app.js"></script>
 </body>
 </html>

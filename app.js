@@ -4,7 +4,7 @@ tg.ready();
 
 // ⚠️ Замени на username своего бота (без @) — используется в реферальных
 // ссылках и на карточке результата.
-const BOT_USERNAME = "pslmaxai_bot";
+const BOT_USERNAME = "your_bot_username";
 
 const API_BASE = "https://ai-rating-backend-2.onrender.com";
 
@@ -181,9 +181,6 @@ const profilePhotoEls = setupPhotoBox(
 function onPhotoBoxChanged(boxId, file) {
     if (boxId === "photo-box-front") {
         currentPhotoFrontFile = file;
-        // Разблокируем шаг 2 сразу после выбора первого фото
-        profilePhotoEls.box.classList.remove("locked");
-        profilePhotoEls.input.disabled = false;
     } else if (boxId === "photo-box-profile") {
         currentPhotoProfileFile = file;
     }
@@ -397,6 +394,12 @@ document.querySelectorAll("[data-close]").forEach(el => {
 
 function openModal(id) { document.getElementById(id).classList.add("open"); }
 function closeModal(id) { document.getElementById(id).classList.remove("open"); }
+
+document.getElementById("privacy-link").addEventListener("click", (e) => {
+    e.preventDefault();
+    openModal("privacy-modal");
+    haptic("light");
+});
 
 document.getElementById("badges-btn").addEventListener("click", () => {
     renderBadgesGrid();

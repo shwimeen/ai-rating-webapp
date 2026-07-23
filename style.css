@@ -209,33 +209,44 @@ select option {
     color: black;
 }
 
-/* ---------- Photo box ---------- */
-.photo-box {
-    display: block;
+/* ---------- Photo box (split: анфас | профиль в одном ряду) ---------- */
+.photo-box-split {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.photo-half {
+    flex: 1;
+    min-width: 0;
     position: relative;
     text-align: center;
-    padding: 18px;
-    border-radius: 20px;
+    padding: 10px 6px;
+    aspect-ratio: 3 / 4;
+    border-radius: 18px;
     border: 2px dashed rgba(255,255,255,.3);
-    margin-top: 10px;
     cursor: pointer;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     transition: border-color .3s var(--ease), transform .1s var(--ease), background .3s var(--ease);
     transform-style: preserve-3d;
 }
 
-.photo-box:active {
-    transform: scale(.98);
+.photo-half:active {
+    transform: scale(.97);
 }
 
-.photo-box input {
+.photo-half input {
     display: none;
 }
 
-.photo-glow {
+.photo-half .photo-glow {
     position: absolute;
     inset: -2px;
-    border-radius: 20px;
+    border-radius: 18px;
     background: linear-gradient(135deg, var(--violet), var(--pink));
     opacity: 0;
     z-index: -1;
@@ -243,54 +254,51 @@ select option {
     transition: opacity .4s var(--ease);
 }
 
-.photo-box.loaded .photo-glow {
+.photo-half.loaded .photo-glow {
     opacity: .35;
 }
 
-.photo-box.loaded {
+.photo-half.loaded {
     border-color: var(--violet);
     background: rgba(139,92,246,.15);
 }
 
-.photo-box.locked {
-    cursor: not-allowed;
-    opacity: .45;
-    filter: grayscale(.6);
-    pointer-events: none;
-}
-
-.photo-lock-hint {
-    display: none;
-    margin-top: 8px;
-    font-size: 12px;
-    opacity: .7;
-}
-
-.photo-box.locked .photo-lock-hint {
-    display: block;
-}
-
-#preview-front, #preview-profile {
+.photo-half img {
+    position: absolute;
+    inset: 0;
     width: 100%;
-    max-height: 250px;
+    height: 100%;
     object-fit: cover;
-    border-radius: 20px;
     display: none;
-    margin-bottom: 10px;
     transition: transform .3s var(--ease);
     will-change: transform;
 }
 
-#photo-text-front, #photo-text-profile {
-    font-size: 16px;
+.photo-half #photo-text-front,
+.photo-half #photo-text-profile {
+    position: relative;
+    z-index: 1;
+    font-size: 13px;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 8px;
+    gap: 6px;
+    padding: 6px;
+    background: rgba(5,5,10,.35);
+    border-radius: 10px;
+}
+
+.photo-half.loaded #photo-text-front,
+.photo-half.loaded #photo-text-profile {
+    position: absolute;
+    bottom: 6px;
+    left: 6px;
+    right: 6px;
 }
 
 .photo-icon {
     display: inline-block;
+    font-size: 20px;
     animation: bob 2.4s ease-in-out infinite;
 }
 
@@ -664,6 +672,23 @@ li {
     font-size: 12px;
     opacity: .35;
     margin-top: 18px;
+    line-height: 1.8;
+}
+
+.footer-hint a {
+    color: rgba(255,255,255,.5);
+    text-decoration: underline;
+}
+
+.privacy-text p {
+    font-size: 13px;
+    line-height: 1.6;
+    opacity: .85;
+    margin: 0 0 14px;
+}
+
+.privacy-text p:last-child {
+    margin-bottom: 0;
 }
 
 .toast {

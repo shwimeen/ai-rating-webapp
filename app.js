@@ -4,7 +4,7 @@ tg.ready();
 
 // ⚠️ Замени на username своего бота (без @) — используется в реферальных
 // ссылках и на карточке результата.
-const BOT_USERNAME = "your_bot_username";
+const BOT_USERNAME = "pslmaxai_bot";
 
 const API_BASE = "https://ai-rating-backend-2.onrender.com";
 

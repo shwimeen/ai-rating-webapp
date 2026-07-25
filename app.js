@@ -8,6 +8,269 @@ const BOT_USERNAME = "pslmaxai_bot";
 
 const API_BASE = "https://ai-rating-backend-2.onrender.com";
 
+/* ============================================================
+   I18N — перевод интерфейса (ru/en)
+   ============================================================ */
+
+let currentLang = "ru";
+
+const I18N = {
+    ru: {
+        app_subtitle: "Оцени свою внешность<br>с помощью искусственного интеллекта",
+        stat_days: "дней",
+        stat_analyses: "анализов",
+        stat_balance: "баланс",
+        tab_analyze: "🔥 Анализ",
+        tab_history: "🕓 История",
+        tab_leaderboard: "🏆 Топ",
+        mode_label: "🎯 Тип анализа",
+        mode_male: "👨 Муж.",
+        mode_female: "👩 Жен.",
+        mode_general: "✨ Общая",
+        field_age: "🎂 Возраст",
+        field_height: "📏 Рост (см)",
+        field_weight: "⚖️ Вес (кг)",
+        photo_front_label: "Анфас",
+        photo_profile_label: "Профиль",
+        photo_front_loaded: "Анфас загружен",
+        photo_profile_loaded: "Профиль загружен",
+        scan_status_default: "Поиск...",
+        analyze_btn: "🔥 Анализировать",
+        history_loading: "🕓 Загрузка истории...",
+        invite_btn: "🤝 Пригласить друга",
+        visibility_label: "Показывать меня в топе",
+        leaderboard_loading: "🏆 Загрузка топа...",
+        footer_hint: "Работает на нейросети · результат может отличаться каждый раз",
+        privacy_link: "🔒 Конфиденциальность",
+        badges_modal_title: "🏅 Бейджи",
+        privacy_modal_title: "🔒 Конфиденциальность",
+        privacy_p1: "Фото используются <b>только</b> для анализа внешности и не передаются третьим лицам, кроме сервиса Google Gemini, который непосредственно выполняет сам анализ по нашему запросу.",
+        privacy_p2: "Файлы фотографий удаляются с сервера сразу после обработки — они нигде не сохраняются.",
+        privacy_p3: "Сохраняются только результаты анализа (оценки, текст советов) и привязка к твоему Telegram-аккаунту — чтобы работали история, стрики и бейджи.",
+        privacy_p4: "Данные для лидерборда (имя, оценка) видны другим пользователям, только если ты сам не отключил показ в настройках топа.",
+        payment_modal_title: "⭐ Пополнить баланс",
+        payment_hint: "Бесплатная попытка использована. Выбери пакет — оплата звёздами Telegram, прямо здесь.",
+        packages_loading: "Загрузка пакетов...",
+        share_modal_title: "📤 Поделиться",
+        share_download: "⬇️ Скачать",
+        share_native: "📤 Поделиться",
+
+        toast_select_front: "📸 Сначала загрузите фото анфас",
+        toast_select_profile: "📸 Теперь загрузите фото профиля (сбоку)",
+        toast_telegram_only: "Доступно только в Telegram",
+        toast_link_copied: "✅ Ссылка скопирована",
+        toast_invoice_failed: "❌ Не удалось создать счёт",
+        toast_payment_success: "✅ Оплата прошла! Баланс пополнен",
+        toast_payment_failed: "❌ Оплата не прошла",
+        toast_copied_manual_download: "✅ Ссылка скопирована, картинку скачайте вручную",
+        share_native_text: "Мой AI Rating ✨ Проверь свою оценку:",
+
+        thinking_phrases: [
+            "🔍 Изучаем изображение...",
+            "🧠 Анализируем черты лица...",
+            "📐 Считаем пропорции...",
+            "💫 Оцениваем стиль...",
+            "✍️ Формируем вывод...",
+        ],
+        scan_status_phases: [
+            "Поиск лица...",
+            "Лицо обнаружено ✅",
+            "Разметка точек...",
+            "Анализ пропорций...",
+        ],
+
+        result_error_generic: "Произошла ошибка",
+        server_unreachable: "❌ Не удалось связаться с сервером",
+        unknown_error: "Неизвестная ошибка",
+
+        criteria_group_main: "📊 Основные критерии",
+        criteria_group_lookmax: "💪 Lookmaxing",
+        criteria_group_bonus: "✨ Дополнительно",
+        crit_rating: "Общая привлекательность",
+        crit_symmetry_score: "Симметрия лица",
+        crit_proportions_score: "Пропорции лица",
+        crit_jawline_score: "Линия челюсти",
+        crit_chin_score: "Подбородок",
+        crit_eyes_score: "Глаза",
+        crit_nose_score: "Нос",
+        crit_lips_score: "Губы",
+        crit_skin_score: "Кожа",
+        crit_hair_score: "Волосы и причёска",
+        crit_expression_score: "Выражение лица",
+        crit_photo_quality_score: "Качество фотографии",
+        crit_body_fat_percent: "Процент жира (оценочно)",
+        crit_style_score: "Стиль",
+        dimorphism_male: "Маскулинность",
+        dimorphism_female: "Женственность",
+        dimorphism_general: "Диморфизм",
+
+        strengths_title: "✨ Сильные стороны",
+        advice_title: "💡 Советы",
+        share_result_btn: "📤 Поделиться результатом",
+        potential_title: "Потенциал роста",
+        buy_credits_btn: "⭐ Пополнить баланс",
+        loading_title: "✨ AI анализирует",
+        paywall_default_message: "Бесплатная попытка использована.",
+
+        history_empty_no_auth: "Откройте приложение через Telegram, чтобы видеть историю 🔒",
+        history_load_error: "❌ Не удалось загрузить историю",
+        history_empty: "Пока нет ни одного анализа 👀<br>Начни на вкладке «Анализ»",
+
+        leaderboard_load_error: "❌ Не удалось загрузить топ",
+        leaderboard_empty: "Топ пока пуст — стань первым! 🚀",
+        leaderboard_you_suffix: " (вы)",
+        leaderboard_default_name: "Игрок",
+
+        badges_empty: "Бейджи появятся после первого анализа ✨",
+        badge_new_prefix: "Новый бейдж: ",
+
+        packages_unavailable: "❌ Оплата временно недоступна",
+        package_badge_best: "Выгодно",
+
+        share_out_of_10: "из 10",
+        share_get_your_rating: "Узнай свою оценку:",
+        share_ai_generated: "результат сгенерирован нейросетью",
+        share_brand: "✨ AI Rating",
+        invite_share_text: "Узнай свою AI-оценку внешности ✨",
+    },
+
+    en: {
+        app_subtitle: "Get your appearance rated<br>by artificial intelligence",
+        stat_days: "days",
+        stat_analyses: "analyses",
+        stat_balance: "balance",
+        tab_analyze: "🔥 Analyze",
+        tab_history: "🕓 History",
+        tab_leaderboard: "🏆 Top",
+        mode_label: "🎯 Analysis type",
+        mode_male: "👨 Male",
+        mode_female: "👩 Female",
+        mode_general: "✨ General",
+        field_age: "🎂 Age",
+        field_height: "📏 Height (cm)",
+        field_weight: "⚖️ Weight (kg)",
+        photo_front_label: "Front",
+        photo_profile_label: "Profile",
+        photo_front_loaded: "Front photo added",
+        photo_profile_loaded: "Profile photo added",
+        scan_status_default: "Searching...",
+        analyze_btn: "🔥 Analyze",
+        history_loading: "🕓 Loading history...",
+        invite_btn: "🤝 Invite a friend",
+        visibility_label: "Show me on the leaderboard",
+        leaderboard_loading: "🏆 Loading leaderboard...",
+        footer_hint: "Powered by AI · results may vary each time",
+        privacy_link: "🔒 Privacy",
+        badges_modal_title: "🏅 Badges",
+        privacy_modal_title: "🔒 Privacy",
+        privacy_p1: "Photos are used <b>only</b> to analyze your appearance and are not shared with third parties, except for the Google Gemini service, which performs the analysis itself on our request.",
+        privacy_p2: "Photo files are deleted from the server right after processing — they are never stored.",
+        privacy_p3: "Only the analysis results (scores, advice text) and a link to your Telegram account are saved — so history, streaks and badges work.",
+        privacy_p4: "Leaderboard data (name, score) is visible to other users only if you haven't disabled it in leaderboard settings.",
+        payment_modal_title: "⭐ Top up balance",
+        payment_hint: "Your free trial has been used. Choose a package — pay with Telegram Stars, right here.",
+        packages_loading: "Loading packages...",
+        share_modal_title: "📤 Share",
+        share_download: "⬇️ Download",
+        share_native: "📤 Share",
+
+        toast_select_front: "📸 Please upload a front photo first",
+        toast_select_profile: "📸 Now upload a profile (side) photo",
+        toast_telegram_only: "Available only in Telegram",
+        toast_link_copied: "✅ Link copied",
+        toast_invoice_failed: "❌ Failed to create invoice",
+        toast_payment_success: "✅ Payment successful! Balance topped up",
+        toast_payment_failed: "❌ Payment failed",
+        toast_copied_manual_download: "✅ Link copied, please download the image manually",
+        share_native_text: "My AI Rating ✨ Check your score:",
+
+        thinking_phrases: [
+            "🔍 Studying the image...",
+            "🧠 Analyzing facial features...",
+            "📐 Calculating proportions...",
+            "💫 Evaluating style...",
+            "✍️ Putting together the verdict...",
+        ],
+        scan_status_phases: [
+            "Searching for a face...",
+            "Face detected ✅",
+            "Mapping landmarks...",
+            "Analyzing proportions...",
+        ],
+
+        result_error_generic: "Something went wrong",
+        server_unreachable: "❌ Could not reach the server",
+        unknown_error: "Unknown error",
+
+        criteria_group_main: "📊 Main criteria",
+        criteria_group_lookmax: "💪 Lookmaxing",
+        criteria_group_bonus: "✨ Bonus",
+        crit_rating: "Overall attractiveness",
+        crit_symmetry_score: "Facial symmetry",
+        crit_proportions_score: "Facial proportions",
+        crit_jawline_score: "Jawline",
+        crit_chin_score: "Chin",
+        crit_eyes_score: "Eyes",
+        crit_nose_score: "Nose",
+        crit_lips_score: "Lips",
+        crit_skin_score: "Skin",
+        crit_hair_score: "Hair & hairstyle",
+        crit_expression_score: "Facial expression",
+        crit_photo_quality_score: "Photo quality",
+        crit_body_fat_percent: "Body fat (estimated)",
+        crit_style_score: "Style",
+        dimorphism_male: "Masculinity",
+        dimorphism_female: "Femininity",
+        dimorphism_general: "Dimorphism",
+
+        strengths_title: "✨ Strengths",
+        advice_title: "💡 Advice",
+        share_result_btn: "📤 Share result",
+        potential_title: "Growth potential",
+        buy_credits_btn: "⭐ Top up balance",
+        loading_title: "✨ AI is analyzing",
+        paywall_default_message: "Your free trial has been used.",
+
+        history_empty_no_auth: "Open the app via Telegram to see your history 🔒",
+        history_load_error: "❌ Failed to load history",
+        history_empty: "No analyses yet 👀<br>Start on the Analyze tab",
+
+        leaderboard_load_error: "❌ Failed to load leaderboard",
+        leaderboard_empty: "Leaderboard is empty — be the first! 🚀",
+        leaderboard_you_suffix: " (you)",
+        leaderboard_default_name: "Player",
+
+        badges_empty: "Badges will appear after your first analysis ✨",
+        badge_new_prefix: "New badge: ",
+
+        packages_unavailable: "❌ Payments are temporarily unavailable",
+        package_badge_best: "Best value",
+
+        share_out_of_10: "out of 10",
+        share_get_your_rating: "Get your rating:",
+        share_ai_generated: "result generated by AI",
+        share_brand: "✨ AI Rating",
+        invite_share_text: "Discover your AI appearance rating ✨",
+    },
+};
+
+function t(key) {
+    return (I18N[currentLang] && I18N[currentLang][key]) ?? I18N.ru[key] ?? key;
+}
+
+function applyStaticTranslations() {
+    document.documentElement.lang = currentLang;
+
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+        el.innerHTML = t(el.dataset.i18n);
+    });
+
+    document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+        el.placeholder = t(el.dataset.i18nPlaceholder);
+    });
+}
+
+
 // Apply Telegram theme background subtly if available (falls back to CSS gradient)
 try { tg.setHeaderColor && tg.setHeaderColor("secondary_bg_color"); } catch(e) {}
 
@@ -32,41 +295,42 @@ function escapeHtml(str) {
 }
 
 function dimorphismLabel(mode) {
-    if (mode === "male") return { emoji: "💪", label: "Маскулинность" };
-    if (mode === "female") return { emoji: "🌸", label: "Женственность" };
-    return { emoji: "⚖️", label: "Диморфизм" };
+    if (mode === "male") return { emoji: "💪", label: t("dimorphism_male") };
+    if (mode === "female") return { emoji: "🌸", label: t("dimorphism_female") };
+    return { emoji: "⚖️", label: t("dimorphism_general") };
 }
 
-// Единый список критериев — подписи/эмодзи совпадают с CRITERIA_GROUPS на backend.
+// Единый список критериев — ключи совпадают с CRITERIA_GROUPS на backend,
+// подписи резолвятся через t() в момент рендера (чтобы учитывать язык).
 const CRITERIA_GROUPS = [
     {
-        title: "📊 Основные критерии",
+        titleKey: "criteria_group_main",
         items: [
-            { key: "rating", emoji: "⭐", label: "Общая привлекательность" },
-            { key: "symmetry_score", emoji: "😊", label: "Симметрия лица" },
-            { key: "proportions_score", emoji: "📐", label: "Пропорции лица" },
-            { key: "jawline_score", emoji: "🦴", label: "Линия челюсти" },
-            { key: "chin_score", emoji: "👤", label: "Подбородок" },
-            { key: "eyes_score", emoji: "👀", label: "Глаза" },
-            { key: "nose_score", emoji: "👃", label: "Нос" },
-            { key: "lips_score", emoji: "👄", label: "Губы" },
-            { key: "skin_score", emoji: "🧴", label: "Кожа" },
-            { key: "hair_score", emoji: "💇", label: "Волосы и причёска" },
-            { key: "expression_score", emoji: "😐", label: "Выражение лица" },
-            { key: "photo_quality_score", emoji: "📸", label: "Качество фотографии" },
+            { key: "rating", emoji: "⭐", labelKey: "crit_rating" },
+            { key: "symmetry_score", emoji: "😊", labelKey: "crit_symmetry_score" },
+            { key: "proportions_score", emoji: "📐", labelKey: "crit_proportions_score" },
+            { key: "jawline_score", emoji: "🦴", labelKey: "crit_jawline_score" },
+            { key: "chin_score", emoji: "👤", labelKey: "crit_chin_score" },
+            { key: "eyes_score", emoji: "👀", labelKey: "crit_eyes_score" },
+            { key: "nose_score", emoji: "👃", labelKey: "crit_nose_score" },
+            { key: "lips_score", emoji: "👄", labelKey: "crit_lips_score" },
+            { key: "skin_score", emoji: "🧴", labelKey: "crit_skin_score" },
+            { key: "hair_score", emoji: "💇", labelKey: "crit_hair_score" },
+            { key: "expression_score", emoji: "😐", labelKey: "crit_expression_score" },
+            { key: "photo_quality_score", emoji: "📸", labelKey: "crit_photo_quality_score" },
         ],
     },
     {
-        title: "💪 Lookmaxing",
+        titleKey: "criteria_group_lookmax",
         items: [
-            { key: "body_fat_percent", emoji: "🏋️", label: "Процент жира (оценочно)", unit: "%" },
+            { key: "body_fat_percent", emoji: "🏋️", labelKey: "crit_body_fat_percent", unit: "%" },
         ],
     },
     {
-        title: "✨ Дополнительно",
+        titleKey: "criteria_group_bonus",
         items: [
-            { key: "style_score", emoji: "💅", label: "Стиль" },
-            { key: "dimorphism_score", emoji: "⚖️", label: "Диморфизм" },
+            { key: "style_score", emoji: "💅", labelKey: "crit_style_score" },
+            { key: "dimorphism_score", emoji: "⚖️", labelKey: null },
         ],
     },
 ];
@@ -75,7 +339,7 @@ function buildCriteriaTableHtml(data, mode) {
     return CRITERIA_GROUPS.map(group => {
         const rows = group.items.map(item => {
             let emoji = item.emoji;
-            let label = item.label;
+            let label = item.labelKey ? t(item.labelKey) : "";
 
             if (item.key === "dimorphism_score") {
                 const dm = dimorphismLabel(mode);
@@ -97,7 +361,7 @@ function buildCriteriaTableHtml(data, mode) {
 
         return `
             <div class="criteria-group">
-                <h4 class="criteria-group-title">${group.title}</h4>
+                <h4 class="criteria-group-title">${t(group.titleKey)}</h4>
                 <table class="criteria-table"><tbody>${rows}</tbody></table>
             </div>`;
     }).join("");
@@ -134,7 +398,7 @@ modeGroup.addEventListener("click", (e) => {
 });
 
 /* ---------------- Photo upload (2 шага: анфас → профиль) + tilt effect ---------------- */
-function setupPhotoBox(inputId, previewId, boxId, textId, loadedLabel) {
+function setupPhotoBox(inputId, previewId, boxId, textId, loadedLabelKey) {
     const input = document.getElementById(inputId);
     const preview = document.getElementById(previewId);
     const box = document.getElementById(boxId);
@@ -146,7 +410,7 @@ function setupPhotoBox(inputId, previewId, boxId, textId, loadedLabel) {
 
         preview.src = URL.createObjectURL(file);
         preview.style.display = "block";
-        text.innerHTML = `<span class="photo-icon">✅</span><span>${loadedLabel}</span>`;
+        text.innerHTML = `<span class="photo-icon">✅</span><span>${t(loadedLabelKey)}</span>`;
         box.classList.add("loaded");
         haptic("medium");
 
@@ -172,10 +436,10 @@ let currentPhotoFrontFile = null;
 let currentPhotoProfileFile = null;
 
 const frontPhotoEls = setupPhotoBox(
-    "photo-front", "preview-front", "photo-box-front", "photo-text-front", "Анфас загружен"
+    "photo-front", "preview-front", "photo-box-front", "photo-text-front", "photo_front_loaded"
 );
 const profilePhotoEls = setupPhotoBox(
-    "photo-profile", "preview-profile", "photo-box-profile", "photo-text-profile", "Профиль загружен"
+    "photo-profile", "preview-profile", "photo-box-profile", "photo-text-profile", "photo_profile_loaded"
 );
 
 function onPhotoBoxChanged(boxId, file) {
@@ -218,25 +482,18 @@ function showToast(msg) {
 }
 
 /* ---------------- Rotating "thinking" phrases ---------------- */
-const thinkingPhrases = [
-    "🔍 Изучаем изображение...",
-    "🧠 Анализируем черты лица...",
-    "📐 Считаем пропорции...",
-    "💫 Оцениваем стиль...",
-    "✍️ Формируем вывод..."
-];
-
 let thinkingTimer = null;
 
 function startThinkingRotation() {
+    const phrases = t("thinking_phrases");
     let i = 0;
     const el = document.getElementById("ai-text");
     thinkingTimer = setInterval(() => {
-        i = (i + 1) % thinkingPhrases.length;
+        i = (i + 1) % phrases.length;
         if (el) {
             el.style.opacity = 0;
             setTimeout(() => {
-                el.textContent = thinkingPhrases[i];
+                el.textContent = phrases[i];
                 el.style.opacity = .65;
             }, 250);
         }
@@ -324,14 +581,8 @@ const scanOverlay = document.getElementById("scan-overlay");
 const scanDotsWrap = document.getElementById("scan-dots");
 const scanStatusEl = document.getElementById("scan-status");
 
-const scanStatusPhases = [
-    "Поиск лица...",
-    "Лицо обнаружено ✅",
-    "Разметка точек...",
-    "Анализ пропорций..."
-];
-
 function playScanAnimation(duration = 2200) {
+    const scanStatusPhases = t("scan_status_phases");
     return new Promise((resolve) => {
         scanDotsWrap.innerHTML = "";
         scanOverlay.classList.add("active");
@@ -407,6 +658,22 @@ document.getElementById("badges-btn").addEventListener("click", () => {
     haptic("light");
 });
 
+document.getElementById("lang-btn").addEventListener("click", async () => {
+    const newLang = currentLang === "en" ? "ru" : "en";
+    currentLang = newLang;
+    applyStaticTranslations();
+    renderBadgesGrid();
+    haptic("light");
+
+    if (hasAuth()) {
+        try {
+            await apiPostForm("/language", { init_data: tg.initData, language: newLang });
+        } catch (e) {
+            console.error("language switch failed", e);
+        }
+    }
+});
+
 document.getElementById("stat-credits").closest(".stat").addEventListener("click", () => {
     openPaymentModal();
 });
@@ -424,6 +691,11 @@ async function loadProfile() {
         const data = await apiGet("/profile", { init_data: tg.initData });
         if (data.error) return;
 
+        if (data.language && I18N[data.language]) {
+            currentLang = data.language;
+            applyStaticTranslations();
+        }
+
         document.getElementById("stat-streak").textContent = data.stats.streak;
         document.getElementById("stat-total").textContent = data.stats.total;
         document.getElementById("stat-credits").textContent = data.credits || 0;
@@ -435,16 +707,39 @@ async function loadProfile() {
     }
 }
 
+// Названия бейджей переводим на клиенте по id — сервер присылает только
+// русское name (используется как fallback, если id не распознан).
+const BADGE_NAMES = {
+    ru: {
+        first_scan: "Первый шаг", five_scans: "Разогрелся", twenty_scans: "Ветеран",
+        streak_3: "3 дня подряд", streak_7: "Неделя подряд", high_score: "Топ 9+",
+        style_icon: "Икона стиля", symmetry_master: "Идеальная симметрия",
+        golden_ratio: "Золотое сечение", sharp_jawline: "Чёткая челюсть",
+        clear_skin: "Чистая кожа", inviter: "Первый друг", inviter5: "Амбассадор",
+    },
+    en: {
+        first_scan: "First step", five_scans: "Warmed up", twenty_scans: "Veteran",
+        streak_3: "3-day streak", streak_7: "7-day streak", high_score: "Top 9+",
+        style_icon: "Style icon", symmetry_master: "Perfect symmetry",
+        golden_ratio: "Golden ratio", sharp_jawline: "Sharp jawline",
+        clear_skin: "Clear skin", inviter: "First friend", inviter5: "Ambassador",
+    },
+};
+
+function badgeName(b) {
+    return (BADGE_NAMES[currentLang] && BADGE_NAMES[currentLang][b.id]) || b.name;
+}
+
 function renderBadgesGrid() {
     const grid = document.getElementById("badges-grid");
     if (!cachedBadges.length) {
-        grid.innerHTML = `<div class="empty-state">Бейджи появятся после первого анализа ✨</div>`;
+        grid.innerHTML = `<div class="empty-state">${t("badges_empty")}</div>`;
         return;
     }
     grid.innerHTML = cachedBadges.map(b => `
         <div class="badge-chip ${b.earned ? "earned" : ""}">
             <span class="badge-emoji">${b.emoji}</span>
-            <span class="badge-name">${escapeHtml(b.name)}</span>
+            <span class="badge-name">${escapeHtml(badgeName(b))}</span>
         </div>
     `).join("");
 }
@@ -456,7 +751,7 @@ function showBadgePopups(badges) {
         setTimeout(() => {
             const el = document.createElement("div");
             el.className = "badge-popup-item";
-            el.innerHTML = `<span class="badge-emoji">${b.emoji}</span><span>Новый бейдж: ${escapeHtml(b.name)}</span>`;
+            el.innerHTML = `<span class="badge-emoji">${b.emoji}</span><span>${t("badge_new_prefix")}${escapeHtml(badgeName(b))}</span>`;
             wrap.appendChild(el);
             requestAnimationFrame(() => el.classList.add("show"));
             haptic("success");
@@ -471,7 +766,7 @@ function showBadgePopups(badges) {
 document.getElementById("visibility-checkbox").addEventListener("change", async function () {
     if (!hasAuth()) {
         this.checked = !this.checked;
-        showToast("Доступно только в Telegram");
+        showToast(t("toast_telegram_only"));
         return;
     }
     await apiPostForm("/profile/visibility", { init_data: tg.initData, visible: this.checked });
@@ -488,30 +783,32 @@ async function loadHistory() {
     const wrap = document.getElementById("history-list");
 
     if (!hasAuth()) {
-        wrap.innerHTML = `<div class="empty-state">Откройте приложение через Telegram, чтобы видеть историю 🔒</div>`;
+        wrap.innerHTML = `<div class="empty-state">${t("history_empty_no_auth")}</div>`;
         return;
     }
 
-    wrap.innerHTML = `<div class="empty-state">🕓 Загрузка истории...</div>`;
+    wrap.innerHTML = `<div class="empty-state">${t("history_loading")}</div>`;
 
     let data;
     try {
         data = await apiGet("/history", { init_data: tg.initData, limit: 30 });
     } catch (e) {
-        wrap.innerHTML = `<div class="empty-state">❌ Не удалось загрузить историю</div>`;
+        wrap.innerHTML = `<div class="empty-state">${t("history_load_error")}</div>`;
         return;
     }
 
     if (data.error || !data.items || data.items.length === 0) {
-        wrap.innerHTML = `<div class="empty-state">Пока нет ни одного анализа 👀<br>Начни на вкладке «Анализ»</div>`;
+        wrap.innerHTML = `<div class="empty-state">${t("history_empty")}</div>`;
         return;
     }
+
+    const dateLocale = currentLang === "en" ? "en-US" : "ru-RU";
 
     wrap.innerHTML = data.items.map(item => {
         const dt = new Date(item.created_at);
         const dateStr = isNaN(dt.getTime())
             ? ""
-            : dt.toLocaleDateString("ru-RU", { day: "numeric", month: "short" });
+            : dt.toLocaleDateString(dateLocale, { day: "numeric", month: "short" });
 
         return `
         <div class="history-item" data-id="${item.id}">
@@ -545,18 +842,18 @@ async function loadHistory() {
 
 async function loadLeaderboard() {
     const wrap = document.getElementById("leaderboard-list");
-    wrap.innerHTML = `<div class="empty-state">🏆 Загрузка топа...</div>`;
+    wrap.innerHTML = `<div class="empty-state">${t("leaderboard_loading")}</div>`;
 
     let data;
     try {
         data = await apiGet("/leaderboard", { init_data: tg.initData || "", limit: 30 });
     } catch (e) {
-        wrap.innerHTML = `<div class="empty-state">❌ Не удалось загрузить топ</div>`;
+        wrap.innerHTML = `<div class="empty-state">${t("leaderboard_load_error")}</div>`;
         return;
     }
 
     if (data.error || !data.items || data.items.length === 0) {
-        wrap.innerHTML = `<div class="empty-state">Топ пока пуст — стань первым! 🚀</div>`;
+        wrap.innerHTML = `<div class="empty-state">${t("leaderboard_empty")}</div>`;
         return;
     }
 
@@ -573,7 +870,7 @@ async function loadLeaderboard() {
         <div class="leaderboard-row ${row.is_you ? "is-you" : ""}">
             <div class="leaderboard-rank">${medal}</div>
             ${avatar}
-            <div class="leaderboard-name">${escapeHtml(row.first_name || "Игрок")}${row.is_you ? " (вы)" : ""}</div>
+            <div class="leaderboard-name">${escapeHtml(row.first_name || t("leaderboard_default_name"))}${row.is_you ? t("leaderboard_you_suffix") : ""}</div>
             <div class="leaderboard-score">${Number(row.best_rating || 0).toFixed(1)}</div>
         </div>`;
     }).join("");
@@ -604,11 +901,11 @@ async function handleReferral() {
 document.getElementById("invite-btn").addEventListener("click", () => {
     const myId = tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id;
     if (!myId) {
-        showToast("Доступно только в Telegram");
+        showToast(t("toast_telegram_only"));
         return;
     }
     const link = `https://t.me/${BOT_USERNAME}?startapp=ref_${myId}`;
-    const text = `Узнай свою AI-оценку внешности ✨\n${link}`;
+    const text = `${t("invite_share_text")}\n${link}`;
 
     haptic("medium");
 
@@ -616,7 +913,7 @@ document.getElementById("invite-btn").addEventListener("click", () => {
         navigator.share({ text }).catch(() => {});
     } else if (navigator.clipboard) {
         navigator.clipboard.writeText(text);
-        showToast("✅ Ссылка скопирована");
+        showToast(t("toast_link_copied"));
     }
 });
 
@@ -637,16 +934,26 @@ async function loadPackages() {
     return cachedPackages;
 }
 
+// Названия пакетов переводим на клиенте по id, цену/кредиты берём с сервера.
+const PACKAGE_LABELS = {
+    ru: { small: "5 анализов", medium: "15 анализов", large: "50 анализов" },
+    en: { small: "5 analyses", medium: "15 analyses", large: "50 analyses" },
+};
+
+function packageTitle(p) {
+    return (PACKAGE_LABELS[currentLang] && PACKAGE_LABELS[currentLang][p.id]) || p.title;
+}
+
 async function openPaymentModal() {
     const wrap = document.getElementById("packages-list");
-    wrap.innerHTML = `<div class="empty-state">Загрузка пакетов...</div>`;
+    wrap.innerHTML = `<div class="empty-state">${t("packages_loading")}</div>`;
     openModal("payment-modal");
     haptic("light");
 
     const packages = await loadPackages();
 
     if (!packages.length) {
-        wrap.innerHTML = `<div class="empty-state">❌ Оплата временно недоступна</div>`;
+        wrap.innerHTML = `<div class="empty-state">${t("packages_unavailable")}</div>`;
         return;
     }
 
@@ -660,8 +967,8 @@ async function openPaymentModal() {
     wrap.innerHTML = packages.map(p => `
         <div class="package-card ${p.id === bestValueId ? "popular" : ""}" data-id="${p.id}">
             <div class="package-info">
-                <span class="package-title">${escapeHtml(p.title)}</span>
-                ${p.id === bestValueId ? `<span class="package-badge">Выгодно</span>` : ""}
+                <span class="package-title">${escapeHtml(packageTitle(p))}</span>
+                ${p.id === bestValueId ? `<span class="package-badge">${t("package_badge_best")}</span>` : ""}
             </div>
             <div class="package-price">⭐ ${p.stars}</div>
         </div>
@@ -674,7 +981,7 @@ async function openPaymentModal() {
 
 async function buyPackage(packageId) {
     if (!hasAuth()) {
-        showToast("Доступно только в Telegram");
+        showToast(t("toast_telegram_only"));
         return;
     }
 
@@ -686,7 +993,7 @@ async function buyPackage(packageId) {
     });
 
     if (data.error || !data.invoice_link) {
-        showToast(data.message || "❌ Не удалось создать счёт");
+        showToast(data.message || t("toast_invoice_failed"));
         return;
     }
 
@@ -694,12 +1001,12 @@ async function buyPackage(packageId) {
         if (status === "paid") {
             haptic("success");
             launchConfetti();
-            showToast("✅ Оплата прошла! Баланс пополнен");
+            showToast(t("toast_payment_success"));
             closeModal("payment-modal");
             loadProfile();
         } else if (status === "failed") {
             haptic("error");
-            showToast("❌ Оплата не прошла");
+            showToast(t("toast_payment_failed"));
         } else if (status === "cancelled") {
             haptic("light");
         }
@@ -771,7 +1078,7 @@ async function buildShareCard(data, rating) {
 
     sc.font = "20px -apple-system, Arial";
     sc.fillStyle = "rgba(255,255,255,.6)";
-    sc.fillText("из 10", W / 2, 478);
+    sc.fillText(t("share_out_of_10"), W / 2, 478);
 
     if (data.vibe) {
         sc.font = "bold 22px -apple-system, Arial";
@@ -799,33 +1106,33 @@ async function buildShareCard(data, rating) {
 
     sc.font = "15px -apple-system, Arial";
     const chipTexts = miniStats.map(m => `${m.emoji} ${m.value.toFixed(1)}`);
-    const chipWidths = chipTexts.map(t => sc.measureText(t).width + 30);
+    const chipWidths = chipTexts.map(txt => sc.measureText(txt).width + 30);
     const gap = 10;
     const totalW = chipWidths.reduce((a, b) => a + b, 0) + gap * (chipWidths.length - 1);
     let chipX = W / 2 - totalW / 2;
     const chipY = 565;
 
-    chipTexts.forEach((t, i) => {
+    chipTexts.forEach((txt, i) => {
         const cw = chipWidths[i];
         sc.fillStyle = "rgba(255,255,255,.08)";
         roundRectPath(sc, chipX, chipY, cw, 34, 17);
         sc.fill();
         sc.fillStyle = "rgba(255,255,255,.85)";
-        sc.fillText(t, chipX + cw / 2, chipY + 23);
+        sc.fillText(txt, chipX + cw / 2, chipY + 23);
         chipX += cw + gap;
     });
 
     sc.font = "bold 26px -apple-system, Arial";
     sc.fillStyle = "#fff";
-    sc.fillText("✨ AI Rating", W / 2, 622);
+    sc.fillText(t("share_brand"), W / 2, 622);
 
     sc.font = "16px -apple-system, Arial";
     sc.fillStyle = "rgba(255,255,255,.55)";
-    sc.fillText(`Узнай свою оценку: @${BOT_USERNAME}`, W / 2, 657);
+    sc.fillText(`${t("share_get_your_rating")} @${BOT_USERNAME}`, W / 2, 657);
 
     sc.font = "12px -apple-system, Arial";
     sc.fillStyle = "rgba(255,255,255,.3)";
-    sc.fillText("результат сгенерирован нейросетью", W / 2, 722);
+    sc.fillText(t("share_ai_generated"), W / 2, 722);
 }
 
 async function openShareCard(data, rating) {
@@ -853,7 +1160,7 @@ document.getElementById("share-native").addEventListener("click", () => {
         const file = new File([blob], "ai-rating.png", { type: "image/png" });
         const myId = tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id;
         const link = myId ? `https://t.me/${BOT_USERNAME}?startapp=ref_${myId}` : `https://t.me/${BOT_USERNAME}`;
-        const text = `Мой AI Rating ✨ Проверь свою оценку: ${link}`;
+        const text = `${t("share_native_text")} ${link}`;
 
         if (navigator.canShare && navigator.canShare({ files: [file] })) {
             try {
@@ -867,7 +1174,7 @@ document.getElementById("share-native").addEventListener("click", () => {
 
         if (navigator.clipboard) {
             navigator.clipboard.writeText(text);
-            showToast("✅ Ссылка скопирована, картинку скачайте вручную");
+            showToast(t("toast_copied_manual_download"));
         }
     }, "image/png");
 });
@@ -879,13 +1186,13 @@ async function analyze() {
 
     if (!frontFile) {
         haptic("error");
-        showToast("📸 Сначала загрузите фото анфас");
+        showToast(t("toast_select_front"));
         return;
     }
 
     if (!profileFile) {
         haptic("error");
-        showToast("📸 Теперь загрузите фото профиля (сбоку)");
+        showToast(t("toast_select_profile"));
         return;
     }
 
@@ -908,8 +1215,8 @@ async function analyze() {
     resultEl.innerHTML = `
 <div class="loading">
     <div class="skeleton-ring"></div>
-    <h3>✨ AI анализирует</h3>
-    <p id="ai-text">🔍 Изучаем изображение...</p>
+    <h3>${t("loading_title")}</h3>
+    <p id="ai-text">${t("thinking_phrases")[0]}</p>
     <div class="skeleton-line w1"></div>
     <div class="skeleton-line w2"></div>
     <div class="skeleton-line w3"></div>
@@ -926,7 +1233,7 @@ async function analyze() {
         stopThinkingRotation();
         analyzeBtn.classList.remove("loading");
         haptic("error");
-        resultEl.innerHTML = `<div class="result-wrap">❌ Не удалось связаться с сервером</div>`;
+        resultEl.innerHTML = `<div class="result-wrap">${t("server_unreachable")}</div>`;
         return;
     }
 
@@ -935,7 +1242,7 @@ async function analyze() {
 
     if (!response.ok) {
         haptic("error");
-        let errorText = "Неизвестная ошибка";
+        let errorText = t("unknown_error");
         try {
             const errorData = await response.json();
             errorText = errorData.error || errorText;
@@ -953,8 +1260,8 @@ async function analyze() {
         <div class="result-wrap">
             <div class="paywall-card">
                 <div class="paywall-emoji">🔒</div>
-                <p>${escapeHtml(data.message || "Бесплатная попытка использована.")}</p>
-                <button class="share-btn" id="buy-credits-btn">⭐ Пополнить баланс</button>
+                <p>${escapeHtml(data.message || t("paywall_default_message"))}</p>
+                <button class="share-btn" id="buy-credits-btn">${t("buy_credits_btn")}</button>
             </div>
         </div>`;
         document.getElementById("buy-credits-btn").addEventListener("click", openPaymentModal);
@@ -963,7 +1270,7 @@ async function analyze() {
 
     if (data.error) {
         haptic("error");
-        resultEl.innerHTML = `<div class="result-wrap">${escapeHtml(data.message || "Произошла ошибка")}</div>`;
+        resultEl.innerHTML = `<div class="result-wrap">${escapeHtml(data.message || t("result_error_generic"))}</div>`;
         return;
     }
 
@@ -993,22 +1300,22 @@ async function analyze() {
 
         ${data.vibe ? `<div class="vibe-pill">🌀 ${escapeHtml(data.vibe)}</div>` : ""}
 
-        ${data.potential ? `<div class="potential-box"><b>Потенциал роста</b>${escapeHtml(data.potential)}</div>` : ""}
+        ${data.potential ? `<div class="potential-box"><b>${t("potential_title")}</b>${escapeHtml(data.potential)}</div>` : ""}
     </div>
 
     <div class="criteria-wrap">${criteriaHtml}</div>
 
     <div class="section">
-        <h3>✨ Сильные стороны</h3>
+        <h3>${t("strengths_title")}</h3>
         <ul>${(data.strengths || []).map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
     </div>
 
     <div class="section">
-        <h3>💡 Советы</h3>
+        <h3>${t("advice_title")}</h3>
         <ul>${(data.advice || []).map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
     </div>
 
-    <button class="share-btn" id="share-btn">📤 Поделиться результатом</button>
+    <button class="share-btn" id="share-btn">${t("share_result_btn")}</button>
 
 </div>`;
 
@@ -1042,5 +1349,6 @@ async function analyze() {
 }
 
 /* ---------------- Init ---------------- */
+applyStaticTranslations();
 loadProfile();
 handleReferral();

@@ -577,28 +577,15 @@ function launchConfetti() {
 }
 
 /* ---------------- Face scan overlay animation ---------------- */
-const scanOverlay = document.getElementById("scan-overlay");
-const scanDotsWrap = document.getElementById("scan-dots");
+const scanOverlayFront = document.getElementById("scan-overlay-front");
+const scanOverlayProfile = document.getElementById("scan-overlay-profile");
 const scanStatusEl = document.getElementById("scan-status");
 
 function playScanAnimation(duration = 2200) {
     const scanStatusPhases = t("scan_status_phases");
     return new Promise((resolve) => {
-        scanDotsWrap.innerHTML = "";
-        scanOverlay.classList.add("active");
-
-        // Scatter random "landmark" dots inside the frame, staggered
-        const dotCount = 14;
-        for (let i = 0; i < dotCount; i++) {
-            const dot = document.createElement("div");
-            dot.className = "scan-dot";
-            const x = 20 + Math.random() * 60; // % within frame, avoiding edges
-            const y = 20 + Math.random() * 60;
-            dot.style.left = x + "%";
-            dot.style.top = y + "%";
-            dot.style.animationDelay = (i * 0.07) + "s";
-            scanDotsWrap.appendChild(dot);
-        }
+        scanOverlayFront.classList.add("active");
+        scanOverlayProfile.classList.add("active");
 
         // Cycle status text
         let phase = 0;
@@ -612,7 +599,8 @@ function playScanAnimation(duration = 2200) {
 
         setTimeout(() => {
             clearInterval(statusInterval);
-            scanOverlay.classList.remove("active");
+            scanOverlayFront.classList.remove("active");
+            scanOverlayProfile.classList.remove("active");
             haptic("success");
             resolve();
         }, duration);

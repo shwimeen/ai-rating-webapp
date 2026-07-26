@@ -706,6 +706,8 @@ li {
 .stats-bar {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
+    row-gap: 8px;
     gap: 10px;
     background: rgba(255,255,255,.06);
     border: 1px solid rgba(255,255,255,.08);
@@ -713,6 +715,12 @@ li {
     padding: 10px 14px;
     margin-bottom: 14px;
     animation: fadeDown .7s var(--ease);
+}
+
+.stats-actions {
+    display: flex;
+    gap: 8px;
+    margin-left: auto;
 }
 
 .stats-bar .stat {
@@ -734,12 +742,17 @@ li {
 }
 
 .badges-btn {
-    margin-left: auto;
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border: 1px solid rgba(255,255,255,.15);
     background: rgba(255,255,255,.06);
     color: white;
-    font-size: 12px;
-    padding: 8px 12px;
+    font-size: 14px;
+    padding: 0;
     border-radius: 12px;
     cursor: pointer;
     transition: background .25s var(--ease), transform .15s var(--ease);

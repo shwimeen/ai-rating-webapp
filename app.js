@@ -652,26 +652,21 @@ function launchConfetti() {
 /* ---------------- Face scan overlay animation ---------------- */
 const scanOverlayFront = document.getElementById("scan-overlay-front");
 const scanOverlayProfile = document.getElementById("scan-overlay-profile");
-const scanStatusEl = document.getElementById("scan-status");
 
 function playScanAnimation(duration = 2200) {
-    const scanStatusPhases = t("scan_status_phases");
     return new Promise((resolve) => {
         scanOverlayFront.classList.add("active");
         scanOverlayProfile.classList.add("active");
-
-        // Cycle status text
-        let phase = 0;
-        scanStatusEl.textContent = scanStatusPhases[0];
         haptic("light");
-        const statusInterval = setInterval(() => {
-            phase = (phase + 1) % scanStatusPhases.length;
-            scanStatusEl.textContent = scanStatusPhases[phase];
+
+        // Лёгкая haptic-обратная связь по ходу сканирования (без текста).
+        const tickCount = 4;
+        const hapticInterval = setInterval(() => {
             haptic("light");
-        }, duration / scanStatusPhases.length);
+        }, duration / tickCount);
 
         setTimeout(() => {
-            clearInterval(statusInterval);
+            clearInterval(hapticInterval);
             scanOverlayFront.classList.remove("active");
             scanOverlayProfile.classList.remove("active");
             haptic("success");

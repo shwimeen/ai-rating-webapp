@@ -35,7 +35,7 @@
             <span class="stat-label" data-i18n="stat_balance">баланс</span>
         </div>
         <div class="stats-actions">
-            <button class="badges-btn" id="lang-btn">🌐</button>
+            <button class="badges-btn" id="settings-btn">⚙️</button>
             <button class="badges-btn" id="badges-btn">🏅</button>
         </div>
     </div>
@@ -144,11 +144,6 @@
     <div class="card">
         <button class="share-btn" id="invite-btn" data-i18n="invite_btn">🤝 Пригласить друга</button>
 
-        <label class="visibility-toggle">
-            <input type="checkbox" id="visibility-checkbox" checked>
-            <span data-i18n="visibility_label">Показывать меня в топе</span>
-        </label>
-
         <div id="leaderboard-list">
             <div class="empty-state" data-i18n="leaderboard_loading">🏆 Загрузка топа...</div>
         </div>
@@ -186,6 +181,36 @@
         <div class="share-actions">
             <button class="share-action-btn" id="share-download" data-i18n="share_download">⬇️ Скачать</button>
             <button class="share-action-btn primary" id="share-native" data-i18n="share_native">📤 Поделиться</button>
+        </div>
+    </div>
+</div>
+
+<!-- ================= MODAL: SETTINGS ================= -->
+<div class="modal" id="settings-modal">
+    <div class="modal-backdrop" data-close="settings-modal"></div>
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3 data-i18n="settings_modal_title">⚙️ Настройки</h3>
+            <button class="modal-close" data-close="settings-modal">✕</button>
+        </div>
+
+        <div class="settings-section">
+            <label class="settings-label" data-i18n="settings_language_label">Язык интерфейса</label>
+            <div class="segmented" id="settings-lang-group">
+                <button type="button" class="seg" data-lang="ru">🇷🇺 Русский</button>
+                <button type="button" class="seg" data-lang="en">🇬🇧 English</button>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <label class="visibility-toggle">
+                <input type="checkbox" id="visibility-checkbox" checked>
+                <span data-i18n="visibility_label">Показывать меня в топе</span>
+            </label>
+        </div>
+
+        <div class="settings-section">
+            <a href="#" id="privacy-link-settings" class="settings-link" data-i18n="privacy_link">🔒 Конфиденциальность</a>
         </div>
     </div>
 </div>

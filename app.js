@@ -42,6 +42,8 @@ const I18N = {
         leaderboard_loading: "🏆 Загрузка топа...",
         footer_hint: "Работает на нейросети · результат может отличаться каждый раз",
         privacy_link: "🔒 Конфиденциальность",
+        settings_modal_title: "⚙️ Настройки",
+        settings_language_label: "Язык интерфейса",
         badges_modal_title: "🏅 Бейджи",
         privacy_modal_title: "🔒 Конфиденциальность",
         privacy_p1: "Фото используются <b>только</b> для анализа внешности и не передаются третьим лицам, кроме сервиса Google Gemini, который непосредственно выполняет сам анализ по нашему запросу.",
@@ -108,6 +110,9 @@ const I18N = {
         advice_title: "💡 Советы",
         share_result_btn: "📤 Поделиться результатом",
         potential_title: "Потенциал роста",
+        progress_up: "с прошлого раза",
+        progress_down: "с прошлого раза",
+        checklist_progress: "выполнено",
         buy_credits_btn: "⭐ Пополнить баланс",
         loading_title: "✨ AI анализирует",
         paywall_default_message: "Бесплатная попытка использована.",
@@ -161,6 +166,8 @@ const I18N = {
         leaderboard_loading: "🏆 Loading leaderboard...",
         footer_hint: "Powered by AI · results may vary each time",
         privacy_link: "🔒 Privacy",
+        settings_modal_title: "⚙️ Settings",
+        settings_language_label: "Interface language",
         badges_modal_title: "🏅 Badges",
         privacy_modal_title: "🔒 Privacy",
         privacy_p1: "Photos are used <b>only</b> to analyze your appearance and are not shared with third parties, except for the Google Gemini service, which performs the analysis itself on our request.",
@@ -227,6 +234,9 @@ const I18N = {
         advice_title: "💡 Advice",
         share_result_btn: "📤 Share result",
         potential_title: "Growth potential",
+        progress_up: "since last time",
+        progress_down: "since last time",
+        checklist_progress: "completed",
         buy_credits_btn: "⭐ Top up balance",
         loading_title: "✨ AI is analyzing",
         paywall_default_message: "Your free trial has been used.",
@@ -294,6 +304,60 @@ function escapeHtml(str) {
     return div.innerHTML;
 }
 
+function buildAdviceChecklistHtml(analysisId, adviceList, progressArr) {
+    if (!adviceList.length) return "";
+
+    return `<ul class="advice-checklist">` + adviceList.map((item, i) => {
+        const done = !!progressArr[i];
+        return `
+        <li class="advice-item ${done ? "done" : ""}" data-analysis-id="${analysisId || ""}" data-index="${i}">
+            <span class="advice-checkbox">${done ? "✅" : "⬜"}</span>
+            <span class="advice-text">${escapeHtml(item)}</span>
+        </li>`;
+    }).join("") + `</ul>`;
+}
+
+function updateAdviceProgressLabel(container) {
+    const label = container.querySelector(".advice-progress-label");
+    if (!label) return;
+    const items = container.querySelectorAll(".advice-item");
+    const done = container.querySelectorAll(".advice-item.done").length;
+    label.textContent = `${done}/${items.length} ${t("checklist_progress")}`;
+}
+
+// Делегирование клика по чек-листу советов — работает и в результате анализа, и в истории.
+document.addEventListener("click", async (e) => {
+    const li = e.target.closest(".advice-item");
+    if (!li) return;
+
+    const analysisId = li.dataset.analysisId;
+    if (!analysisId) {
+        showToast(t("toast_telegram_only"));
+        return;
+    }
+
+    const index = Number(li.dataset.index);
+    const willBeDone = !li.classList.contains("done");
+
+    li.classList.toggle("done", willBeDone);
+    li.querySelector(".advice-checkbox").textContent = willBeDone ? "✅" : "⬜";
+    haptic("light");
+
+    const container = li.closest(".section, .history-body");
+    if (container) updateAdviceProgressLabel(container);
+
+    try {
+        await apiPostForm("/advice/toggle", {
+            init_data: tg.initData,
+            analysis_id: analysisId,
+            index: index,
+            done: willBeDone,
+        });
+    } catch (err) {
+        console.error("advice toggle failed", err);
+    }
+});
+
 function dimorphismLabel(mode) {
     if (mode === "male") return { emoji: "💪", label: t("dimorphism_male") };
     if (mode === "female") return { emoji: "🌸", label: t("dimorphism_female") };
@@ -335,7 +399,7 @@ const CRITERIA_GROUPS = [
     },
 ];
 
-function buildCriteriaTableHtml(data, mode) {
+function buildCriteriaTableHtml(data, mode, deltas) {
     return CRITERIA_GROUPS.map(group => {
         const rows = group.items.map(item => {
             let emoji = item.emoji;
@@ -352,10 +416,19 @@ function buildCriteriaTableHtml(data, mode) {
                 ? `${raw.toFixed(1)}%`
                 : `${raw.toFixed(1)}<span class="crit-max">/10</span>`;
 
+            let deltaHtml = "";
+            if (deltas && typeof deltas[item.key] === "number" && deltas[item.key] !== 0) {
+                const d = deltas[item.key];
+                const up = d > 0;
+                const cls = up ? "delta-up" : "delta-down";
+                const arrow = up ? "▲" : "▼";
+                deltaHtml = `<span class="crit-delta ${cls}">${arrow} ${Math.abs(d).toFixed(1)}</span>`;
+            }
+
             return `
                 <tr>
                     <td class="crit-name">${emoji} ${escapeHtml(label)}</td>
-                    <td class="crit-value">${display}</td>
+                    <td class="crit-value">${display}${deltaHtml}</td>
                 </tr>`;
         }).join("");
 
@@ -640,17 +713,24 @@ document.getElementById("privacy-link").addEventListener("click", (e) => {
     haptic("light");
 });
 
+document.getElementById("privacy-link-settings").addEventListener("click", (e) => {
+    e.preventDefault();
+    openModal("privacy-modal");
+    haptic("light");
+});
+
 document.getElementById("badges-btn").addEventListener("click", () => {
     renderBadgesGrid();
     openModal("badges-modal");
     haptic("light");
 });
 
-document.getElementById("lang-btn").addEventListener("click", async () => {
-    const newLang = currentLang === "en" ? "ru" : "en";
+async function switchLanguage(newLang) {
+    if (newLang === currentLang) return;
     currentLang = newLang;
     applyStaticTranslations();
     renderBadgesGrid();
+    updateSettingsLangButtons();
     haptic("light");
 
     if (hasAuth()) {
@@ -660,6 +740,22 @@ document.getElementById("lang-btn").addEventListener("click", async () => {
             console.error("language switch failed", e);
         }
     }
+}
+
+function updateSettingsLangButtons() {
+    document.querySelectorAll("#settings-lang-group .seg").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.lang === currentLang);
+    });
+}
+
+document.querySelectorAll("#settings-lang-group .seg").forEach(btn => {
+    btn.addEventListener("click", () => switchLanguage(btn.dataset.lang));
+});
+
+document.getElementById("settings-btn").addEventListener("click", () => {
+    updateSettingsLangButtons();
+    openModal("settings-modal");
+    haptic("light");
 });
 
 document.getElementById("stat-credits").closest(".stat").addEventListener("click", () => {
@@ -682,6 +778,7 @@ async function loadProfile() {
         if (data.language && I18N[data.language]) {
             currentLang = data.language;
             applyStaticTranslations();
+            updateSettingsLangButtons();
         }
 
         document.getElementById("stat-streak").textContent = data.stats.streak;
@@ -811,10 +908,15 @@ async function loadHistory() {
             <div class="history-body">
                 ${buildCriteriaTableHtml(item, item.mode)}
                 <p>${escapeHtml(item.potential || "")}</p>
-                <ul>${(item.advice || []).map(a => `<li>${escapeHtml(a)}</li>`).join("")}</ul>
+                <div class="advice-header">
+                    <span class="advice-progress-label"></span>
+                </div>
+                ${buildAdviceChecklistHtml(item.id, item.advice || [], item.advice_progress || [])}
             </div>
         </div>`;
     }).join("");
+
+    wrap.querySelectorAll(".history-body").forEach(el => updateAdviceProgressLabel(el));
 
     wrap.querySelectorAll(".history-item").forEach(el => {
         el.addEventListener("click", () => {
@@ -1265,7 +1367,19 @@ async function analyze() {
     const rating = Number(data.rating) || 0;
     const circumference = 314; // 2 * PI * r(50)
     const offset = circumference - (rating / 10) * circumference;
-    const criteriaHtml = buildCriteriaTableHtml(data, modeInput.value);
+    const criteriaHtml = buildCriteriaTableHtml(data, modeInput.value, data.deltas);
+
+    let progressChip = "";
+    if (data.has_previous && data.deltas && typeof data.deltas.rating === "number" && data.deltas.rating !== 0) {
+        const d = data.deltas.rating;
+        const up = d > 0;
+        progressChip = `<div class="progress-chip ${up ? "delta-up" : "delta-down"}">
+            ${up ? "▲" : "▼"} ${Math.abs(d).toFixed(1)} ${t(up ? "progress_up" : "progress_down")}
+        </div>`;
+    }
+
+    const adviceList = data.advice || [];
+    const adviceProgress = adviceList.map(() => false);
 
     resultEl.innerHTML = `
 <div class="result-wrap">
@@ -1284,6 +1398,7 @@ async function analyze() {
             </svg>
             <div class="score-number"><span id="score-count">0.0</span><span>/10</span></div>
         </div>
+        ${progressChip}
         <p>${escapeHtml(data.summary || "")}</p>
 
         ${data.vibe ? `<div class="vibe-pill">🌀 ${escapeHtml(data.vibe)}</div>` : ""}
@@ -1299,8 +1414,11 @@ async function analyze() {
     </div>
 
     <div class="section">
-        <h3>${t("advice_title")}</h3>
-        <ul>${(data.advice || []).map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+        <div class="advice-header">
+            <h3>${t("advice_title")}</h3>
+            <span class="advice-progress-label" id="advice-progress-label">0/${adviceList.length} ${t("checklist_progress")}</span>
+        </div>
+        ${buildAdviceChecklistHtml(data.analysis_id, adviceList, adviceProgress)}
     </div>
 
     <button class="share-btn" id="share-btn">${t("share_result_btn")}</button>

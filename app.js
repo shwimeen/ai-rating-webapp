@@ -961,7 +961,7 @@ async function loadLeaderboard() {
             <div class="leaderboard-rank">${medal}</div>
             ${avatar}
             <div class="leaderboard-name">${escapeHtml(row.first_name || t("leaderboard_default_name"))}${row.is_you ? t("leaderboard_you_suffix") : ""}</div>
-            <div class="leaderboard-score">${Number(row.best_rating || 0).toFixed(1)}</div>
+            <div class="leaderboard-score">${Number(row.latest_rating || 0).toFixed(1)}</div>
         </div>`;
     }).join("");
 }

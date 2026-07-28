@@ -294,6 +294,14 @@ select option {
     bottom: 6px;
     left: 6px;
     right: 6px;
+    opacity: 1;
+    transition: opacity .2s var(--ease);
+}
+
+.scan-overlay.active ~ #photo-text-front,
+.scan-overlay.active ~ #photo-text-profile {
+    opacity: 0;
+    pointer-events: none;
 }
 
 .photo-icon {

@@ -5,72 +5,70 @@
 <title>AI Rating</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<canvas id="confetti"></canvas>
-
 <div class="container">
 
     <div class="header">
-        <h1>✨ AI Rating</h1>
+        <h1>AI Rating</h1>
         <p data-i18n="app_subtitle">Оцени свою внешность<br>с помощью искусственного интеллекта</p>
     </div>
 
     <div class="stats-bar" id="stats-bar">
         <div class="stat">
-            <span class="stat-emoji">🔥</span>
             <span id="stat-streak">0</span>
             <span class="stat-label" data-i18n="stat_days">дней</span>
         </div>
         <div class="stat">
-            <span class="stat-emoji">📸</span>
             <span id="stat-total">0</span>
             <span class="stat-label" data-i18n="stat_analyses">анализов</span>
         </div>
         <div class="stat">
-            <span class="stat-emoji">💰</span>
             <span id="stat-credits">0</span>
             <span class="stat-label" data-i18n="stat_balance">баланс</span>
         </div>
         <div class="stats-actions">
-            <button class="badges-btn" id="settings-btn">⚙️</button>
-            <button class="badges-btn" id="badges-btn">🏅</button>
+            <button class="badges-btn" id="settings-btn" data-i18n="nav_settings">Настройки</button>
+            <button class="badges-btn" id="badges-btn" data-i18n="nav_badges">Бейджи</button>
         </div>
     </div>
 
     <div class="tabbar" id="tabbar">
-        <button class="tab active" data-tab="analyze" data-i18n="tab_analyze">🔥 Анализ</button>
-        <button class="tab" data-tab="history" data-i18n="tab_history">🕓 История</button>
-        <button class="tab" data-tab="leaderboard" data-i18n="tab_leaderboard">🏆 Топ</button>
+        <button class="tab active" data-tab="analyze" data-i18n="tab_analyze">Анализ</button>
+        <button class="tab" data-tab="history" data-i18n="tab_history">История</button>
+        <button class="tab" data-tab="leaderboard" data-i18n="tab_leaderboard">Топ</button>
     </div>
 
     <!-- ================= TAB: ANALYZE ================= -->
     <div class="tab-panel active" id="panel-analyze">
     <div class="card">
 
-        <label data-i18n="mode_label">🎯 Тип анализа</label>
+        <label data-i18n="mode_label">Тип анализа</label>
 
         <div class="segmented" id="mode-group">
-            <button type="button" class="seg active" data-value="male" data-i18n="mode_male">👨 Муж.</button>
-            <button type="button" class="seg" data-value="female" data-i18n="mode_female">👩 Жен.</button>
-            <button type="button" class="seg" data-value="general" data-i18n="mode_general">✨ Общая</button>
+            <button type="button" class="seg active" data-value="male" data-i18n="mode_male">Муж.</button>
+            <button type="button" class="seg" data-value="female" data-i18n="mode_female">Жен.</button>
+            <button type="button" class="seg" data-value="general" data-i18n="mode_general">Общая</button>
         </div>
         <input type="hidden" id="mode" value="male">
 
         <div class="inputs">
             <div class="field">
                 <input id="age" type="number" placeholder=" ">
-                <label for="age" data-i18n="field_age">🎂 Возраст</label>
+                <label for="age" data-i18n="field_age">Возраст</label>
             </div>
             <div class="field">
                 <input id="height" type="number" placeholder=" ">
-                <label for="height" data-i18n="field_height">📏 Рост (см)</label>
+                <label for="height" data-i18n="field_height">Рост (см)</label>
             </div>
             <div class="field">
                 <input id="weight" type="number" placeholder=" ">
-                <label for="weight" data-i18n="field_weight">⚖️ Вес (кг)</label>
+                <label for="weight" data-i18n="field_weight">Вес (кг)</label>
             </div>
         </div>
 
@@ -91,7 +89,6 @@
                 </div>
 
                 <div id="photo-text-front">
-                    <span class="photo-icon">📸</span>
                     <span data-i18n="photo_front_label">Анфас</span>
                 </div>
                 <input id="photo-front" type="file" accept="image/*">
@@ -113,7 +110,6 @@
                 </div>
 
                 <div id="photo-text-profile">
-                    <span class="photo-icon">🔄</span>
                     <span data-i18n="photo_profile_label">Профиль</span>
                 </div>
                 <input id="photo-profile" type="file" accept="image/*">
@@ -121,7 +117,7 @@
         </div>
 
         <button id="analyze-btn" onclick="analyze()">
-            <span class="btn-label" data-i18n="analyze_btn">🔥 Анализировать</span>
+            <span class="btn-label" data-i18n="analyze_btn">Анализировать</span>
         </button>
 
         <div id="result"></div>
@@ -133,7 +129,7 @@
     <div class="tab-panel" id="panel-history">
     <div class="card">
         <div id="history-list">
-            <div class="empty-state" data-i18n="history_loading">🕓 Загрузка истории...</div>
+            <div class="empty-state" data-i18n="history_loading">Загрузка истории...</div>
         </div>
     </div>
     </div>
@@ -141,17 +137,17 @@
     <!-- ================= TAB: LEADERBOARD ================= -->
     <div class="tab-panel" id="panel-leaderboard">
     <div class="card">
-        <button class="share-btn" id="invite-btn" data-i18n="invite_btn">🤝 Пригласить друга</button>
+        <button class="share-btn" id="invite-btn" data-i18n="invite_btn">Пригласить друга</button>
 
         <div id="leaderboard-list">
-            <div class="empty-state" data-i18n="leaderboard_loading">🏆 Загрузка топа...</div>
+            <div class="empty-state" data-i18n="leaderboard_loading">Загрузка топа...</div>
         </div>
     </div>
     </div>
 
     <div class="footer-hint">
         <span data-i18n="footer_hint">Работает на нейросети · результат может отличаться каждый раз</span><br>
-        <a href="#" id="privacy-link" data-i18n="privacy_link">🔒 Конфиденциальность</a>
+        <a href="#" id="privacy-link" data-i18n="privacy_link">Конфиденциальность</a>
     </div>
 
 </div>
@@ -161,7 +157,7 @@
     <div class="modal-backdrop" data-close="badges-modal"></div>
     <div class="modal-card">
         <div class="modal-header">
-            <h3 data-i18n="badges_modal_title">🏅 Бейджи</h3>
+            <h3 data-i18n="badges_modal_title">Бейджи</h3>
             <button class="modal-close" data-close="badges-modal">✕</button>
         </div>
         <div id="badges-grid" class="badges-grid"></div>
@@ -173,13 +169,13 @@
     <div class="modal-backdrop" data-close="share-modal"></div>
     <div class="modal-card">
         <div class="modal-header">
-            <h3 data-i18n="share_modal_title">📤 Поделиться</h3>
+            <h3 data-i18n="share_modal_title">Поделиться</h3>
             <button class="modal-close" data-close="share-modal">✕</button>
         </div>
         <canvas id="share-canvas" width="600" height="750"></canvas>
         <div class="share-actions">
-            <button class="share-action-btn" id="share-download" data-i18n="share_download">⬇️ Скачать</button>
-            <button class="share-action-btn primary" id="share-native" data-i18n="share_native">📤 Поделиться</button>
+            <button class="share-action-btn" id="share-download" data-i18n="share_download">Скачать</button>
+            <button class="share-action-btn primary" id="share-native" data-i18n="share_native">Поделиться</button>
         </div>
     </div>
 </div>
@@ -189,15 +185,15 @@
     <div class="modal-backdrop" data-close="settings-modal"></div>
     <div class="modal-card">
         <div class="modal-header">
-            <h3 data-i18n="settings_modal_title">⚙️ Настройки</h3>
+            <h3 data-i18n="settings_modal_title">Настройки</h3>
             <button class="modal-close" data-close="settings-modal">✕</button>
         </div>
 
         <div class="settings-section">
             <label class="settings-label" data-i18n="settings_language_label">Язык интерфейса</label>
             <div class="segmented" id="settings-lang-group">
-                <button type="button" class="seg" data-lang="ru">🇷🇺 Русский</button>
-                <button type="button" class="seg" data-lang="en">🇬🇧 English</button>
+                <button type="button" class="seg" data-lang="ru">RU</button>
+                <button type="button" class="seg" data-lang="en">EN</button>
             </div>
         </div>
 
@@ -209,7 +205,7 @@
         </div>
 
         <div class="settings-section">
-            <a href="#" id="privacy-link-settings" class="settings-link" data-i18n="privacy_link">🔒 Конфиденциальность</a>
+            <a href="#" id="privacy-link-settings" class="settings-link" data-i18n="privacy_link">Конфиденциальность</a>
         </div>
     </div>
 </div>
@@ -219,7 +215,7 @@
     <div class="modal-backdrop" data-close="privacy-modal"></div>
     <div class="modal-card">
         <div class="modal-header">
-            <h3 data-i18n="privacy_modal_title">🔒 Конфиденциальность</h3>
+            <h3 data-i18n="privacy_modal_title">Конфиденциальность</h3>
             <button class="modal-close" data-close="privacy-modal">✕</button>
         </div>
         <div class="privacy-text">
@@ -236,7 +232,7 @@
     <div class="modal-backdrop" data-close="payment-modal"></div>
     <div class="modal-card">
         <div class="modal-header">
-            <h3 data-i18n="payment_modal_title">⭐ Пополнить баланс</h3>
+            <h3 data-i18n="payment_modal_title">Пополнить баланс</h3>
             <button class="modal-close" data-close="payment-modal">✕</button>
         </div>
         <p class="payment-hint" data-i18n="payment_hint">Бесплатная попытка использована. Выбери пакет — оплата звёздами Telegram, прямо здесь.</p>

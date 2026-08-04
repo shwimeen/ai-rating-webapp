@@ -20,74 +20,74 @@ const I18N = {
         stat_days: "дней",
         stat_analyses: "анализов",
         stat_balance: "баланс",
-        tab_analyze: "🔥 Анализ",
-        tab_history: "🕓 История",
-        tab_leaderboard: "🏆 Топ",
-        mode_label: "🎯 Тип анализа",
-        mode_male: "👨 Муж.",
-        mode_female: "👩 Жен.",
-        mode_general: "✨ Общая",
-        field_age: "🎂 Возраст",
-        field_height: "📏 Рост (см)",
-        field_weight: "⚖️ Вес (кг)",
+        tab_analyze: "Анализ",
+        tab_history: "История",
+        tab_leaderboard: "Топ",
+        mode_label: "Тип анализа",
+        mode_male: "Муж.",
+        mode_female: "Жен.",
+        mode_general: "Общая",
+        field_age: "Возраст",
+        field_height: "Рост (см)",
+        field_weight: "Вес (кг)",
         photo_front_label: "Анфас",
         photo_profile_label: "Профиль",
         photo_front_loaded: "Анфас загружен",
         photo_profile_loaded: "Профиль загружен",
         scan_status_default: "Поиск...",
-        analyze_btn: "🔥 Анализировать",
-        history_loading: "🕓 Загрузка истории...",
-        invite_btn: "🤝 Пригласить друга",
+        analyze_btn: "Анализировать",
+        history_loading: "Загрузка истории...",
+        invite_btn: "Пригласить друга",
         visibility_label: "Показывать меня в топе",
-        leaderboard_loading: "🏆 Загрузка топа...",
+        leaderboard_loading: "Загрузка топа...",
         footer_hint: "Работает на нейросети · результат может отличаться каждый раз",
-        privacy_link: "🔒 Конфиденциальность",
-        settings_modal_title: "⚙️ Настройки",
+        privacy_link: "Конфиденциальность",
+        settings_modal_title: "Настройки",
         settings_language_label: "Язык интерфейса",
-        badges_modal_title: "🏅 Бейджи",
-        privacy_modal_title: "🔒 Конфиденциальность",
+        badges_modal_title: "Бейджи",
+        privacy_modal_title: "Конфиденциальность",
         privacy_p1: "Фото используются <b>только</b> для анализа внешности и не передаются третьим лицам, кроме сервиса Google Gemini, который непосредственно выполняет сам анализ по нашему запросу.",
         privacy_p2: "Файлы фотографий удаляются с сервера сразу после обработки — они нигде не сохраняются.",
         privacy_p3: "Сохраняются только результаты анализа (оценки, текст советов) и привязка к твоему Telegram-аккаунту — чтобы работали история, стрики и бейджи.",
         privacy_p4: "Данные для лидерборда (имя, оценка) видны другим пользователям, только если ты сам не отключил показ в настройках топа.",
-        payment_modal_title: "⭐ Пополнить баланс",
+        payment_modal_title: "Пополнить баланс",
         payment_hint: "Бесплатная попытка использована. Выбери пакет — оплата звёздами Telegram, прямо здесь.",
         packages_loading: "Загрузка пакетов...",
-        share_modal_title: "📤 Поделиться",
-        share_download: "⬇️ Скачать",
-        share_native: "📤 Поделиться",
+        share_modal_title: "Поделиться",
+        share_download: "Скачать",
+        share_native: "Поделиться",
 
-        toast_select_front: "📸 Сначала загрузите фото анфас",
-        toast_select_profile: "📸 Теперь загрузите фото профиля (сбоку)",
+        toast_select_front: "Сначала загрузите фото анфас",
+        toast_select_profile: "Теперь загрузите фото профиля (сбоку)",
         toast_telegram_only: "Доступно только в Telegram",
-        toast_link_copied: "✅ Ссылка скопирована",
-        toast_invoice_failed: "❌ Не удалось создать счёт",
-        toast_payment_success: "✅ Оплата прошла! Баланс пополнен",
-        toast_payment_failed: "❌ Оплата не прошла",
-        toast_copied_manual_download: "✅ Ссылка скопирована, картинку скачайте вручную",
-        share_native_text: "Мой AI Rating ✨ Проверь свою оценку:",
+        toast_link_copied: "Ссылка скопирована",
+        toast_invoice_failed: "Не удалось создать счёт",
+        toast_payment_success: "Оплата прошла! Баланс пополнен",
+        toast_payment_failed: "Оплата не прошла",
+        toast_copied_manual_download: "Ссылка скопирована, картинку скачайте вручную",
+        share_native_text: "Мой AI Rating Проверь свою оценку:",
 
         thinking_phrases: [
-            "🔍 Изучаем изображение...",
-            "🧠 Анализируем черты лица...",
-            "📐 Считаем пропорции...",
-            "💫 Оцениваем стиль...",
-            "✍️ Формируем вывод...",
+            "Изучаем изображение...",
+            "Анализируем черты лица...",
+            "Считаем пропорции...",
+            "Оцениваем стиль...",
+            "Формируем вывод...",
         ],
         scan_status_phases: [
             "Поиск лица...",
-            "Лицо обнаружено ✅",
+            "Лицо обнаружено",
             "Разметка точек...",
             "Анализ пропорций...",
         ],
 
         result_error_generic: "Произошла ошибка",
-        server_unreachable: "❌ Не удалось связаться с сервером",
+        server_unreachable: "Не удалось связаться с сервером",
         unknown_error: "Неизвестная ошибка",
 
-        criteria_group_main: "📊 Основные критерии",
-        criteria_group_lookmax: "💪 Lookmaxing",
-        criteria_group_bonus: "✨ Дополнительно",
+        criteria_group_main: "Основные критерии",
+        criteria_group_lookmax: "Lookmaxing",
+        criteria_group_bonus: "Дополнительно",
         crit_rating: "Общая привлекательность",
         crit_symmetry_score: "Симметрия лица",
         crit_proportions_score: "Пропорции лица",
@@ -106,37 +106,43 @@ const I18N = {
         dimorphism_female: "Женственность",
         dimorphism_general: "Диморфизм",
 
-        strengths_title: "✨ Сильные стороны",
-        advice_title: "💡 Советы",
-        share_result_btn: "📤 Поделиться результатом",
+        strengths_title: "Сильные стороны",
+        advice_title: "Советы",
+        share_result_btn: "Поделиться результатом",
         potential_title: "Потенциал роста",
         progress_up: "с прошлого раза",
         progress_down: "с прошлого раза",
         checklist_progress: "выполнено",
-        buy_credits_btn: "⭐ Пополнить баланс",
-        loading_title: "✨ AI анализирует",
+        nav_settings: "Настройки",
+        nav_badges: "Бейджи",
+        buy_credits_btn: "Пополнить баланс",
+        loading_title: "AI анализирует",
         paywall_default_message: "Бесплатная попытка использована.",
 
-        history_empty_no_auth: "Откройте приложение через Telegram, чтобы видеть историю 🔒",
-        history_load_error: "❌ Не удалось загрузить историю",
-        history_empty: "Пока нет ни одного анализа 👀<br>Начни на вкладке «Анализ»",
+        history_empty_no_auth: "Откройте приложение через Telegram, чтобы видеть историю",
+        history_load_error: "Не удалось загрузить историю",
+        history_empty: "Пока нет ни одного анализа <br>Начни на вкладке «Анализ»",
 
-        leaderboard_load_error: "❌ Не удалось загрузить топ",
-        leaderboard_empty: "Топ пока пуст — стань первым! 🚀",
-        leaderboard_you_suffix: " (вы)",
+        leaderboard_load_error: "Не удалось загрузить топ",
+        leaderboard_empty: "Топ пока пуст — стань первым!",
+        leaderboard_you_suffix: "(вы)",
         leaderboard_default_name: "Игрок",
 
-        badges_empty: "Бейджи появятся после первого анализа ✨",
-        badge_new_prefix: "Новый бейдж: ",
+        badges_empty: "Бейджи появятся после первого анализа",
+        badge_new_prefix: "Новый бейдж:",
 
-        packages_unavailable: "❌ Оплата временно недоступна",
+        packages_unavailable: "Оплата временно недоступна",
         package_badge_best: "Выгодно",
 
         share_out_of_10: "из 10",
         share_get_your_rating: "Узнай свою оценку:",
         share_ai_generated: "результат сгенерирован нейросетью",
-        share_brand: "✨ AI Rating",
-        invite_share_text: "Узнай свою AI-оценку внешности ✨",
+        share_brand: "AI Rating",
+        invite_share_text: "Узнай свою AI-оценку внешности",
+        stars_label: "звёзд",
+        chip_symmetry: "Симметрия",
+        chip_proportions: "Пропорции",
+        chip_jawline: "Челюсть",
     },
 
     en: {
@@ -144,74 +150,74 @@ const I18N = {
         stat_days: "days",
         stat_analyses: "analyses",
         stat_balance: "balance",
-        tab_analyze: "🔥 Analyze",
-        tab_history: "🕓 History",
-        tab_leaderboard: "🏆 Top",
-        mode_label: "🎯 Analysis type",
-        mode_male: "👨 Male",
-        mode_female: "👩 Female",
-        mode_general: "✨ General",
-        field_age: "🎂 Age",
-        field_height: "📏 Height (cm)",
-        field_weight: "⚖️ Weight (kg)",
+        tab_analyze: "Analyze",
+        tab_history: "History",
+        tab_leaderboard: "Top",
+        mode_label: "Analysis type",
+        mode_male: "Male",
+        mode_female: "Female",
+        mode_general: "General",
+        field_age: "Age",
+        field_height: "Height (cm)",
+        field_weight: "Weight (kg)",
         photo_front_label: "Front",
         photo_profile_label: "Profile",
         photo_front_loaded: "Front photo added",
         photo_profile_loaded: "Profile photo added",
         scan_status_default: "Searching...",
-        analyze_btn: "🔥 Analyze",
-        history_loading: "🕓 Loading history...",
-        invite_btn: "🤝 Invite a friend",
+        analyze_btn: "Analyze",
+        history_loading: "Loading history...",
+        invite_btn: "Invite a friend",
         visibility_label: "Show me on the leaderboard",
-        leaderboard_loading: "🏆 Loading leaderboard...",
+        leaderboard_loading: "Loading leaderboard...",
         footer_hint: "Powered by AI · results may vary each time",
-        privacy_link: "🔒 Privacy",
-        settings_modal_title: "⚙️ Settings",
+        privacy_link: "Privacy",
+        settings_modal_title: "Settings",
         settings_language_label: "Interface language",
-        badges_modal_title: "🏅 Badges",
-        privacy_modal_title: "🔒 Privacy",
+        badges_modal_title: "Badges",
+        privacy_modal_title: "Privacy",
         privacy_p1: "Photos are used <b>only</b> to analyze your appearance and are not shared with third parties, except for the Google Gemini service, which performs the analysis itself on our request.",
         privacy_p2: "Photo files are deleted from the server right after processing — they are never stored.",
         privacy_p3: "Only the analysis results (scores, advice text) and a link to your Telegram account are saved — so history, streaks and badges work.",
         privacy_p4: "Leaderboard data (name, score) is visible to other users only if you haven't disabled it in leaderboard settings.",
-        payment_modal_title: "⭐ Top up balance",
+        payment_modal_title: "Top up balance",
         payment_hint: "Your free trial has been used. Choose a package — pay with Telegram Stars, right here.",
         packages_loading: "Loading packages...",
-        share_modal_title: "📤 Share",
-        share_download: "⬇️ Download",
-        share_native: "📤 Share",
+        share_modal_title: "Share",
+        share_download: "Download",
+        share_native: "Share",
 
-        toast_select_front: "📸 Please upload a front photo first",
-        toast_select_profile: "📸 Now upload a profile (side) photo",
+        toast_select_front: "Please upload a front photo first",
+        toast_select_profile: "Now upload a profile (side) photo",
         toast_telegram_only: "Available only in Telegram",
-        toast_link_copied: "✅ Link copied",
-        toast_invoice_failed: "❌ Failed to create invoice",
-        toast_payment_success: "✅ Payment successful! Balance topped up",
-        toast_payment_failed: "❌ Payment failed",
-        toast_copied_manual_download: "✅ Link copied, please download the image manually",
-        share_native_text: "My AI Rating ✨ Check your score:",
+        toast_link_copied: "Link copied",
+        toast_invoice_failed: "Failed to create invoice",
+        toast_payment_success: "Payment successful! Balance topped up",
+        toast_payment_failed: "Payment failed",
+        toast_copied_manual_download: "Link copied, please download the image manually",
+        share_native_text: "My AI Rating Check your score:",
 
         thinking_phrases: [
-            "🔍 Studying the image...",
-            "🧠 Analyzing facial features...",
-            "📐 Calculating proportions...",
-            "💫 Evaluating style...",
-            "✍️ Putting together the verdict...",
+            "Studying the image...",
+            "Analyzing facial features...",
+            "Calculating proportions...",
+            "Evaluating style...",
+            "Putting together the verdict...",
         ],
         scan_status_phases: [
             "Searching for a face...",
-            "Face detected ✅",
+            "Face detected",
             "Mapping landmarks...",
             "Analyzing proportions...",
         ],
 
         result_error_generic: "Something went wrong",
-        server_unreachable: "❌ Could not reach the server",
+        server_unreachable: "Could not reach the server",
         unknown_error: "Unknown error",
 
-        criteria_group_main: "📊 Main criteria",
-        criteria_group_lookmax: "💪 Lookmaxing",
-        criteria_group_bonus: "✨ Bonus",
+        criteria_group_main: "Main criteria",
+        criteria_group_lookmax: "Lookmaxing",
+        criteria_group_bonus: "Bonus",
         crit_rating: "Overall attractiveness",
         crit_symmetry_score: "Facial symmetry",
         crit_proportions_score: "Facial proportions",
@@ -230,37 +236,43 @@ const I18N = {
         dimorphism_female: "Femininity",
         dimorphism_general: "Dimorphism",
 
-        strengths_title: "✨ Strengths",
-        advice_title: "💡 Advice",
-        share_result_btn: "📤 Share result",
+        strengths_title: "Strengths",
+        advice_title: "Advice",
+        share_result_btn: "Share result",
         potential_title: "Growth potential",
         progress_up: "since last time",
         progress_down: "since last time",
         checklist_progress: "completed",
-        buy_credits_btn: "⭐ Top up balance",
-        loading_title: "✨ AI is analyzing",
+        nav_settings: "Settings",
+        nav_badges: "Badges",
+        buy_credits_btn: "Top up balance",
+        loading_title: "AI is analyzing",
         paywall_default_message: "Your free trial has been used.",
 
-        history_empty_no_auth: "Open the app via Telegram to see your history 🔒",
-        history_load_error: "❌ Failed to load history",
-        history_empty: "No analyses yet 👀<br>Start on the Analyze tab",
+        history_empty_no_auth: "Open the app via Telegram to see your history",
+        history_load_error: "Failed to load history",
+        history_empty: "No analyses yet <br>Start on the Analyze tab",
 
-        leaderboard_load_error: "❌ Failed to load leaderboard",
-        leaderboard_empty: "Leaderboard is empty — be the first! 🚀",
-        leaderboard_you_suffix: " (you)",
+        leaderboard_load_error: "Failed to load leaderboard",
+        leaderboard_empty: "Leaderboard is empty — be the first!",
+        leaderboard_you_suffix: "(you)",
         leaderboard_default_name: "Player",
 
-        badges_empty: "Badges will appear after your first analysis ✨",
-        badge_new_prefix: "New badge: ",
+        badges_empty: "Badges will appear after your first analysis",
+        badge_new_prefix: "New badge:",
 
-        packages_unavailable: "❌ Payments are temporarily unavailable",
+        packages_unavailable: "Payments are temporarily unavailable",
         package_badge_best: "Best value",
 
         share_out_of_10: "out of 10",
         share_get_your_rating: "Get your rating:",
         share_ai_generated: "result generated by AI",
-        share_brand: "✨ AI Rating",
-        invite_share_text: "Discover your AI appearance rating ✨",
+        share_brand: "AI Rating",
+        invite_share_text: "Discover your AI appearance rating",
+        stars_label: "Stars",
+        chip_symmetry: "Symmetry",
+        chip_proportions: "Proportions",
+        chip_jawline: "Jawline",
     },
 };
 
@@ -311,7 +323,7 @@ function buildAdviceChecklistHtml(analysisId, adviceList, progressArr) {
         const done = !!progressArr[i];
         return `
         <li class="advice-item ${done ? "done" : ""}" data-analysis-id="${analysisId || ""}" data-index="${i}">
-            <span class="advice-checkbox">${done ? "✅" : "⬜"}</span>
+            <span class="advice-checkbox"></span>
             <span class="advice-text">${escapeHtml(item)}</span>
         </li>`;
     }).join("") + `</ul>`;
@@ -340,7 +352,6 @@ document.addEventListener("click", async (e) => {
     const willBeDone = !li.classList.contains("done");
 
     li.classList.toggle("done", willBeDone);
-    li.querySelector(".advice-checkbox").textContent = willBeDone ? "✅" : "⬜";
     haptic("light");
 
     const container = li.closest(".section, .history-body");
@@ -359,9 +370,9 @@ document.addEventListener("click", async (e) => {
 });
 
 function dimorphismLabel(mode) {
-    if (mode === "male") return { emoji: "💪", label: t("dimorphism_male") };
-    if (mode === "female") return { emoji: "🌸", label: t("dimorphism_female") };
-    return { emoji: "⚖️", label: t("dimorphism_general") };
+    if (mode === "male") return { label: t("dimorphism_male") };
+    if (mode === "female") return { label: t("dimorphism_female") };
+    return { label: t("dimorphism_general") };
 }
 
 // Единый список критериев — ключи совпадают с CRITERIA_GROUPS на backend,
@@ -370,31 +381,31 @@ const CRITERIA_GROUPS = [
     {
         titleKey: "criteria_group_main",
         items: [
-            { key: "rating", emoji: "⭐", labelKey: "crit_rating" },
-            { key: "symmetry_score", emoji: "😊", labelKey: "crit_symmetry_score" },
-            { key: "proportions_score", emoji: "📐", labelKey: "crit_proportions_score" },
-            { key: "jawline_score", emoji: "🦴", labelKey: "crit_jawline_score" },
-            { key: "chin_score", emoji: "👤", labelKey: "crit_chin_score" },
-            { key: "eyes_score", emoji: "👀", labelKey: "crit_eyes_score" },
-            { key: "nose_score", emoji: "👃", labelKey: "crit_nose_score" },
-            { key: "lips_score", emoji: "👄", labelKey: "crit_lips_score" },
-            { key: "skin_score", emoji: "🧴", labelKey: "crit_skin_score" },
-            { key: "hair_score", emoji: "💇", labelKey: "crit_hair_score" },
-            { key: "expression_score", emoji: "😐", labelKey: "crit_expression_score" },
-            { key: "photo_quality_score", emoji: "📸", labelKey: "crit_photo_quality_score" },
+            { key: "rating", labelKey: "crit_rating" },
+            { key: "symmetry_score", labelKey: "crit_symmetry_score" },
+            { key: "proportions_score", labelKey: "crit_proportions_score" },
+            { key: "jawline_score", labelKey: "crit_jawline_score" },
+            { key: "chin_score", labelKey: "crit_chin_score" },
+            { key: "eyes_score", labelKey: "crit_eyes_score" },
+            { key: "nose_score", labelKey: "crit_nose_score" },
+            { key: "lips_score", labelKey: "crit_lips_score" },
+            { key: "skin_score", labelKey: "crit_skin_score" },
+            { key: "hair_score", labelKey: "crit_hair_score" },
+            { key: "expression_score", labelKey: "crit_expression_score" },
+            { key: "photo_quality_score", labelKey: "crit_photo_quality_score" },
         ],
     },
     {
         titleKey: "criteria_group_lookmax",
         items: [
-            { key: "body_fat_percent", emoji: "🏋️", labelKey: "crit_body_fat_percent", unit: "%" },
+            { key: "body_fat_percent", labelKey: "crit_body_fat_percent", unit: "%" },
         ],
     },
     {
         titleKey: "criteria_group_bonus",
         items: [
-            { key: "style_score", emoji: "💅", labelKey: "crit_style_score" },
-            { key: "dimorphism_score", emoji: "⚖️", labelKey: null },
+            { key: "style_score", labelKey: "crit_style_score" },
+            { key: "dimorphism_score", labelKey: null },
         ],
     },
 ];
@@ -402,13 +413,10 @@ const CRITERIA_GROUPS = [
 function buildCriteriaTableHtml(data, mode, deltas) {
     return CRITERIA_GROUPS.map(group => {
         const rows = group.items.map(item => {
-            let emoji = item.emoji;
             let label = item.labelKey ? t(item.labelKey) : "";
 
             if (item.key === "dimorphism_score") {
-                const dm = dimorphismLabel(mode);
-                emoji = dm.emoji;
-                label = dm.label;
+                label = dimorphismLabel(mode).label;
             }
 
             const raw = Number(data[item.key]) || 0;
@@ -427,7 +435,7 @@ function buildCriteriaTableHtml(data, mode, deltas) {
 
             return `
                 <tr>
-                    <td class="crit-name">${emoji} ${escapeHtml(label)}</td>
+                    <td class="crit-name">${escapeHtml(label)}</td>
                     <td class="crit-value">${display}${deltaHtml}</td>
                 </tr>`;
         }).join("");
@@ -483,7 +491,7 @@ function setupPhotoBox(inputId, previewId, boxId, textId, loadedLabelKey) {
 
         preview.src = URL.createObjectURL(file);
         preview.style.display = "block";
-        text.innerHTML = `<span class="photo-icon">✅</span><span>${t(loadedLabelKey)}</span>`;
+        text.innerHTML = `<span>${t(loadedLabelKey)}</span>`;
         box.classList.add("loaded");
         haptic("medium");
 
@@ -589,64 +597,6 @@ function animateCount(el, target, duration = 1200) {
         else el.textContent = target.toFixed(1);
     }
     requestAnimationFrame(frame);
-}
-
-/* ---------------- Lightweight confetti ---------------- */
-const confettiCanvas = document.getElementById("confetti");
-const ctx = confettiCanvas.getContext("2d");
-let confettiParticles = [];
-let confettiAnimId = null;
-
-function resizeCanvas() {
-    confettiCanvas.width = window.innerWidth;
-    confettiCanvas.height = window.innerHeight;
-}
-window.addEventListener("resize", resizeCanvas);
-resizeCanvas();
-
-function launchConfetti() {
-    const colors = ["#8b5cf6", "#ec4899", "#ffffff", "#c4b5fd"];
-    confettiParticles = Array.from({ length: 90 }, () => ({
-        x: confettiCanvas.width / 2,
-        y: confettiCanvas.height * 0.35,
-        vx: (Math.random() - 0.5) * 14,
-        vy: Math.random() * -14 - 4,
-        size: Math.random() * 6 + 4,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        rotation: Math.random() * 360,
-        vr: (Math.random() - 0.5) * 12,
-        gravity: 0.35 + Math.random() * 0.15,
-        life: 0
-    }));
-
-    cancelAnimationFrame(confettiAnimId);
-    const tick = () => {
-        ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
-        let alive = false;
-        confettiParticles.forEach(p => {
-            p.vy += p.gravity;
-            p.x += p.vx;
-            p.y += p.vy;
-            p.rotation += p.vr;
-            p.life++;
-            if (p.y < confettiCanvas.height + 20 && p.life < 260) {
-                alive = true;
-                ctx.save();
-                ctx.translate(p.x, p.y);
-                ctx.rotate((p.rotation * Math.PI) / 180);
-                ctx.fillStyle = p.color;
-                ctx.globalAlpha = Math.max(0, 1 - p.life / 260);
-                ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
-                ctx.restore();
-            }
-        });
-        if (alive) {
-            confettiAnimId = requestAnimationFrame(tick);
-        } else {
-            ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
-        }
-    };
-    tick();
 }
 
 /* ---------------- Face scan overlay animation ---------------- */
@@ -857,7 +807,7 @@ document.getElementById("visibility-checkbox").addEventListener("change", async 
    HISTORY
    ============================================================ */
 
-const MODE_ICONS = { male: "👨", female: "👩", general: "✨" };
+const MODE_ICONS = { male: "M", female: "F", general: "G" };
 
 async function loadHistory() {
     const wrap = document.getElementById("history-list");
@@ -893,7 +843,7 @@ async function loadHistory() {
         return `
         <div class="history-item" data-id="${item.id}">
             <div class="history-item-top">
-                <span class="history-mode-icon">${MODE_ICONS[item.mode] || "✨"}</span>
+                <span class="history-mode-icon">${MODE_ICONS[item.mode] || "-"}</span>
                 <div class="history-meta">
                     <div class="history-date">${dateStr}${item.vibe ? " · " + escapeHtml(item.vibe) : ""}</div>
                     <div class="history-vibe">${escapeHtml(item.summary || "")}</div>
@@ -942,18 +892,15 @@ async function loadLeaderboard() {
         return;
     }
 
-    const medals = ["🥇", "🥈", "🥉"];
-
     wrap.innerHTML = data.items.map(row => {
-        const medal = row.rank <= 3 ? medals[row.rank - 1] : row.rank;
         const initials = (row.first_name || "?").slice(0, 1).toUpperCase();
         const avatar = row.photo_url
             ? `<img class="leaderboard-avatar" src="${row.photo_url}" alt="">`
             : `<div class="leaderboard-avatar">${initials}</div>`;
 
         return `
-        <div class="leaderboard-row ${row.is_you ? "is-you" : ""}">
-            <div class="leaderboard-rank">${medal}</div>
+        <div class="leaderboard-row ${row.is_you ? "is-you" : ""} ${row.rank <= 3 ? "top-rank" : ""}">
+            <div class="leaderboard-rank">${row.rank}</div>
             ${avatar}
             <div class="leaderboard-name">${escapeHtml(row.first_name || t("leaderboard_default_name"))}${row.is_you ? t("leaderboard_you_suffix") : ""}</div>
             <div class="leaderboard-score">${Number(row.latest_rating || 0).toFixed(1)}</div>
@@ -1055,7 +1002,7 @@ async function openPaymentModal() {
                 <span class="package-title">${escapeHtml(packageTitle(p))}</span>
                 ${p.id === bestValueId ? `<span class="package-badge">${t("package_badge_best")}</span>` : ""}
             </div>
-            <div class="package-price">⭐ ${p.stars}</div>
+            <div class="package-price">${p.stars} <span class="package-price-unit">${t("stars_label")}</span></div>
         </div>
     `).join("");
 
@@ -1085,7 +1032,6 @@ async function buyPackage(packageId) {
     tg.openInvoice(data.invoice_link, (status) => {
         if (status === "paid") {
             haptic("success");
-            launchConfetti();
             showToast(t("toast_payment_success"));
             closeModal("payment-modal");
             loadProfile();
@@ -1184,13 +1130,13 @@ async function buildShareCard(data, rating) {
 
     // Мини-метрики на карточке: симметрия / пропорции / чёткость челюсти
     const miniStats = [
-        { emoji: "😊", value: Number(data.symmetry_score) || 0 },
-        { emoji: "📐", value: Number(data.proportions_score) || 0 },
-        { emoji: "🦴", value: Number(data.jawline_score) || 0 },
+        { label: t("chip_symmetry"), value: Number(data.symmetry_score) || 0 },
+        { label: t("chip_proportions"), value: Number(data.proportions_score) || 0 },
+        { label: t("chip_jawline"), value: Number(data.jawline_score) || 0 },
     ];
 
     sc.font = "15px -apple-system, Arial";
-    const chipTexts = miniStats.map(m => `${m.emoji} ${m.value.toFixed(1)}`);
+    const chipTexts = miniStats.map(m => `${m.label} ${m.value.toFixed(1)}`);
     const chipWidths = chipTexts.map(txt => sc.measureText(txt).width + 30);
     const gap = 10;
     const totalW = chipWidths.reduce((a, b) => a + b, 0) + gap * (chipWidths.length - 1);
@@ -1332,7 +1278,7 @@ async function analyze() {
             const errorData = await response.json();
             errorText = errorData.error || errorText;
         } catch (e) {}
-        resultEl.innerHTML = `<div class="result-wrap">❌ ${escapeHtml(errorText)}</div>`;
+        resultEl.innerHTML = `<div class="result-wrap error">${escapeHtml(errorText)}</div>`;
         return;
     }
 
@@ -1355,7 +1301,7 @@ async function analyze() {
 
     if (data.error) {
         haptic("error");
-        resultEl.innerHTML = `<div class="result-wrap">${escapeHtml(data.message || t("result_error_generic"))}</div>`;
+        resultEl.innerHTML = `<div class="result-wrap error">${escapeHtml(data.message || t("result_error_generic"))}</div>`;
         return;
     }
 
@@ -1396,7 +1342,7 @@ async function analyze() {
         ${progressChip}
         <p>${escapeHtml(data.summary || "")}</p>
 
-        ${data.vibe ? `<div class="vibe-pill">🌀 ${escapeHtml(data.vibe)}</div>` : ""}
+        ${data.vibe ? `<div class="vibe-pill">${escapeHtml(data.vibe)}</div>` : ""}
 
         ${data.potential ? `<div class="potential-box"><b>${t("potential_title")}</b>${escapeHtml(data.potential)}</div>` : ""}
     </div>
@@ -1429,7 +1375,6 @@ async function analyze() {
 
     if (rating >= 8) {
         haptic("success");
-        launchConfetti();
     } else if (rating >= 5) {
         haptic("light");
     } else {

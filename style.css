@@ -49,8 +49,8 @@ body::after {
     width: 480px;
     height: 480px;
     border-radius: 50%;
-    filter: blur(140px);
-    opacity: .06;
+    filter: blur(120px);
+    opacity: .16;
     z-index: 0;
     pointer-events: none;
 }
@@ -59,12 +59,24 @@ body::before {
     background: var(--sapphire);
     top: -160px;
     left: -160px;
+    animation: floatA 18s ease-in-out infinite;
 }
 
 body::after {
     background: var(--emerald);
     bottom: -180px;
     right: -140px;
+    animation: floatB 20s ease-in-out infinite;
+}
+
+@keyframes floatA {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(30px, 40px) scale(1.1); }
+}
+
+@keyframes floatB {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(-25px, -35px) scale(1.08); }
 }
 
 .container {
@@ -97,12 +109,25 @@ body::after {
 }
 
 .card {
+    position: relative;
     background: var(--surface);
     border: 1px solid var(--hairline);
     border-radius: var(--radius-lg);
     padding: 22px;
     box-shadow: 0 12px 30px rgba(0,0,0,.35);
     animation: fadeUp .5s var(--ease);
+    overflow: hidden;
+}
+
+.card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--sapphire), var(--emerald));
+    opacity: .6;
 }
 
 label {
@@ -139,8 +164,8 @@ label {
 
 .seg.active {
     color: var(--ink);
-    background: rgba(255,255,255,.07);
-    box-shadow: inset 0 0 0 1px var(--hairline);
+    background: linear-gradient(135deg, rgba(59,111,224,.25), rgba(47,184,138,.2));
+    box-shadow: inset 0 0 0 1px rgba(59,111,224,.4);
 }
 
 .seg:active {
@@ -401,14 +426,16 @@ button#analyze-btn {
     font-size: 16px;
     font-weight: 600;
     color: #fff;
-    background: var(--sapphire);
-    transition: transform .2s var(--ease), background .2s var(--ease), box-shadow .2s var(--ease);
+    background: linear-gradient(135deg, var(--sapphire), var(--emerald));
+    background-size: 160% 160%;
+    background-position: 0% 50%;
+    transition: transform .2s var(--ease), background-position .5s ease, box-shadow .2s var(--ease);
     position: relative;
 }
 
 button#analyze-btn:hover {
-    background: #4a7cea;
-    box-shadow: 0 8px 22px rgba(59,111,224,.3);
+    background-position: 100% 50%;
+    box-shadow: 0 8px 22px rgba(59,111,224,.35);
 }
 
 button#analyze-btn:active {
@@ -682,22 +709,28 @@ li {
 
 .stats-bar {
     display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    row-gap: 8px;
+    flex-direction: column;
     gap: 10px;
-    background: rgba(255,255,255,.06);
-    border: 1px solid rgba(255,255,255,.08);
-    border-radius: 18px;
-    padding: 10px 14px;
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-lg);
+    padding: 12px 14px;
     margin-bottom: 14px;
-    animation: fadeDown .7s var(--ease);
+    animation: fadeDown .5s var(--ease);
+}
+
+.stats-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
 }
 
 .stats-actions {
     display: flex;
+    justify-content: center;
     gap: 8px;
-    margin-left: auto;
+    padding-top: 10px;
+    border-top: 1px solid var(--hairline);
 }
 
 .stats-bar .stat {

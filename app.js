@@ -16,7 +16,7 @@ let currentLang = "ru";
 
 const I18N = {
     ru: {
-        app_subtitle: "Оцени свою внешность<br>с помощью искусственного интеллекта",
+        app_subtitle: "Оцени свою внешность<br>по фото анфас и профиль",
         stat_days: "дней",
         stat_analyses: "анализов",
         stat_balance: "баланс",
@@ -40,13 +40,13 @@ const I18N = {
         invite_btn: "Пригласить друга",
         visibility_label: "Показывать меня в топе",
         leaderboard_loading: "Загрузка топа...",
-        footer_hint: "Работает на нейросети · результат может отличаться каждый раз",
+        footer_hint: "Результат может отличаться каждый раз",
         privacy_link: "Конфиденциальность",
         settings_modal_title: "Настройки",
         settings_language_label: "Язык интерфейса",
         badges_modal_title: "Бейджи",
         privacy_modal_title: "Конфиденциальность",
-        privacy_p1: "Фото используются <b>только</b> для анализа внешности и не передаются третьим лицам, кроме сервиса Google Gemini, который непосредственно выполняет сам анализ по нашему запросу.",
+        privacy_p1: "Фото используются <b>только</b> для анализа внешности с помощью нейросети (сервис Google Gemini) и не передаются третьим лицам.",
         privacy_p2: "Файлы фотографий удаляются с сервера сразу после обработки — они нигде не сохраняются.",
         privacy_p3: "Сохраняются только результаты анализа (оценки, текст советов) и привязка к твоему Telegram-аккаунту — чтобы работали история, стрики и бейджи.",
         privacy_p4: "Данные для лидерборда (имя, оценка) видны другим пользователям, только если ты сам не отключил показ в настройках топа.",
@@ -65,7 +65,7 @@ const I18N = {
         toast_payment_success: "Оплата прошла! Баланс пополнен",
         toast_payment_failed: "Оплата не прошла",
         toast_copied_manual_download: "Ссылка скопирована, картинку скачайте вручную",
-        share_native_text: "Мой AI Rating Проверь свою оценку:",
+        share_native_text: "Мой результат в Rating — проверь свою оценку:",
 
         thinking_phrases: [
             "Изучаем изображение...",
@@ -116,7 +116,7 @@ const I18N = {
         nav_settings: "Настройки",
         nav_badges: "Бейджи",
         buy_credits_btn: "Пополнить баланс",
-        loading_title: "AI анализирует",
+        loading_title: "Анализируем",
         paywall_default_message: "Бесплатная попытка использована.",
 
         history_empty_no_auth: "Откройте приложение через Telegram, чтобы видеть историю",
@@ -136,9 +136,9 @@ const I18N = {
 
         share_out_of_10: "из 10",
         share_get_your_rating: "Узнай свою оценку:",
-        share_ai_generated: "результат сгенерирован нейросетью",
-        share_brand: "AI Rating",
-        invite_share_text: "Узнай свою AI-оценку внешности",
+        share_ai_generated: "",
+        share_brand: "Rating",
+        invite_share_text: "Узнай свою оценку внешности",
         stars_label: "звёзд",
         chip_symmetry: "Симметрия",
         chip_proportions: "Пропорции",
@@ -146,7 +146,7 @@ const I18N = {
     },
 
     en: {
-        app_subtitle: "Get your appearance rated<br>by artificial intelligence",
+        app_subtitle: "Get your appearance rated<br>from a front and profile photo",
         stat_days: "days",
         stat_analyses: "analyses",
         stat_balance: "balance",
@@ -170,13 +170,13 @@ const I18N = {
         invite_btn: "Invite a friend",
         visibility_label: "Show me on the leaderboard",
         leaderboard_loading: "Loading leaderboard...",
-        footer_hint: "Powered by AI · results may vary each time",
+        footer_hint: "Results may vary each time",
         privacy_link: "Privacy",
         settings_modal_title: "Settings",
         settings_language_label: "Interface language",
         badges_modal_title: "Badges",
         privacy_modal_title: "Privacy",
-        privacy_p1: "Photos are used <b>only</b> to analyze your appearance and are not shared with third parties, except for the Google Gemini service, which performs the analysis itself on our request.",
+        privacy_p1: "Photos are used <b>only</b> to analyze your appearance using a neural network (Google Gemini service) and are not shared with third parties.",
         privacy_p2: "Photo files are deleted from the server right after processing — they are never stored.",
         privacy_p3: "Only the analysis results (scores, advice text) and a link to your Telegram account are saved — so history, streaks and badges work.",
         privacy_p4: "Leaderboard data (name, score) is visible to other users only if you haven't disabled it in leaderboard settings.",
@@ -195,7 +195,7 @@ const I18N = {
         toast_payment_success: "Payment successful! Balance topped up",
         toast_payment_failed: "Payment failed",
         toast_copied_manual_download: "Link copied, please download the image manually",
-        share_native_text: "My AI Rating Check your score:",
+        share_native_text: "My result in Rating — check your score:",
 
         thinking_phrases: [
             "Studying the image...",
@@ -246,7 +246,7 @@ const I18N = {
         nav_settings: "Settings",
         nav_badges: "Badges",
         buy_credits_btn: "Top up balance",
-        loading_title: "AI is analyzing",
+        loading_title: "Analyzing",
         paywall_default_message: "Your free trial has been used.",
 
         history_empty_no_auth: "Open the app via Telegram to see your history",
@@ -266,9 +266,9 @@ const I18N = {
 
         share_out_of_10: "out of 10",
         share_get_your_rating: "Get your rating:",
-        share_ai_generated: "result generated by AI",
-        share_brand: "AI Rating",
-        invite_share_text: "Discover your AI appearance rating",
+        share_ai_generated: "",
+        share_brand: "Rating",
+        invite_share_text: "Discover your appearance rating",
         stars_label: "Stars",
         chip_symmetry: "Symmetry",
         chip_proportions: "Proportions",
@@ -1160,10 +1160,6 @@ async function buildShareCard(data, rating) {
     sc.font = "16px -apple-system, Arial";
     sc.fillStyle = "rgba(255,255,255,.55)";
     sc.fillText(`${t("share_get_your_rating")} @${BOT_USERNAME}`, W / 2, 657);
-
-    sc.font = "12px -apple-system, Arial";
-    sc.fillStyle = "rgba(255,255,255,.3)";
-    sc.fillText(t("share_ai_generated"), W / 2, 722);
 }
 
 async function openShareCard(data, rating) {
@@ -1330,8 +1326,8 @@ async function analyze() {
             <svg viewBox="0 0 120 120">
                 <defs>
                     <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#8b5cf6"/>
-                        <stop offset="100%" stop-color="#ec4899"/>
+                        <stop offset="0%" stop-color="#3b6fe0"/>
+                        <stop offset="100%" stop-color="#2fb88a"/>
                     </linearGradient>
                 </defs>
                 <circle class="score-ring-bg" cx="60" cy="60" r="50"/>

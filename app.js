@@ -1,1606 +1,1563 @@
-* {
-    box-sizing: border-box;
-}
-
-:root {
-    --violet: #3b6fe0;
-    --pink: #2fb88a;
-    --sapphire: #3b6fe0;
-    --emerald: #2fb88a;
-
-    --bg-deep: #08090b;
-    --surface: #121418;
-    --surface-raised: #171a1f;
-    --card-bg: rgba(255,255,255,.04);
-    --hairline: rgba(255,255,255,.09);
-
-    --ink: #f2f3f5;
-    --ink-muted: #8b92a0;
-
-    --radius-sm: 10px;
-    --radius-md: 14px;
-    --radius-lg: 18px;
-
-    --font-display: "Space Grotesk", "Inter", -apple-system, sans-serif;
-    --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-
-    --ease: cubic-bezier(.22,1,.36,1);
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-body {
-    margin: 0;
-    min-height: 100vh;
-    background: radial-gradient(ellipse at top, #101318 0%, var(--bg-deep) 55%);
-    color: var(--ink);
-    font-family: var(--font-body);
-    overflow-x: hidden;
-    position: relative;
-}
-
-/* ---------- Ambient floating orbs ---------- */
-body::before,
-body::after {
-    content: "";
-    position: fixed;
-    width: 480px;
-    height: 480px;
-    border-radius: 50%;
-    filter: blur(120px);
-    opacity: .16;
-    z-index: 0;
-    pointer-events: none;
-}
-
-body::before {
-    background: var(--sapphire);
-    top: -160px;
-    left: -160px;
-    animation: floatA 18s ease-in-out infinite;
-}
-
-body::after {
-    background: var(--emerald);
-    bottom: -180px;
-    right: -140px;
-    animation: floatB 20s ease-in-out infinite;
-}
-
-@keyframes floatA {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    50% { transform: translate(30px, 40px) scale(1.1); }
-}
-
-@keyframes floatB {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    50% { transform: translate(-25px, -35px) scale(1.08); }
-}
-
-.container {
-    max-width: 450px;
-    margin: auto;
-    padding: 20px;
-    position: relative;
-    z-index: 1;
-}
-
-.header {
-    text-align: center;
-    margin-bottom: 25px;
-    animation: fadeDown .7s var(--ease);
-}
-
-.header h1 {
-    font-family: var(--font-display);
-    font-size: 30px;
-    font-weight: 600;
-    letter-spacing: -.01em;
-    margin-bottom: 8px;
-    color: var(--ink);
-}
-
-.header p {
-    opacity: .55;
-    font-size: 14px;
-    letter-spacing: .01em;
-}
-
-.card {
-    position: relative;
-    background: var(--surface);
-    border: 1px solid var(--hairline);
-    border-radius: var(--radius-lg);
-    padding: 22px;
-    box-shadow: 0 12px 30px rgba(0,0,0,.35);
-    animation: fadeUp .5s var(--ease);
-    overflow: hidden;
-}
-
-.card::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, var(--sapphire), var(--emerald));
-    opacity: .6;
-}
-
-label {
-    display: block;
-    margin-bottom: 8px;
-    font-size: 14px;
-    opacity: .8;
-}
-
-/* ---------- Segmented control (replaces select) ---------- */
-.segmented {
-    display: flex;
-    gap: 2px;
-    background: var(--surface-raised);
-    padding: 3px;
-    border: 1px solid var(--hairline);
-    border-radius: var(--radius-sm);
-    margin-bottom: 14px;
-}
-
-.seg {
-    flex: 1;
-    border: none;
-    background: transparent;
-    color: var(--ink-muted);
-    padding: 11px 6px;
-    border-radius: 8px;
-    font-family: var(--font-body);
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: color .2s var(--ease), background .2s var(--ease);
-}
-
-.seg.active {
-    color: var(--ink);
-    background: linear-gradient(135deg, rgba(59,111,224,.25), rgba(47,184,138,.2));
-    box-shadow: inset 0 0 0 1px rgba(59,111,224,.4);
-}
-
-.seg:active {
-    transform: scale(.95);
-}
-
-/* ---------- Floating label inputs ---------- */
-.inputs {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-}
-
-.field {
-    position: relative;
-    margin-bottom: 14px;
-}
-
-.field input {
-    width: 100%;
-    padding: 20px 15px 8px;
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--hairline);
-    outline: none;
-    background: var(--surface-raised);
-    color: var(--ink);
-    font-family: var(--font-body);
-    font-size: 16px;
-    transition: background .2s var(--ease), box-shadow .2s var(--ease), border-color .2s var(--ease);
-}
-
-.field input:focus {
-    background: var(--surface-raised);
-    border-color: var(--sapphire);
-    box-shadow: 0 0 0 3px rgba(59,111,224,.15);
-}
-
-.field label {
-    position: absolute;
-    left: 15px;
-    top: 15px;
-    font-size: 16px;
-    opacity: .5;
-    margin: 0;
-    pointer-events: none;
-    transition: all .2s var(--ease);
-}
-
-.field input:focus + label,
-.field input:not(:placeholder-shown) + label {
-    top: 6px;
-    font-size: 11px;
-    opacity: .7;
-}
-
-select {
-    width: 100%;
-    margin-bottom: 14px;
-    padding: 15px;
-    border-radius: 16px;
-    border: none;
-    outline: none;
-    background: rgba(255,255,255,.12);
-    color: white;
-    font-size: 16px;
-}
-
-select option {
-    color: black;
-}
-
-/* ---------- Photo box (split: анфас | профиль в одном ряду) ---------- */
-.photo-box-split {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.photo-half {
-    flex: 1;
-    min-width: 0;
-    position: relative;
-    text-align: center;
-    padding: 10px 6px;
-    aspect-ratio: 3 / 4;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--hairline);
-    background: var(--surface-raised);
-    cursor: pointer;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    transition: border-color .2s var(--ease), transform .1s var(--ease), background .2s var(--ease);
-}
-
-.photo-half:active {
-    transform: scale(.98);
-}
-
-.photo-half input {
-    display: none;
-}
-
-.photo-half .photo-glow {
-    position: absolute;
-    inset: -2px;
-    border-radius: 18px;
-    background: linear-gradient(135deg, var(--violet), var(--pink));
-    opacity: 0;
-    z-index: -1;
-    filter: blur(12px);
-    transition: opacity .4s var(--ease);
-}
-
-.photo-half.loaded .photo-glow {
-    opacity: .35;
-}
-
-.photo-half.loaded {
-    border-color: var(--sapphire);
-    background: rgba(59,111,224,.1);
-}
-
-.photo-half img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: none;
-    transition: transform .3s var(--ease);
-    will-change: transform;
-}
-
-.photo-half #photo-text-front,
-.photo-half #photo-text-profile {
-    position: relative;
-    z-index: 1;
-    font-size: 13px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    padding: 6px;
-    background: rgba(5,5,10,.35);
-    border-radius: 10px;
-}
-
-.photo-half.loaded #photo-text-front,
-.photo-half.loaded #photo-text-profile {
-    position: absolute;
-    bottom: 6px;
-    left: 6px;
-    right: 6px;
-    opacity: 1;
-    transition: opacity .2s var(--ease);
-}
-
-.scan-overlay.active ~ #photo-text-front,
-.scan-overlay.active ~ #photo-text-profile {
-    opacity: 0;
-    pointer-events: none;
-}
-
-.photo-icon {
-    display: inline-block;
-    font-size: 18px;
-    opacity: .7;
-}
-
-/* ---------- Face scan overlay ---------- */
-.scan-overlay {
-    position: absolute;
-    inset: 0;
-    border-radius: 20px;
-    overflow: hidden;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity .3s var(--ease);
-    z-index: 5;
-}
-
-.scan-overlay.active {
-    opacity: 1;
-}
-
-.scan-grid {
-    position: absolute;
-    inset: 0;
-    background-image:
-        linear-gradient(rgba(59,111,224,.3) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(59,111,224,.3) 1px, transparent 1px);
-    background-size: 24px 24px;
-    opacity: 0;
-    animation: gridFade 2.6s ease-in-out infinite;
-}
-
-@keyframes gridFade {
-    0%, 100% { opacity: 0; }
-    30%, 70% { opacity: .5; }
-}
-
-.scan-line {
-    position: absolute;
-    left: 6%;
-    right: 6%;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--sapphire), var(--emerald), var(--sapphire), transparent);
-    box-shadow: 0 0 12px 2px rgba(59,111,224,.7);
-    animation: scanMove 2.2s ease-in-out infinite;
-}
-
-@keyframes scanMove {
-    0% { top: 8%; opacity: 0; }
-    10% { opacity: 1; }
-    50% { top: 92%; opacity: 1; }
-    60% { opacity: 0; }
-    100% { top: 8%; opacity: 0; }
-}
-
-.scan-corners {
-    position: absolute;
-    inset: 14px;
-    pointer-events: none;
-}
-
-.corner {
-    position: absolute;
-    width: 26px;
-    height: 26px;
-    border: 2px solid var(--sapphire);
-    opacity: .9;
-    filter: drop-shadow(0 0 4px rgba(59,111,224,.5));
-    animation: cornerPulse 2.6s ease-in-out infinite;
-}
-
-.corner.tl { top: 0; left: 0; border-right: none; border-bottom: none; border-radius: 6px 0 0 0; }
-.corner.tr { top: 0; right: 0; border-left: none; border-bottom: none; border-radius: 0 6px 0 0; }
-.corner.bl { bottom: 0; left: 0; border-right: none; border-top: none; border-radius: 0 0 0 6px; }
-.corner.br { bottom: 0; right: 0; border-left: none; border-top: none; border-radius: 0 0 6px 0; }
-
-@keyframes cornerPulse {
-    0%, 100% { opacity: .5; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.08); }
-}
-
-/* ---------- Button ---------- */
-button#analyze-btn {
-    width: 100%;
-    margin-top: 20px;
-    padding: 16px;
-    border-radius: var(--radius-md);
-    border: none;
-    cursor: pointer;
-    font-family: var(--font-body);
-    font-size: 16px;
-    font-weight: 600;
-    color: #fff;
-    background: linear-gradient(135deg, var(--sapphire), var(--emerald));
-    background-size: 160% 160%;
-    background-position: 0% 50%;
-    transition: transform .2s var(--ease), background-position .5s ease, box-shadow .2s var(--ease);
-    position: relative;
-}
-
-button#analyze-btn:hover {
-    background-position: 100% 50%;
-    box-shadow: 0 8px 22px rgba(59,111,224,.35);
-}
-
-button#analyze-btn:active {
-    transform: scale(.98);
-}
-
-button#analyze-btn.loading {
-    pointer-events: none;
-    opacity: .8;
-}
-
-.ripple {
-    position: absolute;
-    border-radius: 50%;
-    background: rgba(255,255,255,.18);
-    transform: scale(0);
-    animation: rippleAnim .5s ease-out;
-    pointer-events: none;
-}
-
-@keyframes rippleAnim {
-    to { transform: scale(3); opacity: 0; }
-}
-
-/* ---------- Result ---------- */
-#result {
-    margin-top: 25px;
-}
-
-#result:empty {
-    margin-top: 0;
-}
-
-.result-wrap {
-    padding: 20px;
-    border-radius: var(--radius-md);
-    background: var(--surface-raised);
-    border: 1px solid var(--hairline);
-    animation: fadeUp .4s var(--ease);
-}
-
-.result-wrap.error {
-    border-color: rgba(248,113,113,.35);
-    background: rgba(248,113,113,.06);
-    color: #f2b8b5;
-    font-size: 14px;
-    line-height: 1.5;
-}
-
-li {
-    margin-bottom: 8px;
-}
-
-.score {
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-}
-
-.score-ring-wrap {
-    position: relative;
-    width: 150px;
-    height: 150px;
-}
-
-.score-ring-wrap svg {
-    transform: rotate(-90deg);
-    width: 100%;
-    height: 100%;
-}
-
-.score-ring-bg {
-    fill: none;
-    stroke: rgba(255,255,255,.1);
-    stroke-width: 10;
-}
-
-.score-ring-fg {
-    fill: none;
-    stroke: url(#ringGradient);
-    stroke-width: 10;
-    stroke-linecap: round;
-    stroke-dasharray: 314;
-    stroke-dashoffset: 314;
-    transition: stroke-dashoffset 1.4s var(--ease);
-}
-
-.score-number {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-display);
-    font-size: 38px;
-    font-weight: 600;
-}
-
-.score-number span {
-    font-size: 16px;
-    opacity: .6;
-    margin-left: 4px;
-    font-weight: normal;
-}
-
-.score p {
-    max-width: 320px;
-    opacity: .85;
-}
-
-.section {
-    margin-top: 20px;
-    padding: 15px;
-    border-radius: 18px;
-    background: rgba(255,255,255,.08);
-    opacity: 0;
-    transform: translateY(14px);
-    animation: fadeUp .5s var(--ease) forwards;
-}
-
-.section:nth-of-type(1) { animation-delay: .15s; }
-.section:nth-of-type(2) { animation-delay: .3s; }
-
-.section h3 {
-    margin-top: 0;
-}
-
-.share-btn {
-    margin-top: 16px;
-    width: 100%;
-    padding: 14px;
-    border-radius: 16px;
-    border: 1px solid rgba(255,255,255,.2);
-    background: rgba(255,255,255,.06);
-    color: white;
-    font-size: 15px;
-    cursor: pointer;
-    transition: background .25s var(--ease), transform .15s var(--ease);
-}
-
-.share-btn:active {
-    transform: scale(.96);
-    background: rgba(255,255,255,.15);
-}
-
-/* ---------- Loading skeleton ---------- */
-.loading {
-    text-align: center;
-    padding: 10px;
-}
-
-.skeleton-ring {
-    width: 130px;
-    height: 130px;
-    margin: 10px auto 18px;
-    border-radius: 50%;
-    background: conic-gradient(var(--violet), var(--pink), var(--violet));
-    animation: spin 1.4s linear infinite;
-    position: relative;
-}
-
-.skeleton-ring::after {
-    content: "";
-    position: absolute;
-    inset: 8px;
-    border-radius: 50%;
-    background: var(--surface);
-}
-
-.loading h3 {
-    margin: 6px 0;
-}
-
-.loading p {
-    opacity: .65;
-    min-height: 20px;
-    transition: opacity .3s var(--ease);
-}
-
-.skeleton-line {
-    height: 12px;
-    border-radius: 6px;
-    margin: 10px auto;
-    background: linear-gradient(90deg, rgba(255,255,255,.06) 25%, rgba(255,255,255,.16) 37%, rgba(255,255,255,.06) 63%);
-    background-size: 400% 100%;
-    animation: shimmer 1.6s ease infinite;
-}
-
-.skeleton-line.w1 { width: 70%; }
-.skeleton-line.w2 { width: 90%; }
-.skeleton-line.w3 { width: 55%; }
-
-@keyframes shimmer {
-    0% { background-position: 100% 0; }
-    100% { background-position: -100% 0; }
-}
-
-@keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-/* ---------- Shared keyframes ---------- */
-@keyframes fadeUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes fadeDown {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.footer-hint {
-    text-align: center;
-    font-size: 12px;
-    opacity: .35;
-    margin-top: 18px;
-    line-height: 1.8;
-}
-
-.footer-hint a {
-    color: rgba(255,255,255,.5);
-    text-decoration: underline;
-}
-
-.privacy-text p {
-    font-size: 13px;
-    line-height: 1.6;
-    opacity: .85;
-    margin: 0 0 14px;
-}
-
-.privacy-text p:last-child {
-    margin-bottom: 0;
-}
-
-.toast {
-    position: fixed;
-    left: 50%;
-    bottom: 30px;
-    transform: translateX(-50%) translateY(20px);
-    background: rgba(20,16,30,.95);
-    border: 1px solid rgba(255,255,255,.15);
-    padding: 12px 20px;
-    border-radius: 14px;
-    font-size: 14px;
-    opacity: 0;
-    transition: all .35s var(--ease);
-    pointer-events: none;
-    z-index: 1000;
-}
-
-.toast.show {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-}
-
-@media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-        animation-duration: .001ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: .001ms !important;
+const tg = window.Telegram.WebApp;
+tg.expand();
+tg.ready();
+
+// ⚠️ Замени на username своего бота (без @) — используется в реферальных
+// ссылках и на карточке результата.
+const BOT_USERNAME = "pslmaxai_bot";
+
+const API_BASE = "https://ai-rating-backend-2.onrender.com";
+
+/* ============================================================
+   I18N — перевод интерфейса (ru/en)
+   ============================================================ */
+
+let currentLang = "ru";
+
+const I18N = {
+    ru: {
+        app_subtitle: "Оцени свою внешность<br>по фото анфас и профиль",
+        stat_days: "дней",
+        stat_analyses: "анализов",
+        stat_balance: "баланс",
+        tab_analyze: "Анализ",
+        tab_history: "История",
+        tab_progress: "Прогресс",
+        tab_leaderboard: "Топ",
+        mode_label: "Тип анализа",
+        mode_male: "Муж.",
+        mode_female: "Жен.",
+        mode_general: "Общая",
+        field_age: "Возраст",
+        field_height: "Рост (см)",
+        field_weight: "Вес (кг)",
+        photo_front_label: "Анфас",
+        photo_profile_label: "Профиль",
+        photo_front_loaded: "Анфас загружен",
+        photo_profile_loaded: "Профиль загружен",
+        scan_status_default: "Поиск...",
+        analyze_btn: "Анализировать",
+        history_loading: "Загрузка истории...",
+        invite_btn: "Пригласить друга",
+        visibility_label: "Показывать меня в топе",
+        leaderboard_loading: "Загрузка топа...",
+        footer_hint: "Результат может отличаться каждый раз",
+        privacy_link: "Конфиденциальность",
+        settings_modal_title: "Настройки",
+        settings_language_label: "Язык интерфейса",
+        badges_modal_title: "Бейджи",
+        privacy_modal_title: "Конфиденциальность",
+        privacy_p1: "Фото используются <b>только</b> для анализа внешности с помощью нейросети (сервис Google Gemini) и не передаются третьим лицам.",
+        privacy_p2: "Файлы фотографий удаляются с сервера сразу после обработки — они нигде не сохраняются.",
+        privacy_p3: "Сохраняются только результаты анализа (оценки, текст советов) и привязка к твоему Telegram-аккаунту — чтобы работали история, стрики и бейджи.",
+        privacy_p4: "Данные для лидерборда (имя, оценка) видны другим пользователям, только если ты сам не отключил показ в настройках топа.",
+        payment_modal_title: "Пополнить баланс",
+        payment_hint: "Бесплатная попытка использована. Выбери пакет — оплата звёздами Telegram, прямо здесь.",
+        packages_loading: "Загрузка пакетов...",
+        share_modal_title: "Поделиться",
+        share_download: "Скачать",
+        share_native: "Поделиться",
+
+        toast_select_front: "Сначала загрузите фото анфас",
+        toast_select_profile: "Теперь загрузите фото профиля (сбоку)",
+        toast_telegram_only: "Доступно только в Telegram",
+        toast_link_copied: "Ссылка скопирована",
+        toast_invoice_failed: "Не удалось создать счёт",
+        toast_payment_success: "Оплата прошла! Баланс пополнен",
+        toast_payment_failed: "Оплата не прошла",
+        toast_copied_manual_download: "Ссылка скопирована, картинку скачайте вручную",
+        share_native_text: "Мой результат в Rating — проверь свою оценку:",
+
+        thinking_phrases: [
+            "Изучаем изображение...",
+            "Анализируем черты лица...",
+            "Считаем пропорции...",
+            "Оцениваем стиль...",
+            "Формируем вывод...",
+        ],
+        scan_status_phases: [
+            "Поиск лица...",
+            "Лицо обнаружено",
+            "Разметка точек...",
+            "Анализ пропорций...",
+        ],
+
+        result_error_generic: "Произошла ошибка",
+        server_unreachable: "Не удалось связаться с сервером",
+        unknown_error: "Неизвестная ошибка",
+
+        criteria_group_main: "Основные критерии",
+        criteria_group_lookmax: "Lookmaxing",
+        criteria_group_bonus: "Дополнительно",
+        crit_rating: "Общая привлекательность",
+        crit_symmetry_score: "Симметрия лица",
+        crit_proportions_score: "Пропорции лица",
+        crit_jawline_score: "Линия челюсти",
+        crit_chin_score: "Подбородок",
+        crit_eyes_score: "Глаза",
+        crit_nose_score: "Нос",
+        crit_lips_score: "Губы",
+        crit_skin_score: "Кожа",
+        crit_hair_score: "Волосы и причёска",
+        crit_expression_score: "Выражение лица",
+        crit_photo_quality_score: "Качество фотографии",
+        crit_body_fat_percent: "Процент жира (оценочно)",
+        crit_style_score: "Стиль",
+        dimorphism_male: "Маскулинность",
+        dimorphism_female: "Женственность",
+        dimorphism_general: "Диморфизм",
+
+        strengths_title: "Сильные стороны",
+        advice_title: "Советы",
+        share_result_btn: "Поделиться результатом",
+        potential_title: "Потенциал роста",
+        progress_up: "с прошлого раза",
+        progress_down: "с прошлого раза",
+        checklist_progress: "выполнено",
+        progress_loading: "Загрузка прогресса...",
+        progress_empty: "Пока нет ни одного анализа — начни на вкладке «Анализ»",
+        progress_need_more: "Сделай ещё {n} анализа, чтобы увидеть график прогресса",
+        progress_first: "Первый",
+        progress_current: "Текущий",
+        progress_best: "Лучший",
+        progress_upsell: "Ещё {n} анализов — и будет видна более точная динамика по всем критериям",
+        nav_settings: "Настройки",
+        nav_badges: "Бейджи",
+        buy_credits_btn: "Пополнить баланс",
+        loading_title: "Анализируем",
+        paywall_default_message: "Бесплатная попытка использована.",
+
+        history_empty_no_auth: "Откройте приложение через Telegram, чтобы видеть историю",
+        history_load_error: "Не удалось загрузить историю",
+        history_empty: "Пока нет ни одного анализа <br>Начни на вкладке «Анализ»",
+
+        leaderboard_load_error: "Не удалось загрузить топ",
+        leaderboard_empty: "Топ пока пуст — стань первым!",
+        leaderboard_you_suffix: "(вы)",
+        leaderboard_default_name: "Игрок",
+
+        badges_empty: "Бейджи появятся после первого анализа",
+        badge_new_prefix: "Новый бейдж:",
+
+        packages_unavailable: "Оплата временно недоступна",
+        package_badge_best: "Выгодно",
+
+        share_out_of_10: "из 10",
+        share_get_your_rating: "Узнай свою оценку:",
+        share_ai_generated: "",
+        share_brand: "Rating",
+        invite_share_text: "Узнай свою оценку внешности",
+        stars_label: "звёзд",
+        chip_symmetry: "Симметрия",
+        chip_proportions: "Пропорции",
+        chip_jawline: "Челюсть",
+    },
+
+    en: {
+        app_subtitle: "Get your appearance rated<br>from a front and profile photo",
+        stat_days: "days",
+        stat_analyses: "analyses",
+        stat_balance: "balance",
+        tab_analyze: "Analyze",
+        tab_history: "History",
+        tab_progress: "Progress",
+        tab_leaderboard: "Top",
+        mode_label: "Analysis type",
+        mode_male: "Male",
+        mode_female: "Female",
+        mode_general: "General",
+        field_age: "Age",
+        field_height: "Height (cm)",
+        field_weight: "Weight (kg)",
+        photo_front_label: "Front",
+        photo_profile_label: "Profile",
+        photo_front_loaded: "Front photo added",
+        photo_profile_loaded: "Profile photo added",
+        scan_status_default: "Searching...",
+        analyze_btn: "Analyze",
+        history_loading: "Loading history...",
+        invite_btn: "Invite a friend",
+        visibility_label: "Show me on the leaderboard",
+        leaderboard_loading: "Loading leaderboard...",
+        footer_hint: "Results may vary each time",
+        privacy_link: "Privacy",
+        settings_modal_title: "Settings",
+        settings_language_label: "Interface language",
+        badges_modal_title: "Badges",
+        privacy_modal_title: "Privacy",
+        privacy_p1: "Photos are used <b>only</b> to analyze your appearance using a neural network (Google Gemini service) and are not shared with third parties.",
+        privacy_p2: "Photo files are deleted from the server right after processing — they are never stored.",
+        privacy_p3: "Only the analysis results (scores, advice text) and a link to your Telegram account are saved — so history, streaks and badges work.",
+        privacy_p4: "Leaderboard data (name, score) is visible to other users only if you haven't disabled it in leaderboard settings.",
+        payment_modal_title: "Top up balance",
+        payment_hint: "Your free trial has been used. Choose a package — pay with Telegram Stars, right here.",
+        packages_loading: "Loading packages...",
+        share_modal_title: "Share",
+        share_download: "Download",
+        share_native: "Share",
+
+        toast_select_front: "Please upload a front photo first",
+        toast_select_profile: "Now upload a profile (side) photo",
+        toast_telegram_only: "Available only in Telegram",
+        toast_link_copied: "Link copied",
+        toast_invoice_failed: "Failed to create invoice",
+        toast_payment_success: "Payment successful! Balance topped up",
+        toast_payment_failed: "Payment failed",
+        toast_copied_manual_download: "Link copied, please download the image manually",
+        share_native_text: "My result in Rating — check your score:",
+
+        thinking_phrases: [
+            "Studying the image...",
+            "Analyzing facial features...",
+            "Calculating proportions...",
+            "Evaluating style...",
+            "Putting together the verdict...",
+        ],
+        scan_status_phases: [
+            "Searching for a face...",
+            "Face detected",
+            "Mapping landmarks...",
+            "Analyzing proportions...",
+        ],
+
+        result_error_generic: "Something went wrong",
+        server_unreachable: "Could not reach the server",
+        unknown_error: "Unknown error",
+
+        criteria_group_main: "Main criteria",
+        criteria_group_lookmax: "Lookmaxing",
+        criteria_group_bonus: "Bonus",
+        crit_rating: "Overall attractiveness",
+        crit_symmetry_score: "Facial symmetry",
+        crit_proportions_score: "Facial proportions",
+        crit_jawline_score: "Jawline",
+        crit_chin_score: "Chin",
+        crit_eyes_score: "Eyes",
+        crit_nose_score: "Nose",
+        crit_lips_score: "Lips",
+        crit_skin_score: "Skin",
+        crit_hair_score: "Hair & hairstyle",
+        crit_expression_score: "Facial expression",
+        crit_photo_quality_score: "Photo quality",
+        crit_body_fat_percent: "Body fat (estimated)",
+        crit_style_score: "Style",
+        dimorphism_male: "Masculinity",
+        dimorphism_female: "Femininity",
+        dimorphism_general: "Dimorphism",
+
+        strengths_title: "Strengths",
+        advice_title: "Advice",
+        share_result_btn: "Share result",
+        potential_title: "Growth potential",
+        progress_up: "since last time",
+        progress_down: "since last time",
+        checklist_progress: "completed",
+        progress_loading: "Loading progress...",
+        progress_empty: "No analyses yet — start on the Analyze tab",
+        progress_need_more: "Do {n} more analyses to see your progress chart",
+        progress_first: "First",
+        progress_current: "Current",
+        progress_best: "Best",
+        progress_upsell: "{n} more analyses reveal a more accurate trend across all criteria",
+        nav_settings: "Settings",
+        nav_badges: "Badges",
+        buy_credits_btn: "Top up balance",
+        loading_title: "Analyzing",
+        paywall_default_message: "Your free trial has been used.",
+
+        history_empty_no_auth: "Open the app via Telegram to see your history",
+        history_load_error: "Failed to load history",
+        history_empty: "No analyses yet <br>Start on the Analyze tab",
+
+        leaderboard_load_error: "Failed to load leaderboard",
+        leaderboard_empty: "Leaderboard is empty — be the first!",
+        leaderboard_you_suffix: "(you)",
+        leaderboard_default_name: "Player",
+
+        badges_empty: "Badges will appear after your first analysis",
+        badge_new_prefix: "New badge:",
+
+        packages_unavailable: "Payments are temporarily unavailable",
+        package_badge_best: "Best value",
+
+        share_out_of_10: "out of 10",
+        share_get_your_rating: "Get your rating:",
+        share_ai_generated: "",
+        share_brand: "Rating",
+        invite_share_text: "Discover your appearance rating",
+        stars_label: "Stars",
+        chip_symmetry: "Symmetry",
+        chip_proportions: "Proportions",
+        chip_jawline: "Jawline",
+    },
+};
+
+function t(key) {
+    return (I18N[currentLang] && I18N[currentLang][key]) ?? I18N.ru[key] ?? key;
+}
+
+function applyStaticTranslations() {
+    document.documentElement.lang = currentLang;
+
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+        el.innerHTML = t(el.dataset.i18n);
+    });
+
+    document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+        el.placeholder = t(el.dataset.i18nPlaceholder);
+    });
+}
+
+
+// Apply Telegram theme background subtly if available (falls back to CSS gradient)
+try { tg.setHeaderColor && tg.setHeaderColor("secondary_bg_color"); } catch(e) {}
+
+function haptic(type) {
+    try {
+        if (type === "success" || type === "error" || type === "warning") {
+            tg.HapticFeedback.notificationOccurred(type);
+        } else {
+            tg.HapticFeedback.impactOccurred(type || "light");
+        }
+    } catch (e) {}
+}
+
+function hasAuth() {
+    return !!(tg.initData && tg.initData.length > 0);
+}
+
+function escapeHtml(str) {
+    const div = document.createElement("div");
+    div.textContent = str == null ? "" : String(str);
+    return div.innerHTML;
+}
+
+function buildAdviceChecklistHtml(analysisId, adviceList, progressArr) {
+    if (!adviceList.length) return "";
+
+    return `<ul class="advice-checklist">` + adviceList.map((item, i) => {
+        const done = !!progressArr[i];
+        return `
+        <li class="advice-item ${done ? "done" : ""}" data-analysis-id="${analysisId || ""}" data-index="${i}">
+            <span class="advice-checkbox"></span>
+            <span class="advice-text">${escapeHtml(item)}</span>
+        </li>`;
+    }).join("") + `</ul>`;
+}
+
+function updateAdviceProgressLabel(container) {
+    const label = container.querySelector(".advice-progress-label");
+    if (!label) return;
+    const items = container.querySelectorAll(".advice-item");
+    const done = container.querySelectorAll(".advice-item.done").length;
+    label.textContent = `${done}/${items.length} ${t("checklist_progress")}`;
+}
+
+// Делегирование клика по чек-листу советов — работает и в результате анализа, и в истории.
+document.addEventListener("click", async (e) => {
+    const li = e.target.closest(".advice-item");
+    if (!li) return;
+
+    const analysisId = li.dataset.analysisId;
+    if (!analysisId) {
+        showToast(t("toast_telegram_only"));
+        return;
+    }
+
+    const index = Number(li.dataset.index);
+    const willBeDone = !li.classList.contains("done");
+
+    li.classList.toggle("done", willBeDone);
+    haptic("light");
+
+    const container = li.closest(".section, .history-body");
+    if (container) updateAdviceProgressLabel(container);
+
+    try {
+        await apiPostForm("/advice/toggle", {
+            init_data: tg.initData,
+            analysis_id: analysisId,
+            index: index,
+            done: willBeDone,
+        });
+    } catch (err) {
+        console.error("advice toggle failed", err);
+    }
+});
+
+function dimorphismLabel(mode) {
+    if (mode === "male") return { label: t("dimorphism_male") };
+    if (mode === "female") return { label: t("dimorphism_female") };
+    return { label: t("dimorphism_general") };
+}
+
+// Единый список критериев — ключи совпадают с CRITERIA_GROUPS на backend,
+// подписи резолвятся через t() в момент рендера (чтобы учитывать язык).
+const CRITERIA_GROUPS = [
+    {
+        titleKey: "criteria_group_main",
+        items: [
+            { key: "rating", labelKey: "crit_rating" },
+            { key: "symmetry_score", labelKey: "crit_symmetry_score" },
+            { key: "proportions_score", labelKey: "crit_proportions_score" },
+            { key: "jawline_score", labelKey: "crit_jawline_score" },
+            { key: "chin_score", labelKey: "crit_chin_score" },
+            { key: "eyes_score", labelKey: "crit_eyes_score" },
+            { key: "nose_score", labelKey: "crit_nose_score" },
+            { key: "lips_score", labelKey: "crit_lips_score" },
+            { key: "skin_score", labelKey: "crit_skin_score" },
+            { key: "hair_score", labelKey: "crit_hair_score" },
+            { key: "expression_score", labelKey: "crit_expression_score" },
+            { key: "photo_quality_score", labelKey: "crit_photo_quality_score" },
+        ],
+    },
+    {
+        titleKey: "criteria_group_lookmax",
+        items: [
+            { key: "body_fat_percent", labelKey: "crit_body_fat_percent", unit: "%" },
+        ],
+    },
+    {
+        titleKey: "criteria_group_bonus",
+        items: [
+            { key: "style_score", labelKey: "crit_style_score" },
+            { key: "dimorphism_score", labelKey: null },
+        ],
+    },
+];
+
+function buildCriteriaTableHtml(data, mode, deltas) {
+    return CRITERIA_GROUPS.map(group => {
+        const rows = group.items.map(item => {
+            let label = item.labelKey ? t(item.labelKey) : "";
+
+            if (item.key === "dimorphism_score") {
+                label = dimorphismLabel(mode).label;
+            }
+
+            const raw = Number(data[item.key]) || 0;
+            const display = item.unit === "%"
+                ? `${raw.toFixed(1)}%`
+                : `${raw.toFixed(1)}<span class="crit-max">/10</span>`;
+
+            let deltaHtml = "";
+            if (deltas && typeof deltas[item.key] === "number" && deltas[item.key] !== 0) {
+                const d = deltas[item.key];
+                const up = d > 0;
+                const cls = up ? "delta-up" : "delta-down";
+                const arrow = up ? "▲" : "▼";
+                deltaHtml = `<span class="crit-delta ${cls}">${arrow} ${Math.abs(d).toFixed(1)}</span>`;
+            }
+
+            return `
+                <tr>
+                    <td class="crit-name">${escapeHtml(label)}</td>
+                    <td class="crit-value">${display}${deltaHtml}</td>
+                </tr>`;
+        }).join("");
+
+        return `
+            <div class="criteria-group">
+                <h4 class="criteria-group-title">${t(group.titleKey)}</h4>
+                <table class="criteria-table"><tbody>${rows}</tbody></table>
+            </div>`;
+    }).join("");
+}
+
+/* ---------------- Small API helpers ---------------- */
+async function apiGet(path, params) {
+    const url = new URL(API_BASE + path);
+    Object.entries(params || {}).forEach(([k, v]) => {
+        if (v !== undefined && v !== null && v !== "") url.searchParams.set(k, v);
+    });
+    const res = await fetch(url.toString());
+    return res.json();
+}
+
+async function apiPostForm(path, fields) {
+    const formData = new FormData();
+    Object.entries(fields || {}).forEach(([k, v]) => formData.append(k, v));
+    const res = await fetch(API_BASE + path, { method: "POST", body: formData });
+    return res.json();
+}
+
+/* ---------------- Segmented mode control ---------------- */
+const modeGroup = document.getElementById("mode-group");
+const modeInput = document.getElementById("mode");
+
+modeGroup.addEventListener("click", (e) => {
+    const btn = e.target.closest(".seg");
+    if (!btn) return;
+    modeGroup.querySelectorAll(".seg").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    modeInput.value = btn.dataset.value;
+    haptic("light");
+});
+
+/* ---------------- Photo upload (2 шага: анфас → профиль) + tilt effect ---------------- */
+function setupPhotoBox(inputId, previewId, boxId, textId, loadedLabelKey) {
+    const input = document.getElementById(inputId);
+    const preview = document.getElementById(previewId);
+    const box = document.getElementById(boxId);
+    const text = document.getElementById(textId);
+
+    input.addEventListener("change", function () {
+        const file = this.files[0];
+        if (!file) return;
+
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = "block";
+        text.innerHTML = `<span>${t(loadedLabelKey)}</span>`;
+        box.classList.add("loaded");
+        haptic("medium");
+
+        onPhotoBoxChanged(boxId, file);
+    });
+
+    box.addEventListener("pointermove", (e) => {
+        if (!box.classList.contains("loaded")) return;
+        const rect = box.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        preview.style.transform = `scale(1.04) translate(${x * 10}px, ${y * 10}px)`;
+    });
+
+    box.addEventListener("pointerleave", () => {
+        preview.style.transform = "scale(1) translate(0,0)";
+    });
+
+    return { input, preview, box, text };
+}
+
+let currentPhotoFrontFile = null;
+let currentPhotoProfileFile = null;
+
+const frontPhotoEls = setupPhotoBox(
+    "photo-front", "preview-front", "photo-box-front", "photo-text-front", "photo_front_loaded"
+);
+const profilePhotoEls = setupPhotoBox(
+    "photo-profile", "preview-profile", "photo-box-profile", "photo-text-profile", "photo_profile_loaded"
+);
+
+function onPhotoBoxChanged(boxId, file) {
+    if (boxId === "photo-box-front") {
+        currentPhotoFrontFile = file;
+    } else if (boxId === "photo-box-profile") {
+        currentPhotoProfileFile = file;
     }
 }
-/* ============================================================
-   STATS BAR (streak + total + badges button)
-   ============================================================ */
 
-.stats-bar {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    background: var(--surface);
-    border: 1px solid var(--hairline);
-    border-radius: var(--radius-lg);
-    padding: 12px 14px;
-    margin-bottom: 14px;
-    animation: fadeDown .5s var(--ease);
+const photoBox = frontPhotoEls.box; // используется ripple/scan-overlay кодом ниже, который завязан на "первый" бокс
+
+/* ---------------- Button ripple effect ---------------- */
+const analyzeBtn = document.getElementById("analyze-btn");
+
+analyzeBtn.addEventListener("pointerdown", function (e) {
+    const rect = this.getBoundingClientRect();
+    const ripple = document.createElement("span");
+    const size = Math.max(rect.width, rect.height);
+    ripple.className = "ripple";
+    ripple.style.width = ripple.style.height = size + "px";
+    ripple.style.left = (e.clientX - rect.left - size / 2) + "px";
+    ripple.style.top = (e.clientY - rect.top - size / 2) + "px";
+    this.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 650);
+});
+
+/* ---------------- Toast helper ---------------- */
+function showToast(msg) {
+    let toast = document.querySelector(".toast");
+    if (!toast) {
+        toast = document.createElement("div");
+        toast.className = "toast";
+        document.body.appendChild(toast);
+    }
+    toast.textContent = msg;
+    requestAnimationFrame(() => toast.classList.add("show"));
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => toast.classList.remove("show"), 2200);
 }
 
-.stats-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
+/* ---------------- Rotating "thinking" phrases ---------------- */
+let thinkingTimer = null;
+
+function startThinkingRotation() {
+    const phrases = t("thinking_phrases");
+    let i = 0;
+    const el = document.getElementById("ai-text");
+    thinkingTimer = setInterval(() => {
+        i = (i + 1) % phrases.length;
+        if (el) {
+            el.style.opacity = 0;
+            setTimeout(() => {
+                el.textContent = phrases[i];
+                el.style.opacity = .65;
+            }, 250);
+        }
+    }, 1400);
 }
 
-.stats-actions {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    padding-top: 10px;
-    border-top: 1px solid var(--hairline);
+function stopThinkingRotation() {
+    clearInterval(thinkingTimer);
 }
 
-.stats-bar .stat {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 14px;
-    font-weight: 600;
+/* ---------------- Count-up animation ---------------- */
+function animateCount(el, target, duration = 1200) {
+    const start = performance.now();
+    function frame(now) {
+        const progress = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+        const value = (target * eased).toFixed(1);
+        el.textContent = value;
+        if (progress < 1) requestAnimationFrame(frame);
+        else el.textContent = target.toFixed(1);
+    }
+    requestAnimationFrame(frame);
 }
 
-.stat-emoji {
-    font-size: 16px;
-}
+/* ---------------- Face scan overlay animation ---------------- */
+const scanOverlayFront = document.getElementById("scan-overlay-front");
+const scanOverlayProfile = document.getElementById("scan-overlay-profile");
 
-.stat-label {
-    font-weight: 400;
-    opacity: .55;
-    font-size: 12px;
-}
+function playScanAnimation(duration = 2200) {
+    return new Promise((resolve) => {
+        scanOverlayFront.classList.add("active");
+        scanOverlayProfile.classList.add("active");
+        haptic("light");
 
-.badges-btn {
-    flex-shrink: 0;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid var(--hairline);
-    background: var(--surface-raised);
-    color: var(--ink-muted);
-    font-family: var(--font-body);
-    font-size: 12px;
-    font-weight: 500;
-    padding: 0 12px;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    transition: background .2s var(--ease), color .2s var(--ease);
-}
+        // Лёгкая haptic-обратная связь по ходу сканирования (без текста).
+        const tickCount = 4;
+        const hapticInterval = setInterval(() => {
+            haptic("light");
+        }, duration / tickCount);
 
-.badges-btn:active {
-    transform: scale(.96);
-    background: rgba(255,255,255,.15);
-}
-
-/* ============================================================
-   TAB BAR + PANELS
-   ============================================================ */
-
-.tabbar {
-    display: flex;
-    gap: 6px;
-    background: rgba(255,255,255,.06);
-    padding: 6px;
-    border-radius: 18px;
-    margin-bottom: 18px;
-}
-
-.tab {
-    flex: 1;
-    border: none;
-    background: transparent;
-    color: rgba(255,255,255,.55);
-    padding: 12px 6px;
-    border-radius: 14px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: color .3s var(--ease), transform .15s var(--ease), background .3s var(--ease);
-}
-
-.tab.active {
-    color: white;
-    background: linear-gradient(135deg, var(--violet), var(--pink));
-    box-shadow: 0 6px 16px rgba(59,111,224,.3);
-}
-
-.tab:active {
-    transform: scale(.95);
-}
-
-.tab-panel {
-    display: none;
-    animation: fadeUp .4s var(--ease);
-}
-
-.tab-panel.active {
-    display: block;
-}
-
-.empty-state {
-    text-align: center;
-    padding: 40px 10px;
-    opacity: .55;
-    font-size: 14px;
+        setTimeout(() => {
+            clearInterval(hapticInterval);
+            scanOverlayFront.classList.remove("active");
+            scanOverlayProfile.classList.remove("active");
+            haptic("success");
+            resolve();
+        }, duration);
+    });
 }
 
 /* ============================================================
-   HISTORY LIST
+   TABS
    ============================================================ */
 
-.history-item {
-    background: rgba(255,255,255,.06);
-    border-radius: 16px;
-    padding: 14px 16px;
-    margin-bottom: 10px;
-    cursor: pointer;
-    transition: background .25s var(--ease);
+document.querySelectorAll(".tab").forEach(btn => {
+    btn.addEventListener("click", () => switchTab(btn.dataset.tab));
+});
+
+function switchTab(name) {
+    document.querySelectorAll(".tab").forEach(b => b.classList.toggle("active", b.dataset.tab === name));
+    document.querySelectorAll(".tab-panel").forEach(p => p.classList.toggle("active", p.id === "panel-" + name));
+    haptic("light");
+    if (name === "history") loadHistory();
+    if (name === "progress") loadProgress();
+    if (name === "leaderboard") loadLeaderboard();
 }
 
-.history-item:active {
-    background: rgba(255,255,255,.12);
+/* ============================================================
+   MODALS
+   ============================================================ */
+
+document.querySelectorAll("[data-close]").forEach(el => {
+    el.addEventListener("click", () => closeModal(el.dataset.close));
+});
+
+function openModal(id) { document.getElementById(id).classList.add("open"); }
+function closeModal(id) { document.getElementById(id).classList.remove("open"); }
+
+document.getElementById("privacy-link").addEventListener("click", (e) => {
+    e.preventDefault();
+    openModal("privacy-modal");
+    haptic("light");
+});
+
+document.getElementById("privacy-link-settings").addEventListener("click", (e) => {
+    e.preventDefault();
+    openModal("privacy-modal");
+    haptic("light");
+});
+
+document.getElementById("badges-btn").addEventListener("click", () => {
+    renderBadgesGrid();
+    openModal("badges-modal");
+    haptic("light");
+});
+
+async function switchLanguage(newLang) {
+    if (newLang === currentLang) return;
+    currentLang = newLang;
+    applyStaticTranslations();
+    renderBadgesGrid();
+    updateSettingsLangButtons();
+    haptic("light");
+
+    if (hasAuth()) {
+        try {
+            await apiPostForm("/language", { init_data: tg.initData, language: newLang });
+        } catch (e) {
+            console.error("language switch failed", e);
+        }
+    }
 }
 
-.history-item-top {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+function updateSettingsLangButtons() {
+    document.querySelectorAll("#settings-lang-group .seg").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.lang === currentLang);
+    });
 }
 
-.history-mode-icon {
-    flex-shrink: 0;
-    width: 26px;
-    height: 26px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: var(--surface-raised);
-    border: 1px solid var(--hairline);
-    font-family: var(--font-display);
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--ink-muted);
+document.querySelectorAll("#settings-lang-group .seg").forEach(btn => {
+    btn.addEventListener("click", () => switchLanguage(btn.dataset.lang));
+});
+
+document.getElementById("settings-btn").addEventListener("click", () => {
+    updateSettingsLangButtons();
+    openModal("settings-modal");
+    haptic("light");
+});
+
+document.getElementById("stat-credits").closest(".stat").addEventListener("click", () => {
+    openPaymentModal();
+});
+document.getElementById("stat-credits").closest(".stat").style.cursor = "pointer";
+
+/* ============================================================
+   PROFILE / STATS / BADGES
+   ============================================================ */
+
+let cachedBadges = [];
+
+async function loadProfile() {
+    if (!hasAuth()) return;
+    try {
+        const data = await apiGet("/profile", { init_data: tg.initData });
+        if (data.error) return;
+
+        if (data.language && I18N[data.language]) {
+            currentLang = data.language;
+            applyStaticTranslations();
+            updateSettingsLangButtons();
+        }
+
+        document.getElementById("stat-streak").textContent = data.stats.streak;
+        document.getElementById("stat-total").textContent = data.stats.total;
+        document.getElementById("stat-credits").textContent = data.credits || 0;
+        document.getElementById("visibility-checkbox").checked = !!data.leaderboard_opt_in;
+
+        cachedBadges = data.badges || [];
+    } catch (e) {
+        console.error("loadProfile failed", e);
+    }
 }
 
-.history-meta {
-    flex: 1;
-    min-width: 0;
+// Названия бейджей переводим на клиенте по id — сервер присылает только
+// русское name (используется как fallback, если id не распознан).
+const BADGE_NAMES = {
+    ru: {
+        first_scan: "Первый шаг", five_scans: "Разогрелся", twenty_scans: "Ветеран",
+        streak_3: "3 дня подряд", streak_7: "Неделя подряд", high_score: "Топ 9+",
+        style_icon: "Икона стиля", symmetry_master: "Идеальная симметрия",
+        golden_ratio: "Золотое сечение", sharp_jawline: "Чёткая челюсть",
+        clear_skin: "Чистая кожа", inviter: "Первый друг", inviter5: "Амбассадор",
+    },
+    en: {
+        first_scan: "First step", five_scans: "Warmed up", twenty_scans: "Veteran",
+        streak_3: "3-day streak", streak_7: "7-day streak", high_score: "Top 9+",
+        style_icon: "Style icon", symmetry_master: "Perfect symmetry",
+        golden_ratio: "Golden ratio", sharp_jawline: "Sharp jawline",
+        clear_skin: "Clear skin", inviter: "First friend", inviter5: "Ambassador",
+    },
+};
+
+function badgeName(b) {
+    return (BADGE_NAMES[currentLang] && BADGE_NAMES[currentLang][b.id]) || b.name;
 }
 
-.history-date {
-    font-size: 12px;
-    opacity: .5;
+function renderBadgesGrid() {
+    const grid = document.getElementById("badges-grid");
+    if (!cachedBadges.length) {
+        grid.innerHTML = `<div class="empty-state">${t("badges_empty")}</div>`;
+        return;
+    }
+    grid.innerHTML = cachedBadges.map(b => `
+        <div class="badge-chip ${b.earned ? "earned" : ""}">
+            <span class="badge-emoji">${b.emoji}</span>
+            <span class="badge-name">${escapeHtml(badgeName(b))}</span>
+        </div>
+    `).join("");
 }
 
-.history-vibe {
-    font-size: 13px;
-    opacity: .8;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+function showBadgePopups(badges) {
+    if (!badges || !badges.length) return;
+    const wrap = document.getElementById("badge-popup");
+    badges.forEach((b, i) => {
+        setTimeout(() => {
+            const el = document.createElement("div");
+            el.className = "badge-popup-item";
+            el.innerHTML = `<span class="badge-emoji">${b.emoji}</span><span>${t("badge_new_prefix")}${escapeHtml(badgeName(b))}</span>`;
+            wrap.appendChild(el);
+            requestAnimationFrame(() => el.classList.add("show"));
+            haptic("success");
+            setTimeout(() => {
+                el.classList.remove("show");
+                setTimeout(() => el.remove(), 400);
+            }, 2600);
+        }, i * 900);
+    });
 }
 
-.history-rating {
-    font-size: 18px;
-    font-weight: bold;
-    background: linear-gradient(135deg, var(--violet), var(--pink));
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    flex-shrink: 0;
+document.getElementById("visibility-checkbox").addEventListener("change", async function () {
+    if (!hasAuth()) {
+        this.checked = !this.checked;
+        showToast(t("toast_telegram_only"));
+        return;
+    }
+    await apiPostForm("/profile/visibility", { init_data: tg.initData, visible: this.checked });
+    haptic("light");
+});
+
+/* ============================================================
+   HISTORY
+   ============================================================ */
+
+const MODE_ICONS = { male: "M", female: "F", general: "G" };
+
+async function loadHistory() {
+    const wrap = document.getElementById("history-list");
+
+    if (!hasAuth()) {
+        wrap.innerHTML = `<div class="empty-state">${t("history_empty_no_auth")}</div>`;
+        return;
+    }
+
+    wrap.innerHTML = `<div class="empty-state">${t("history_loading")}</div>`;
+
+    let data;
+    try {
+        data = await apiGet("/history", { init_data: tg.initData, limit: 30 });
+    } catch (e) {
+        wrap.innerHTML = `<div class="empty-state">${t("history_load_error")}</div>`;
+        return;
+    }
+
+    if (data.error || !data.items || data.items.length === 0) {
+        wrap.innerHTML = `<div class="empty-state">${t("history_empty")}</div>`;
+        return;
+    }
+
+    const dateLocale = currentLang === "en" ? "en-US" : "ru-RU";
+
+    wrap.innerHTML = data.items.map(item => {
+        const dt = new Date(item.created_at);
+        const dateStr = isNaN(dt.getTime())
+            ? ""
+            : dt.toLocaleDateString(dateLocale, { day: "numeric", month: "short" });
+
+        return `
+        <div class="history-item" data-id="${item.id}">
+            <div class="history-item-top">
+                <span class="history-mode-icon">${MODE_ICONS[item.mode] || "-"}</span>
+                <div class="history-meta">
+                    <div class="history-date">${dateStr}${item.vibe ? " · " + escapeHtml(item.vibe) : ""}</div>
+                    <div class="history-vibe">${escapeHtml(item.summary || "")}</div>
+                </div>
+                <div class="history-rating">${Number(item.rating || 0).toFixed(1)}</div>
+            </div>
+            <div class="history-body">
+                ${buildCriteriaTableHtml(item, item.mode)}
+                <p>${escapeHtml(item.potential || "")}</p>
+                <div class="advice-header">
+                    <span class="advice-progress-label"></span>
+                </div>
+                ${buildAdviceChecklistHtml(item.id, item.advice || [], item.advice_progress || [])}
+            </div>
+        </div>`;
+    }).join("");
+
+    wrap.querySelectorAll(".history-body").forEach(el => updateAdviceProgressLabel(el));
+
+    wrap.querySelectorAll(".history-item").forEach(el => {
+        el.addEventListener("click", () => {
+            el.classList.toggle("open");
+            haptic("light");
+        });
+    });
 }
 
-.history-body {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height .35s var(--ease), margin-top .35s var(--ease);
+/* ============================================================
+   PROGRESS (график динамики + крючок на покупку анализов)
+   ============================================================ */
+
+// Критерии, которые можно построить на графике — подпись берём из тех же
+// ключей i18n, что и таблица критериев результата.
+const PROGRESS_METRICS = [
+    { key: "rating", labelKey: "crit_rating" },
+    { key: "style_score", labelKey: "crit_style_score" },
+    { key: "symmetry_score", labelKey: "crit_symmetry_score" },
+    { key: "proportions_score", labelKey: "crit_proportions_score" },
+    { key: "skin_score", labelKey: "crit_skin_score" },
+];
+
+let progressItems = [];
+let progressMetric = "rating";
+
+async function loadProgress() {
+    const wrap = document.getElementById("progress-content");
+
+    if (!hasAuth()) {
+        wrap.innerHTML = `<div class="empty-state">${t("history_empty_no_auth")}</div>`;
+        return;
+    }
+
+    wrap.innerHTML = `<div class="empty-state">${t("progress_loading")}</div>`;
+
+    let data;
+    try {
+        data = await apiGet("/history", { init_data: tg.initData, limit: 50 });
+    } catch (e) {
+        wrap.innerHTML = `<div class="empty-state">${t("history_load_error")}</div>`;
+        return;
+    }
+
+    if (data.error || !data.items || data.items.length === 0) {
+        wrap.innerHTML = `<div class="empty-state">${t("progress_empty")}</div>`;
+        return;
+    }
+
+    // /history отдаёт от новых к старым — для графика нужен хронологический порядок.
+    progressItems = data.items.slice().reverse();
+    renderProgress();
 }
 
-.history-item.open .history-body {
-    max-height: 260px;
-    margin-top: 12px;
+function renderProgress() {
+    const wrap = document.getElementById("progress-content");
+    const items = progressItems;
+
+    if (items.length < 3) {
+        const need = 3 - items.length;
+        wrap.innerHTML = `
+            <div class="progress-teaser">
+                <div class="progress-teaser-count">${items.length}/3</div>
+                <p>${t("progress_need_more").replace("{n}", need)}</p>
+                <button class="share-btn" id="progress-cta-btn">${t("buy_credits_btn")}</button>
+            </div>`;
+        const btn = document.getElementById("progress-cta-btn");
+        if (btn) btn.addEventListener("click", openPaymentModal);
+        return;
+    }
+
+    const metricButtons = PROGRESS_METRICS.map(m => `
+        <button type="button" class="seg ${m.key === progressMetric ? "active" : ""}" data-metric="${m.key}">${t(m.labelKey)}</button>
+    `).join("");
+
+    const values = items.map(it => Number(it[progressMetric]) || 0);
+    const first = values[0];
+    const last = values[values.length - 1];
+    const best = Math.max(...values);
+    const delta = Math.round((last - first) * 10) / 10;
+    const deltaUp = delta > 0;
+    const deltaCls = delta === 0 ? "" : (deltaUp ? "delta-up" : "delta-down");
+    const deltaSign = delta > 0 ? "+" : "";
+
+    wrap.innerHTML = `
+        <div class="segmented progress-metric-picker" id="progress-metric-picker">${metricButtons}</div>
+
+        ${buildProgressChartSvg(values)}
+
+        <div class="progress-summary">
+            <div class="progress-stat">
+                <span class="progress-stat-label">${t("progress_first")}</span>
+                <span class="progress-stat-value">${first.toFixed(1)}</span>
+            </div>
+            <div class="progress-stat">
+                <span class="progress-stat-label">${t("progress_current")}</span>
+                <span class="progress-stat-value">${last.toFixed(1)} ${delta !== 0 ? `<span class="crit-delta ${deltaCls}">${deltaSign}${delta.toFixed(1)}</span>` : ""}</span>
+            </div>
+            <div class="progress-stat">
+                <span class="progress-stat-label">${t("progress_best")}</span>
+                <span class="progress-stat-value">${best.toFixed(1)}</span>
+            </div>
+        </div>
+
+        ${items.length < 10 ? `
+        <div class="progress-cta">
+            <p>${t("progress_upsell").replace("{n}", 10 - items.length)}</p>
+            <button class="share-btn" id="progress-cta-btn-2">${t("buy_credits_btn")}</button>
+        </div>` : ""}
+    `;
+
+    document.getElementById("progress-metric-picker").querySelectorAll(".seg").forEach(btn => {
+        btn.addEventListener("click", () => {
+            progressMetric = btn.dataset.metric;
+            haptic("light");
+            renderProgress();
+        });
+    });
+
+    const cta2 = document.getElementById("progress-cta-btn-2");
+    if (cta2) cta2.addEventListener("click", openPaymentModal);
 }
 
-.history-body p {
-    font-size: 13px;
-    opacity: .8;
-    margin: 4px 0 8px;
-}
+function buildProgressChartSvg(values) {
+    const W = 320, H = 140, PAD = 16;
+    const min = Math.min(...values, 0);
+    const max = Math.max(...values, 10);
+    const range = (max - min) || 1;
 
-.history-body ul {
-    margin: 0 0 8px;
-    padding-left: 18px;
-    font-size: 13px;
-}
+    const stepX = (W - PAD * 2) / (values.length - 1);
+    const points = values.map((v, i) => {
+        const x = PAD + i * stepX;
+        const y = H - PAD - ((v - min) / range) * (H - PAD * 2);
+        return [x, y];
+    });
 
-.history-body li {
-    margin-bottom: 4px;
-    opacity: .85;
+    const linePath = points.map((p, i) => (i === 0 ? "M" : "L") + p[0].toFixed(1) + "," + p[1].toFixed(1)).join(" ");
+    const areaPath = linePath + ` L${points[points.length - 1][0].toFixed(1)},${H - PAD} L${points[0][0].toFixed(1)},${H - PAD} Z`;
+
+    const dots = points.map(p => `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3" fill="var(--sapphire)" />`).join("");
+
+    return `
+        <svg class="progress-chart" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
+            <defs>
+                <linearGradient id="progressAreaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#3b6fe0" stop-opacity="0.35"/>
+                    <stop offset="100%" stop-color="#3b6fe0" stop-opacity="0"/>
+                </linearGradient>
+                <linearGradient id="progressLineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#3b6fe0"/>
+                    <stop offset="100%" stop-color="#2fb88a"/>
+                </linearGradient>
+            </defs>
+            <path d="${areaPath}" fill="url(#progressAreaGradient)" stroke="none" />
+            <path d="${linePath}" fill="none" stroke="url(#progressLineGradient)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+            ${dots}
+        </svg>`;
 }
 
 /* ============================================================
    LEADERBOARD
    ============================================================ */
 
-.settings-section {
-    margin-bottom: 20px;
-}
+async function loadLeaderboard() {
+    const wrap = document.getElementById("leaderboard-list");
+    wrap.innerHTML = `<div class="empty-state">${t("leaderboard_loading")}</div>`;
 
-.settings-section:last-child {
-    margin-bottom: 4px;
-}
+    let data;
+    try {
+        data = await apiGet("/leaderboard", { init_data: tg.initData || "", limit: 30 });
+    } catch (e) {
+        wrap.innerHTML = `<div class="empty-state">${t("leaderboard_load_error")}</div>`;
+        return;
+    }
 
-.settings-label {
-    display: block;
-    font-size: 13px;
-    opacity: .7;
-    margin-bottom: 8px;
-}
+    if (data.error || !data.items || data.items.length === 0) {
+        wrap.innerHTML = `<div class="empty-state">${t("leaderboard_empty")}</div>`;
+        return;
+    }
 
-.settings-section .visibility-toggle {
-    margin: 0;
-}
+    wrap.innerHTML = data.items.map(row => {
+        const initials = (row.first_name || "?").slice(0, 1).toUpperCase();
+        const avatar = row.photo_url
+            ? `<img class="leaderboard-avatar" src="${row.photo_url}" alt="">`
+            : `<div class="leaderboard-avatar">${initials}</div>`;
 
-.settings-link {
-    display: inline-block;
-    font-size: 13px;
-    color: rgba(255,255,255,.6);
-    text-decoration: underline;
-}
-
-.visibility-toggle {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 13px;
-    opacity: .75;
-    margin: 14px 2px 18px;
-    cursor: pointer;
-}
-
-.visibility-toggle input {
-    accent-color: var(--violet);
-    width: 16px;
-    height: 16px;
-}
-
-.leaderboard-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 12px;
-    border-radius: 14px;
-    margin-bottom: 8px;
-    background: rgba(255,255,255,.05);
-}
-
-.leaderboard-row.is-you {
-    background: rgba(59,111,224,.15);
-    border: 1px solid rgba(59,111,224,.4);
-}
-
-.leaderboard-rank {
-    width: 26px;
-    text-align: center;
-    font-family: var(--font-display);
-    font-weight: 600;
-    opacity: .7;
-    flex-shrink: 0;
-}
-
-.leaderboard-row.top-rank .leaderboard-rank {
-    color: var(--sapphire);
-    opacity: 1;
-}
-
-.leaderboard-avatar {
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    object-fit: cover;
-    background: linear-gradient(135deg, var(--violet), var(--pink));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    font-weight: bold;
-    flex-shrink: 0;
-}
-
-.leaderboard-name {
-    flex: 1;
-    min-width: 0;
-    font-size: 14px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.leaderboard-score {
-    font-weight: bold;
-    font-size: 15px;
-    flex-shrink: 0;
+        return `
+        <div class="leaderboard-row ${row.is_you ? "is-you" : ""} ${row.rank <= 3 ? "top-rank" : ""}">
+            <div class="leaderboard-rank">${row.rank}</div>
+            ${avatar}
+            <div class="leaderboard-name">${escapeHtml(row.first_name || t("leaderboard_default_name"))}${row.is_you ? t("leaderboard_you_suffix") : ""}</div>
+            <div class="leaderboard-score">${Number(row.latest_rating || 0).toFixed(1)}</div>
+        </div>`;
+    }).join("");
 }
 
 /* ============================================================
-   MODALS (badges / share)
+   REFERRALS
    ============================================================ */
 
-.modal {
-    position: fixed;
-    inset: 0;
-    z-index: 1200;
-    display: none;
-    align-items: flex-end;
-    justify-content: center;
+async function handleReferral() {
+    if (!hasAuth()) return;
+
+    const startParam = tg.initDataUnsafe && tg.initDataUnsafe.start_param;
+    if (!startParam || !startParam.startsWith("ref_")) return;
+    if (localStorage.getItem("ai_rating_referral_done")) return;
+
+    const referrerId = startParam.replace("ref_", "");
+    if (!referrerId || isNaN(Number(referrerId))) return;
+
+    try {
+        await apiPostForm("/referral", { init_data: tg.initData, referred_by: referrerId });
+        localStorage.setItem("ai_rating_referral_done", "1");
+    } catch (e) {
+        console.error("referral failed", e);
+    }
 }
 
-.modal.open {
-    display: flex;
+document.getElementById("invite-btn").addEventListener("click", () => {
+    const myId = tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id;
+    if (!myId) {
+        showToast(t("toast_telegram_only"));
+        return;
+    }
+    const link = `https://t.me/${BOT_USERNAME}?startapp=ref_${myId}`;
+    const text = `${t("invite_share_text")}\n${link}`;
+
+    haptic("medium");
+
+    if (navigator.share) {
+        navigator.share({ text }).catch(() => {});
+    } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(text);
+        showToast(t("toast_link_copied"));
+    }
+});
+
+/* ============================================================
+   PAYMENTS (Telegram Stars)
+   ============================================================ */
+
+let cachedPackages = null;
+
+async function loadPackages() {
+    if (cachedPackages) return cachedPackages;
+    try {
+        const data = await apiGet("/packages", {});
+        cachedPackages = data.items || [];
+    } catch (e) {
+        cachedPackages = [];
+    }
+    return cachedPackages;
 }
 
-.modal-backdrop {
-    position: absolute;
-    inset: 0;
-    background: rgba(0,0,0,.6);
-    backdrop-filter: blur(4px);
-    animation: fadeUp .3s var(--ease);
+// Названия пакетов переводим на клиенте по id, цену/кредиты берём с сервера.
+const PACKAGE_LABELS = {
+    ru: { small: "5 анализов", medium: "15 анализов", large: "50 анализов" },
+    en: { small: "5 analyses", medium: "15 analyses", large: "50 analyses" },
+};
+
+function packageTitle(p) {
+    return (PACKAGE_LABELS[currentLang] && PACKAGE_LABELS[currentLang][p.id]) || p.title;
 }
 
-.modal-card {
-    position: relative;
-    width: 100%;
-    max-width: 450px;
-    max-height: 85vh;
-    overflow-y: auto;
-    background: var(--surface);
-    border: 1px solid var(--hairline);
-    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-    padding: 22px;
-    animation: slideUp .3s var(--ease);
+async function openPaymentModal() {
+    const wrap = document.getElementById("packages-list");
+    wrap.innerHTML = `<div class="empty-state">${t("packages_loading")}</div>`;
+    openModal("payment-modal");
+    haptic("light");
+
+    const packages = await loadPackages();
+
+    if (!packages.length) {
+        wrap.innerHTML = `<div class="empty-state">${t("packages_unavailable")}</div>`;
+        return;
+    }
+
+    // Пакет с лучшей ценой за анализ помечаем как "выгодно"
+    const bestValueId = packages.reduce((best, p) => {
+        const ratio = p.stars / p.credits;
+        const bestRatio = best ? best.stars / best.credits : Infinity;
+        return ratio < bestRatio ? p : best;
+    }, null)?.id;
+
+    wrap.innerHTML = packages.map(p => `
+        <div class="package-card ${p.id === bestValueId ? "popular" : ""}" data-id="${p.id}">
+            <div class="package-info">
+                <span class="package-title">${escapeHtml(packageTitle(p))}</span>
+                ${p.id === bestValueId ? `<span class="package-badge">${t("package_badge_best")}</span>` : ""}
+            </div>
+            <div class="package-price">${p.stars} <span class="package-price-unit">${t("stars_label")}</span></div>
+        </div>
+    `).join("");
+
+    wrap.querySelectorAll(".package-card").forEach(card => {
+        card.addEventListener("click", () => buyPackage(card.dataset.id));
+    });
 }
 
-@media (min-width: 500px) {
-    .modal { align-items: center; }
-    .modal-card { border-radius: var(--radius-lg); }
-}
+async function buyPackage(packageId) {
+    if (!hasAuth()) {
+        showToast(t("toast_telegram_only"));
+        return;
+    }
 
-@keyframes slideUp {
-    from { transform: translateY(60px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-}
+    haptic("medium");
 
-.modal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
-}
+    const data = await apiPostForm("/create_invoice", {
+        init_data: tg.initData,
+        package: packageId,
+    });
 
-.modal-header h3 {
-    margin: 0;
-}
+    if (data.error || !data.invoice_link) {
+        showToast(data.message || t("toast_invoice_failed"));
+        return;
+    }
 
-.modal-close {
-    border: none;
-    background: rgba(255,255,255,.08);
-    color: white;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 14px;
+    tg.openInvoice(data.invoice_link, (status) => {
+        if (status === "paid") {
+            haptic("success");
+            showToast(t("toast_payment_success"));
+            closeModal("payment-modal");
+            loadProfile();
+        } else if (status === "failed") {
+            haptic("error");
+            showToast(t("toast_payment_failed"));
+        } else if (status === "cancelled") {
+            haptic("light");
+        }
+    });
 }
 
 /* ============================================================
-   BADGES GRID
+   SHARE CARD (canvas)
    ============================================================ */
 
-.badges-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-}
-
-.badge-chip {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    padding: 14px 8px;
-    border-radius: 16px;
-    background: rgba(255,255,255,.05);
-    text-align: center;
-    opacity: .35;
-    filter: grayscale(1);
-    transition: opacity .3s var(--ease), filter .3s var(--ease), transform .3s var(--ease);
-}
-
-.badge-chip.earned {
-    opacity: 1;
-    filter: none;
-    background: rgba(59,111,224,.08);
-    border: 1px solid rgba(59,111,224,.3);
-}
-
-.badge-chip .badge-emoji {
-    font-size: 22px;
-}
-
-.badge-chip .badge-name {
-    font-size: 11px;
-    line-height: 1.3;
-}
-
-/* ============================================================
-   BADGE CELEBRATION POPUP
-   ============================================================ */
-
-.badge-popup {
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1300;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    pointer-events: none;
-}
-
-.badge-popup-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: var(--surface-raised);
-    border: 1px solid var(--hairline);
-    padding: 12px 18px;
-    border-radius: var(--radius-md);
-    box-shadow: 0 10px 24px rgba(0,0,0,.4);
-    opacity: 0;
-    transform: translateY(-14px);
-    transition: all .3s var(--ease);
-    font-size: 14px;
-    font-weight: 600;
-    white-space: nowrap;
-}
-
-.badge-popup-item.show {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-}
-
-.badge-popup-item .badge-emoji {
-    font-size: 22px;
-}
-
-/* ============================================================
-   RESULT: criteria table (12+ критериев), vibe / potential
-   ============================================================ */
-
-.criteria-wrap {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-}
-
-.criteria-group-title {
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: .4px;
-    opacity: .6;
-    margin: 0 0 8px 2px;
-}
-
-.criteria-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: rgba(255,255,255,.05);
-    border-radius: 16px;
-    overflow: hidden;
-}
-
-.criteria-table tr:not(:last-child) td {
-    border-bottom: 1px solid rgba(255,255,255,.06);
-}
-
-.criteria-table td {
-    padding: 10px 14px;
-    font-size: 13px;
-}
-
-.crit-name {
-    opacity: .85;
-}
-
-.crit-value {
-    text-align: right;
-    font-weight: 700;
-    white-space: nowrap;
-}
-
-.crit-max {
-    font-weight: 400;
-    opacity: .5;
-    font-size: 11px;
-}
-
-.vibe-pill {
-    display: inline-block;
-    margin-top: 14px;
-    padding: 8px 16px;
-    border-radius: 999px;
-    background: rgba(255,255,255,.1);
-    border: 1px solid rgba(255,255,255,.15);
-    font-size: 13px;
-}
-
-.potential-box {
-    margin-top: 14px;
-    padding: 14px 16px;
-    border-radius: 16px;
-    background: rgba(59,111,224,.1);
-    border: 1px solid rgba(59,111,224,.25);
-    font-size: 13px;
-    line-height: 1.5;
-}
-
-.potential-box b {
-    display: block;
-    margin-bottom: 4px;
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: .5px;
-    opacity: .7;
-}
-
-/* ============================================================
-   SHARE CARD MODAL
-   ============================================================ */
-
-#share-canvas {
-    width: 100%;
-    height: auto;
-    border-radius: 18px;
-    display: block;
-    box-shadow: 0 15px 40px rgba(0,0,0,.5);
-}
-
-.share-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 16px;
-}
-
-.share-action-btn {
-    flex: 1;
-    padding: 13px;
-    border-radius: 14px;
-    border: 1px solid rgba(255,255,255,.2);
-    background: rgba(255,255,255,.06);
-    color: white;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background .25s var(--ease), transform .15s var(--ease);
-}
-
-.share-action-btn.primary {
-    border: none;
-    background: linear-gradient(135deg, var(--violet), var(--pink));
-}
-
-.share-action-btn:active {
-    transform: scale(.95);
-}
-
-/* ============================================================
-   PAYMENT MODAL (Stars packages)
-   ============================================================ */
-
-.payment-hint {
-    font-size: 13px;
-    opacity: .7;
-    margin: 0 0 16px;
-    line-height: 1.5;
-}
-
-.package-card {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 16px;
-    border-radius: 16px;
-    background: rgba(255,255,255,.06);
-    border: 1px solid rgba(255,255,255,.1);
-    margin-bottom: 10px;
-    cursor: pointer;
-    transition: background .25s var(--ease), transform .15s var(--ease), border-color .25s var(--ease);
-}
-
-.package-card:active {
-    transform: scale(.97);
-}
-
-.package-card.popular {
-    border-color: rgba(59,111,224,.5);
-    background: rgba(59,111,224,.08);
-}
-
-.package-info {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.package-title {
-    font-size: 15px;
-    font-weight: 700;
-}
-
-.package-badge {
-    display: inline-block;
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: .5px;
-    background: var(--sapphire);
-    padding: 2px 8px;
-    border-radius: 999px;
-    margin-top: 4px;
-    width: fit-content;
-}
-
-.package-price {
-    display: flex;
-    align-items: baseline;
-    gap: 4px;
-    font-family: var(--font-display);
-    font-size: 17px;
-    font-weight: 600;
-    white-space: nowrap;
-    flex-shrink: 0;
-}
-
-.package-price-unit {
-    font-family: var(--font-body);
-    font-size: 11px;
-    font-weight: 400;
-    color: var(--ink-muted);
-}
-
-/* Paywall card shown in the result area when free trial is used up */
-.paywall-card {
-    text-align: center;
-    padding: 10px 4px 4px;
-}
-
-.paywall-card .paywall-emoji {
-    font-size: 42px;
-    margin-bottom: 10px;
-}
-
-.paywall-card p {
-    opacity: .8;
-    font-size: 14px;
-    margin-bottom: 18px;
-    line-height: 1.5;
-}
-
-/* ============================================================
-   PROGRESS: дельты между анализами (сравнение с прошлым разом)
-   ============================================================ */
-
-.progress-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    margin-top: 10px;
-    padding: 6px 14px;
-    border-radius: 999px;
-    font-size: 13px;
-    font-weight: 700;
-}
-
-.progress-chip.delta-up {
-    background: rgba(52, 211, 153, .15);
-    color: #34d399;
-    border: 1px solid rgba(52, 211, 153, .3);
-}
-
-.progress-chip.delta-down {
-    background: rgba(248, 113, 113, .15);
-    color: #f87171;
-    border: 1px solid rgba(248, 113, 113, .3);
-}
-
-.crit-delta {
-    display: inline-block;
-    margin-left: 6px;
-    font-size: 11px;
-    font-weight: 700;
-    vertical-align: middle;
-}
-
-.crit-delta.delta-up {
-    color: #34d399;
-}
-
-.crit-delta.delta-down {
-    color: #f87171;
-}
-
-/* ============================================================
-   ЧЕК-ЛИСТ СОВЕТОВ
-   ============================================================ */
-
-.advice-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 8px;
-}
-
-.advice-header h3 {
-    margin: 0;
-}
-
-.advice-progress-label {
-    font-size: 11px;
-    opacity: .6;
-    background: rgba(255,255,255,.08);
-    padding: 3px 10px;
-    border-radius: 999px;
-    white-space: nowrap;
-}
-
-.advice-checklist {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-.advice-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 8px 6px;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background .2s var(--ease);
-}
-
-.advice-item:active {
-    background: rgba(255,255,255,.08);
-}
-
-.advice-checkbox {
-    flex-shrink: 0;
-    width: 16px;
-    height: 16px;
-    margin-top: 3px;
-    border: 1.5px solid var(--ink-muted);
-    border-radius: 4px;
-    position: relative;
-    transition: background .2s var(--ease), border-color .2s var(--ease);
-}
-
-.advice-item.done .advice-checkbox {
-    background: var(--sapphire);
-    border-color: var(--sapphire);
-}
-
-.advice-item.done .advice-checkbox::after {
-    content: "";
-    position: absolute;
-    left: 4px;
-    top: 1px;
-    width: 4px;
-    height: 8px;
-    border: solid #fff;
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
-}
-
-.advice-text {
-    font-size: 14px;
-    line-height: 1.5;
-    opacity: .9;
-    transition: opacity .2s var(--ease);
-}
-
-.advice-item.done .advice-text {
-    opacity: .45;
-    text-decoration: line-through;
-}
-
-/* ============================================================
-   PROGRESS TAB (график динамики + крючок на покупку)
-   ============================================================ */
-
-.progress-metric-picker {
-    margin-bottom: 16px;
-}
-
-.progress-chart {
-    width: 100%;
-    height: 140px;
-    display: block;
-    margin-bottom: 18px;
-}
-
-.progress-summary {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-    padding: 14px 0;
-    border-top: 1px solid var(--hairline);
-    border-bottom: 1px solid var(--hairline);
-    margin-bottom: 16px;
-}
-
-.progress-stat {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    flex: 1;
-}
-
-.progress-stat-label {
-    font-size: 11px;
-    color: var(--ink-muted);
-    text-transform: uppercase;
-    letter-spacing: .04em;
-}
-
-.progress-stat-value {
-    font-family: var(--font-display);
-    font-size: 20px;
-    font-weight: 600;
-    display: flex;
-    align-items: baseline;
-    gap: 4px;
-}
-
-.progress-teaser {
-    text-align: center;
-    padding: 20px 10px;
-}
-
-.progress-teaser-count {
-    font-family: var(--font-display);
-    font-size: 34px;
-    font-weight: 700;
-    background: linear-gradient(135deg, var(--sapphire), var(--emerald));
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 10px;
-}
-
-.progress-teaser p {
-    font-size: 14px;
-    color: var(--ink-muted);
-    margin: 0 0 18px;
-    line-height: 1.5;
-}
-
-.progress-cta {
-    text-align: center;
-    padding: 16px;
-    border-radius: var(--radius-md);
-    background: rgba(59,111,224,.06);
-    border: 1px solid rgba(59,111,224,.2);
-}
-
-.progress-cta p {
-    font-size: 13px;
-    color: var(--ink-muted);
-    margin: 0 0 12px;
-    line-height: 1.5;
-}
+function roundRectPath(c, x, y, w, h, r) {
+    c.beginPath();
+    c.moveTo(x + r, y);
+    c.arcTo(x + w, y, x + w, y + h, r);
+    c.arcTo(x + w, y + h, x, y + h, r);
+    c.arcTo(x, y + h, x, y, r);
+    c.arcTo(x, y, x + w, y, r);
+    c.closePath();
+}
+
+function loadImageFromFile(file) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = URL.createObjectURL(file);
+    });
+}
+
+async function buildShareCard(data, rating) {
+    const canvas = document.getElementById("share-canvas");
+    const sc = canvas.getContext("2d");
+    const W = canvas.width, H = canvas.height;
+
+    const bg = sc.createRadialGradient(W / 2, 120, 40, W / 2, H / 2, W);
+    bg.addColorStop(0, "#5b21ff");
+    bg.addColorStop(0.5, "#1a1030");
+    bg.addColorStop(1, "#05050a");
+    sc.fillStyle = bg;
+    sc.fillRect(0, 0, W, H);
+
+    if (currentPhotoFrontFile) {
+        try {
+            const img = await loadImageFromFile(currentPhotoFrontFile);
+            const size = 260;
+            const px = W / 2 - size / 2, py = 70;
+
+            sc.save();
+            roundRectPath(sc, px, py, size, size, 28);
+            sc.clip();
+            const scale = Math.max(size / img.width, size / img.height);
+            const iw = img.width * scale, ih = img.height * scale;
+            sc.drawImage(img, px + size / 2 - iw / 2, py + size / 2 - ih / 2, iw, ih);
+            sc.restore();
+
+            sc.strokeStyle = "rgba(255,255,255,.25)";
+            sc.lineWidth = 2;
+            roundRectPath(sc, px, py, size, size, 28);
+            sc.stroke();
+        } catch (e) {
+            console.error("photo draw failed", e);
+        }
+    }
+
+    sc.textAlign = "center";
+    sc.fillStyle = "#ffffff";
+    sc.font = "bold 90px -apple-system, Arial";
+    sc.fillText(rating.toFixed(1), W / 2, 445);
+
+    sc.font = "20px -apple-system, Arial";
+    sc.fillStyle = "rgba(255,255,255,.6)";
+    sc.fillText(t("share_out_of_10"), W / 2, 478);
+
+    if (data.vibe) {
+        sc.font = "bold 22px -apple-system, Arial";
+        const text = data.vibe;
+        const textW = sc.measureText(text).width;
+        const pillW = textW + 50, pillH = 44;
+        const pillX = W / 2 - pillW / 2, pillY = 505;
+
+        sc.fillStyle = "rgba(255,255,255,.12)";
+        roundRectPath(sc, pillX, pillY, pillW, pillH, 22);
+        sc.fill();
+        sc.strokeStyle = "rgba(255,255,255,.25)";
+        sc.stroke();
+
+        sc.fillStyle = "#fff";
+        sc.fillText(text, W / 2, pillY + 29);
+    }
+
+    // Мини-метрики на карточке: симметрия / пропорции / чёткость челюсти
+    const miniStats = [
+        { label: t("chip_symmetry"), value: Number(data.symmetry_score) || 0 },
+        { label: t("chip_proportions"), value: Number(data.proportions_score) || 0 },
+        { label: t("chip_jawline"), value: Number(data.jawline_score) || 0 },
+    ];
+
+    sc.font = "15px -apple-system, Arial";
+    const chipTexts = miniStats.map(m => `${m.label} ${m.value.toFixed(1)}`);
+    const chipWidths = chipTexts.map(txt => sc.measureText(txt).width + 30);
+    const gap = 10;
+    const totalW = chipWidths.reduce((a, b) => a + b, 0) + gap * (chipWidths.length - 1);
+    let chipX = W / 2 - totalW / 2;
+    const chipY = 565;
+
+    chipTexts.forEach((txt, i) => {
+        const cw = chipWidths[i];
+        sc.fillStyle = "rgba(255,255,255,.08)";
+        roundRectPath(sc, chipX, chipY, cw, 34, 17);
+        sc.fill();
+        sc.fillStyle = "rgba(255,255,255,.85)";
+        sc.fillText(txt, chipX + cw / 2, chipY + 23);
+        chipX += cw + gap;
+    });
+
+    sc.font = "bold 26px -apple-system, Arial";
+    sc.fillStyle = "#fff";
+    sc.fillText(t("share_brand"), W / 2, 622);
+
+    sc.font = "16px -apple-system, Arial";
+    sc.fillStyle = "rgba(255,255,255,.55)";
+    sc.fillText(`${t("share_get_your_rating")} @${BOT_USERNAME}`, W / 2, 657);
+}
+
+async function openShareCard(data, rating) {
+    await buildShareCard(data, rating);
+    openModal("share-modal");
+    haptic("light");
+}
+
+document.getElementById("share-download").addEventListener("click", () => {
+    const canvas = document.getElementById("share-canvas");
+    canvas.toBlob(blob => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "ai-rating.png";
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 2000);
+    }, "image/png");
+    haptic("medium");
+});
+
+document.getElementById("share-native").addEventListener("click", () => {
+    const canvas = document.getElementById("share-canvas");
+    canvas.toBlob(async blob => {
+        const file = new File([blob], "ai-rating.png", { type: "image/png" });
+        const myId = tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id;
+        const link = myId ? `https://t.me/${BOT_USERNAME}?startapp=ref_${myId}` : `https://t.me/${BOT_USERNAME}`;
+        const text = `${t("share_native_text")} ${link}`;
+
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            try {
+                await navigator.share({ files: [file], text });
+                haptic("success");
+                return;
+            } catch (e) {
+                /* user cancelled or unsupported — fall through to clipboard */
+            }
+        }
+
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(text);
+            showToast(t("toast_copied_manual_download"));
+        }
+    }, "image/png");
+});
+
+/* ---------------- Main analyze flow ---------------- */
+async function analyze() {
+    const frontFile = document.getElementById("photo-front").files[0];
+    const profileFile = document.getElementById("photo-profile").files[0];
+
+    if (!frontFile) {
+        haptic("error");
+        showToast(t("toast_select_front"));
+        return;
+    }
+
+    if (!profileFile) {
+        haptic("error");
+        showToast(t("toast_select_profile"));
+        return;
+    }
+
+    haptic("medium");
+    analyzeBtn.classList.add("loading");
+
+    // Play the face-scan animation over the photo first
+    await playScanAnimation();
+
+    const formData = new FormData();
+    formData.append("photo_front", frontFile);
+    formData.append("photo_profile", profileFile);
+    formData.append("mode", modeInput.value);
+    formData.append("age", document.getElementById("age").value);
+    formData.append("height", document.getElementById("height").value);
+    formData.append("weight", document.getElementById("weight").value);
+    formData.append("init_data", tg.initData || "");
+
+    const resultEl = document.getElementById("result");
+    resultEl.innerHTML = `
+<div class="loading">
+    <div class="skeleton-ring"></div>
+    <h3>${t("loading_title")}</h3>
+    <p id="ai-text">${t("thinking_phrases")[0]}</p>
+    <div class="skeleton-line w1"></div>
+    <div class="skeleton-line w2"></div>
+    <div class="skeleton-line w3"></div>
+</div>`;
+    startThinkingRotation();
+
+    let response;
+    try {
+        response = await fetch(`${API_BASE}/analyze`, {
+            method: "POST",
+            body: formData
+        });
+    } catch (err) {
+        stopThinkingRotation();
+        analyzeBtn.classList.remove("loading");
+        haptic("error");
+        resultEl.innerHTML = `<div class="result-wrap">${t("server_unreachable")}</div>`;
+        return;
+    }
+
+    stopThinkingRotation();
+    analyzeBtn.classList.remove("loading");
+
+    if (!response.ok) {
+        haptic("error");
+        let errorText = t("unknown_error");
+        try {
+            const errorData = await response.json();
+            errorText = errorData.error || errorText;
+        } catch (e) {}
+        resultEl.innerHTML = `<div class="result-wrap error">${escapeHtml(errorText)}</div>`;
+        return;
+    }
+
+    const data = await response.json();
+    if (!data.error) data.mode = modeInput.value;
+
+    if (data.need_payment) {
+        haptic("warning");
+        resultEl.innerHTML = `
+        <div class="result-wrap">
+            <div class="paywall-card">
+                <div class="paywall-emoji">🔒</div>
+                <p>${escapeHtml(data.message || t("paywall_default_message"))}</p>
+                <button class="share-btn" id="buy-credits-btn">${t("buy_credits_btn")}</button>
+            </div>
+        </div>`;
+        document.getElementById("buy-credits-btn").addEventListener("click", openPaymentModal);
+        return;
+    }
+
+    if (data.error) {
+        haptic("error");
+        resultEl.innerHTML = `<div class="result-wrap error">${escapeHtml(data.message || t("result_error_generic"))}</div>`;
+        return;
+    }
+
+    const rating = Number(data.rating) || 0;
+    const circumference = 314; // 2 * PI * r(50)
+    const offset = circumference - (rating / 10) * circumference;
+    const criteriaHtml = buildCriteriaTableHtml(data, modeInput.value, data.deltas);
+
+    let progressChip = "";
+    if (data.has_previous && data.deltas && typeof data.deltas.rating === "number" && data.deltas.rating !== 0) {
+        const d = data.deltas.rating;
+        const up = d > 0;
+        progressChip = `<div class="progress-chip ${up ? "delta-up" : "delta-down"}">
+            ${up ? "▲" : "▼"} ${Math.abs(d).toFixed(1)} ${t(up ? "progress_up" : "progress_down")}
+        </div>`;
+    }
+
+    const adviceList = data.advice || [];
+    const adviceProgress = adviceList.map(() => false);
+
+    resultEl.innerHTML = `
+<div class="result-wrap">
+
+    <div class="score">
+        <div class="score-ring-wrap">
+            <svg viewBox="0 0 120 120">
+                <defs>
+                    <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#3b6fe0"/>
+                        <stop offset="100%" stop-color="#2fb88a"/>
+                    </linearGradient>
+                </defs>
+                <circle class="score-ring-bg" cx="60" cy="60" r="50"/>
+                <circle class="score-ring-fg" id="ring-fg" cx="60" cy="60" r="50"/>
+            </svg>
+            <div class="score-number"><span id="score-count">0.0</span><span>/10</span></div>
+        </div>
+        ${progressChip}
+        <p>${escapeHtml(data.summary || "")}</p>
+
+        ${data.vibe ? `<div class="vibe-pill">${escapeHtml(data.vibe)}</div>` : ""}
+
+        ${data.potential ? `<div class="potential-box"><b>${t("potential_title")}</b>${escapeHtml(data.potential)}</div>` : ""}
+    </div>
+
+    <div class="criteria-wrap">${criteriaHtml}</div>
+
+    <div class="section">
+        <h3>${t("strengths_title")}</h3>
+        <ul>${(data.strengths || []).map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+    </div>
+
+    <div class="section">
+        <div class="advice-header">
+            <h3>${t("advice_title")}</h3>
+            <span class="advice-progress-label" id="advice-progress-label">0/${adviceList.length} ${t("checklist_progress")}</span>
+        </div>
+        ${buildAdviceChecklistHtml(data.analysis_id, adviceList, adviceProgress)}
+    </div>
+
+    <button class="share-btn" id="share-btn">${t("share_result_btn")}</button>
+
+</div>`;
+
+    // Animate ring + counters
+    const ringFg = document.getElementById("ring-fg");
+    requestAnimationFrame(() => {
+        ringFg.style.strokeDashoffset = offset;
+    });
+    animateCount(document.getElementById("score-count"), rating);
+
+    if (rating >= 8) {
+        haptic("success");
+    } else if (rating >= 5) {
+        haptic("light");
+    } else {
+        haptic("warning");
+    }
+
+    // Update stats bar + badges from this response, refresh full profile in background
+    if (typeof data.streak === "number") document.getElementById("stat-streak").textContent = data.streak;
+    if (typeof data.total_analyses === "number") document.getElementById("stat-total").textContent = data.total_analyses;
+    if (typeof data.credits_left === "number") document.getElementById("stat-credits").textContent = data.credits_left;
+    if (data.new_badges && data.new_badges.length) showBadgePopups(data.new_badges);
+    loadProfile();
+
+    document.getElementById("share-btn").addEventListener("click", () => {
+        haptic("light");
+        openShareCard(data, rating);
+    });
+}
+
+/* ---------------- Init ---------------- */
+applyStaticTranslations();
+loadProfile();
+handleReferral();

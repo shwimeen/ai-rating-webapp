@@ -1517,3 +1517,90 @@ li {
     opacity: .45;
     text-decoration: line-through;
 }
+
+/* ============================================================
+   PROGRESS TAB (график динамики + крючок на покупку)
+   ============================================================ */
+
+.progress-metric-picker {
+    margin-bottom: 16px;
+}
+
+.progress-chart {
+    width: 100%;
+    height: 140px;
+    display: block;
+    margin-bottom: 18px;
+}
+
+.progress-summary {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 14px 0;
+    border-top: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+    margin-bottom: 16px;
+}
+
+.progress-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    flex: 1;
+}
+
+.progress-stat-label {
+    font-size: 11px;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+.progress-stat-value {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 600;
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+}
+
+.progress-teaser {
+    text-align: center;
+    padding: 20px 10px;
+}
+
+.progress-teaser-count {
+    font-family: var(--font-display);
+    font-size: 34px;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--sapphire), var(--emerald));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 10px;
+}
+
+.progress-teaser p {
+    font-size: 14px;
+    color: var(--ink-muted);
+    margin: 0 0 18px;
+    line-height: 1.5;
+}
+
+.progress-cta {
+    text-align: center;
+    padding: 16px;
+    border-radius: var(--radius-md);
+    background: rgba(59,111,224,.06);
+    border: 1px solid rgba(59,111,224,.2);
+}
+
+.progress-cta p {
+    font-size: 13px;
+    color: var(--ink-muted);
+    margin: 0 0 12px;
+    line-height: 1.5;
+}
